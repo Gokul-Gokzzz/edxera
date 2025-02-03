@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "211414476514",
+    "project_id": "edxera-ccb25",
+    "storage_bucket": "edxera-ccb25.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211414476514:android:cf19874f768c40cb2920bb",
+        "android_client_info": {
+          "package_name": "com.edxera.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT9Ua6ixnFuv4I8tyEyqRu1LTcoxPoEYo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211414476514:android:4596ebb663c74d552920bb",
+        "android_client_info": {
+          "package_name": "com.edxera.learning.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT9Ua6ixnFuv4I8tyEyqRu1LTcoxPoEYo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
