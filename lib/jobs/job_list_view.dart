@@ -47,37 +47,118 @@ class JobListScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final job = jobController.jobList[index];
 
-            return Card(
-              elevation: 4,
-              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(12),
-                title: Text(
-                  job.title ?? "No Title",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    job.shortDescription ?? "",
-                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                  ),
-                ),
+            return GestureDetector(
                 onTap: () {
                   Get.to(() => JobDetailScreen(job: job));
                 },
-                trailing: job.deletionAllowedStatus == 1
-                    ? IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          _showDeleteConfirmation(context, job.id ?? 0, index);
-                        },
-                      )
-                    : null,
-              ),
-            );
+                child: Card(
+                  elevation: 4,
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Job Name:',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          job.title ?? "No Title",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Divider(),
+                        Text(
+                          'salary :${job.jobSalaryMin} - ${job.jobSalaryMax}',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        // _buildDetailRow(
+                        //     'Salary', job.jobSalaryMin ?? "Not Disclosed"),
+
+                        _buildDetailRow(
+                          'Location',
+                          job.jobLocation?.isNotEmpty == true
+                              ? job.jobLocation!
+                              : "Not Provided",
+                        ),
+                        _buildDetailRow('WhatsApp',
+                            job.contactWhatsappNumber ?? "No Number"),
+                        _buildDetailRow(
+                            'Email', job.contactEmail ?? "No Email"),
+                        if (job.contactLink != null &&
+                            job.contactLink!.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Contact Link:',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    job.contactLink!,
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.blue),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        SizedBox(height: 12),
+                        // Align(
+                        //   alignment: Alignment.centerRight,
+                        //   child: TextButton(
+                        //     onPressed: () {
+                        //       Get.to(() => JobDetailScreen(job: job));
+                        //     },
+                        //     child: Text(
+                        //       'View More',
+                        //       style: TextStyle(color: Colors.blue),
+                        //     ),
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  ),
+                )
+
+                // ListTile(
+                //   contentPadding: EdgeInsets.all(12),
+                //   title: Text(
+                //     job.title ?? "No Title",
+                //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                //   ),
+                //   subtitle: Padding(
+                //     padding: const EdgeInsets.only(top: 4),
+                //     child: Text(
+                //       job.shortDescription ?? "",
+                //       style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                //     ),
+                //   ),
+                //   onTap: () {
+                //     Get.to(() => JobDetailScreen(job: job));
+                //   },
+                //   trailing: job.deletionAllowedStatus == 1
+                //       ? IconButton(
+                //           icon: Icon(Icons.delete, color: Colors.red),
+                //           onPressed: () {
+                //             _showDeleteConfirmation(context, job.id ?? 0, index);
+                //           },
+                //         )
+                //       : null,
+                // ),
+
+                );
           },
         );
       }),
@@ -110,6 +191,28 @@ class JobListScreen extends StatelessWidget {
         jobController.deleteJob(jobId, index);
         Get.back(); // Close the dialog
       },
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text(
+            '$label:',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 4),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(fontSize: 14),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

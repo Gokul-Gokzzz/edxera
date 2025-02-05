@@ -10,13 +10,48 @@ class JobController extends GetxController {
   var jobList = <Datum>[].obs;
   var isLoading = false.obs;
 
-  // Move controllers here
+  // Text Controllers for form fields
   final TextEditingController titleController = TextEditingController();
   final TextEditingController smallDescController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController contactLinkController = TextEditingController();
   final TextEditingController whatsappController = TextEditingController();
+  final TextEditingController jobLocationController = TextEditingController();
+  final TextEditingController jobSalaryController = TextEditingController();
+  final TextEditingController maxSalaryController = TextEditingController();
+  final TextEditingController companyNameController = TextEditingController();
+  final TextEditingController responsibilitiesController =
+      TextEditingController();
+  final TextEditingController requirementsController = TextEditingController();
+  final TextEditingController skillsController = TextEditingController();
+  final TextEditingController preferredQualificationController =
+      TextEditingController();
+  final TextEditingController jobBenefitsController = TextEditingController();
+  final TextEditingController companyWebsiteController =
+      TextEditingController();
+  final TextEditingController companyLogoController = TextEditingController();
+  final TextEditingController deadlineController = TextEditingController();
+
+  // Dropdown options
+  final List<String> workTypes = ["On-site", "Remote", "Hybrid"];
+  final List<String> jobTypes = [
+    "Full-time",
+    "Part-time",
+    "Contract",
+    "Internship"
+  ];
+  final List<String> experienceLevels = [
+    "0-1 years",
+    "1-3 years",
+    "3-5 years",
+    "5+ years"
+  ];
+
+  // Selected dropdown values
+  final RxString selectedWorkType = "On-site".obs;
+  final RxString selectedJobType = "Full-time".obs;
+  final RxString selectedExperience = "0-1 years".obs;
 
   final RxInt applyStatus = 1.obs; // 1 for allowed, 0 for not allowed
 
@@ -56,6 +91,20 @@ class JobController extends GetxController {
       "contact_whatsapp_number": whatsappController.text,
       "contact_link": contactLinkController.text,
       "apply_allowed_status": applyStatus.value,
+      "job_salary": jobSalaryController.text,
+      "max_salary": maxSalaryController.text,
+      "job_location": jobLocationController.text,
+      "work_type": selectedWorkType.value,
+      "job_type": selectedJobType.value,
+      "experience_level": selectedExperience.value,
+      "responsibilities": responsibilitiesController.text,
+      "requirements": requirementsController.text,
+      "skills": skillsController.text,
+      "preferred_qualification": preferredQualificationController.text,
+      "job_benefits": jobBenefitsController.text,
+      "company_website": companyWebsiteController.text,
+      "company_logo": companyLogoController.text,
+      "deadline": deadlineController.text,
     };
 
     final response = await _jobService.addJob(jobData);
@@ -90,6 +139,17 @@ class JobController extends GetxController {
     emailController.clear();
     contactLinkController.clear();
     whatsappController.clear();
+    jobLocationController.clear();
+    jobSalaryController.clear();
+    maxSalaryController.clear();
+    responsibilitiesController.clear();
+    requirementsController.clear();
+    skillsController.clear();
+    preferredQualificationController.clear();
+    jobBenefitsController.clear();
+    companyWebsiteController.clear();
+    companyLogoController.clear();
+    deadlineController.clear();
   }
 
   @override
@@ -100,6 +160,17 @@ class JobController extends GetxController {
     emailController.dispose();
     contactLinkController.dispose();
     whatsappController.dispose();
+    jobLocationController.dispose();
+    jobSalaryController.dispose();
+    maxSalaryController.dispose();
+    responsibilitiesController.dispose();
+    requirementsController.dispose();
+    skillsController.dispose();
+    preferredQualificationController.dispose();
+    jobBenefitsController.dispose();
+    companyWebsiteController.dispose();
+    companyLogoController.dispose();
+    deadlineController.dispose();
     super.onClose();
   }
 }

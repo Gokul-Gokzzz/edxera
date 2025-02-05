@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 
 class AddJobScreen extends StatelessWidget {
   final int userId;
-  final JobController jobController =
-      Get.find<JobController>(); // Get existing instance
+  final JobController jobController = Get.find<JobController>();
 
   AddJobScreen({Key? key, required this.userId}) : super(key: key);
 
@@ -21,11 +20,26 @@ class AddJobScreen extends StatelessWidget {
             children: [
               _buildTextField(jobController.titleController, "Job Title"),
               _buildTextField(
+                  jobController.companyNameController, "Company Name"),
+              _buildTextField(
                   jobController.smallDescController, "Small Description",
                   maxLines: 2),
               _buildTextField(
                   jobController.descriptionController, "Description",
                   maxLines: 4),
+              _buildDropdown("Work Type", jobController.workTypes,
+                  jobController.selectedWorkType),
+              _buildDropdown("Job Type", jobController.jobTypes,
+                  jobController.selectedJobType),
+              _buildDropdown("Experience", jobController.experienceLevels,
+                  jobController.selectedExperience),
+              _buildDatePicker(
+                  context, "Deadline", jobController.deadlineController),
+              _buildTextField(jobController.jobSalaryController, "Min Salary"),
+              _buildTextField(jobController.maxSalaryController, "Max Salary"),
+              _buildTextField(
+                  jobController.jobBenefitsController, "Job Benefits"),
+              _buildTextField(jobController.jobLocationController, "Location"),
               _buildTextField(jobController.emailController, "Contact Email",
                   keyboardType: TextInputType.emailAddress),
               _buildTextField(
@@ -33,6 +47,21 @@ class AddJobScreen extends StatelessWidget {
               _buildTextField(
                   jobController.whatsappController, "WhatsApp Number",
                   keyboardType: TextInputType.phone),
+              _buildTextField(
+                  jobController.responsibilitiesController, "Responsibilities",
+                  maxLines: 3),
+              _buildTextField(
+                  jobController.requirementsController, "Requirements",
+                  maxLines: 3),
+              _buildTextField(jobController.skillsController, "Skills",
+                  maxLines: 3),
+              _buildTextField(jobController.preferredQualificationController,
+                  "Preferred Qualification",
+                  maxLines: 3),
+              _buildTextField(
+                  jobController.companyWebsiteController, "Company Website"),
+              _buildTextField(
+                  jobController.companyLogoController, "Company Logo URL"),
               SizedBox(height: 10),
               Obx(() => Row(
                     children: [
@@ -64,12 +93,8 @@ class AddJobScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(
-    TextEditingController controller,
-    String label, {
-    int maxLines = 1,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
+  Widget _buildTextField(TextEditingController controller, String label,
+      {int maxLines = 1, TextInputType keyboardType = TextInputType.text}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: TextFormField(
@@ -80,6 +105,53 @@ class AddJobScreen extends StatelessWidget {
           labelText: label,
           border: OutlineInputBorder(),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDropdown(
+      String label, List<String> items, RxString selectedValue) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Obx(() => DropdownButtonFormField<String>(
+            value: selectedValue.value,
+            decoration: InputDecoration(
+              labelText: label,
+              border: OutlineInputBorder(),
+            ),
+            items: items.map((item) {
+              return DropdownMenuItem(value: item, child: Text(item));
+            }).toList(),
+            onChanged: (newValue) {
+              selectedValue.value = newValue!;
+            },
+          )),
+    );
+  }
+
+  Widget _buildDatePicker(
+      BuildContext context, String label, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: TextFormField(
+        controller: controller,
+        readOnly: true,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(),
+          suffixIcon: Icon(Icons.calendar_today),
+        ),
+        onTap: () async {
+          DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2101),
+          );
+          if (pickedDate != null) {
+            controller.text = pickedDate.toLocal().toString().split(' ')[0];
+          }
+        },
       ),
     );
   }

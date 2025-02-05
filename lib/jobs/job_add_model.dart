@@ -3,11 +3,15 @@ class AddJobModel {
   final String title;
   final String description;
   final String contactEmail;
+  final String? job_salary;
+  final String? job_location;
   final String contactWhatsappNumber;
   final int applyAllowedStatus;
 
   AddJobModel({
     required this.userId,
+    this.job_location,
+    this.job_salary,
     required this.title,
     required this.description,
     required this.contactEmail,

@@ -83,6 +83,7 @@ dependencies:
   screenshot: ^3.0.0
   logger: ^2.4.0
   html: ^0.15.4
+  smooth_page_indicator: ^1.2.0+3
 
 
 dependency_overrides:

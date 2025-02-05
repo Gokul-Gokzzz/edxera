@@ -90,6 +90,28 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
                         activeIcon: Column(
                           children: const [
                             Image(
+                              image: AssetImage("assets/homework.png"),
+                              height: 24,
+                              width: 24,
+                              color: Color(0XFF503494),
+                            ),
+                            SizedBox(height: 8.79),
+                            Image(
+                                image: AssetImage("assets/line.png"),
+                                height: 1.75,
+                                width: 24),
+                          ],
+                        ),
+                        icon: const Image(
+                          image: AssetImage("assets/homework.png"),
+                          height: 24,
+                          width: 24,
+                        ),
+                        label: 'Courses'),
+                    BottomNavigationBarItem(
+                        activeIcon: Column(
+                          children: const [
+                            Image(
                                 image: AssetImage("assets/bottomhomeblue.png"),
                                 height: 24,
                                 width: 24,
@@ -181,16 +203,23 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
         //return Center(child: Container(child: Text("1")));
         return HomeScreen();
       case 1:
+        return MyProfile();
+      case 2:
         //return Center(child: Container(child: Text("1")));
         return BatchesScreen();
-      case 2:
-      //return Center(child: Container(child: Text("2")));
-      // return JobListScreen(userId: ,);
       case 3:
+        //return Center(child: Container(child: Text("2")));
+        return JobListScreen(
+          userId: 498,
+        );
+      case 4:
         //return Center(child: Container(child: Text("3")));
         return const WebviewStore();
-      case 4:
+      case 5:
         return MyProfile();
+      case 6:
+        return MyProfile();
+
       default:
         return const Center(
           child: Text("inavalid"),

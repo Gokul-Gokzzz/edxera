@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:edxera/category/category_view.dart';
 import 'package:edxera/firebase_options.dart';
+import 'package:edxera/homes/add_post.dart';
+import 'package:edxera/homes/homes.dart';
 import 'package:edxera/jobs/job_list_view.dart';
 import 'package:edxera/notification/my_notification.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -62,16 +64,19 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF5F5F5),
       ),
       home: DefaultTextStyle(
-          maxLines: 3,
-          style: const TextStyle(
-            overflow: TextOverflow.ellipsis,
-          ),
-          child: JobListScreen(
-            userId: 498,
-          )
-          // CategoryGridView(userId: '498')
-          // const Splashscreen(),
-          ),
+        maxLines: 3,
+        style: const TextStyle(
+          overflow: TextOverflow.ellipsis,
+        ),
+        child:
+            //  SocialFeedScreen(),
+
+            // JobListScreen(
+            //   userId: 498,
+            // )
+            // CategoryGridView(userId: '498')
+            const Splashscreen(),
+      ),
     );
   }
 }
