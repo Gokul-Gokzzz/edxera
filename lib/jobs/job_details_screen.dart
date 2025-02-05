@@ -13,6 +13,7 @@ class JobDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           job.title ?? "Job Details",
+          maxLines: 3,
           style: TextStyle(color: Color(0XFF503494)),
         ),
         backgroundColor: Colors.transparent,
@@ -23,6 +24,7 @@ class JobDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ///title
               Text(
                 job.title ?? "No Title",
                 style: TextStyle(
@@ -31,14 +33,44 @@ class JobDetailScreen extends StatelessWidget {
                     color: Colors.blueGrey[800]),
               ),
               SizedBox(height: 10),
-              Text(
-                job.description ?? "",
-                style: TextStyle(fontSize: 18, color: Colors.black87),
-              ),
+
+              ///Description
+              ///
+              Text(job.description ?? "",
+                  style: TextStyle(fontSize: 18, color: Colors.black87)),
               SizedBox(height: 16),
-              _infoRow(Icons.email, "Contact Email", job.contactEmail),
-              _infoRow(Icons.phone, "WhatsApp", job.contactWhatsappNumber),
-              _infoRow(Icons.work, "Status", job.status),
+
+              ///  🏢 Job Title (Text Input)
+              _infoRow2("🌍", "Job Location", job.jobLocation),
+              _infoRow2("🏠", "Work Type", job.workType),
+              _infoRow2("💼", "Job Type", job.jobType),
+              _infoRow2("💰", "Salary Range",
+                  "${job.jobSalaryMin} - ${job.jobSalaryMax}"),
+              _infoRow2("🎓", "Experience Required", job.experience),
+
+              ///2️⃣ Job Description
+              _infoRow(Icons.location_on_outlined, "Responsibilities",
+                  job.responsibilities),
+              _infoRow(
+                  Icons.work_history_outlined, "Requirements", job.workType),
+              _infoRow(
+                  Icons.work_history_outlined, "Skills Required", job.jobType),
+              _infoRow(Icons.attach_money, "Salary Range",
+                  "${job.jobSalaryMin} - ${job.jobSalaryMax}"),
+              _infoRow(Icons.workspace_premium, "Preferred Qualifications",
+                  job.experience),
+
+              /// 3️⃣ Application Process
+              _infoRow2("📅", "Application Deadline", job.responsibilities),
+              _infoRow2("✉️", "How to Apply?", job.contactLink, isLink: true),
+              _infoRow2("🔗", "Application Link/Email", job.contactEmail),
+
+              /// 4️⃣ Additional Details
+              _infoRow2("🎁", "Job Benefits", job.jobBenefits),
+              _infoRow2("📂", "Company Logo", job.companyLogo),
+              _infoRow2("🌐", "Company Website", job.companyWebsite,
+                  isLink: true),
+
               SizedBox(height: 20),
             ],
           ),
@@ -84,6 +116,66 @@ class JobDetailScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _infoRow2(String icon, String label, String? value,
+      {bool isLink = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        children: [
+          Text(
+            icon,
+            style: TextStyle(fontSize: 16, color: Colors.black87),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                if (isLink) {
+                  launchUrl(Uri.parse(value!));
+                }
+              },
+              child: Text(
+                "$label: ${value ?? "N/A"}",
+                style: TextStyle(
+                    fontSize: 16, color: isLink ? Colors.blue : Colors.black87),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Widget _infoRow3(String icon, String label, String? value,
+  //     {bool isLink = false}) {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(bottom: 10),
+  //     child: Row(
+  //       children: [
+  //         Text(
+  //           icon,
+  //           style: TextStyle(fontSize: 16, color: Colors.black87),
+  //         ),
+  //         SizedBox(width: 10),
+  //         Expanded(
+  //           child: InkWell(
+  //             onTap: () {
+  //               if (isLink) {
+  //                 launchUrl(Uri.parse(value!));
+  //               }
+  //             },
+  //             child: Text(
+  //               "$label: ${value ?? "N/A"}",
+  //               style: TextStyle(
+  //                   fontSize: 16, color: isLink ? Colors.blue : Colors.black87),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   /// **Bottom Sheet for Apply Options**
   void _showApplyOptions(BuildContext context) {

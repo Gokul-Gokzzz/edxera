@@ -20,49 +20,43 @@ class AddJobScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildTextField(jobController.titleController, "Job Title"),
-              _buildTextField(
-                  jobController.companyNameController, "Company Name"),
-              _buildTextField(
-                  jobController.smallDescController, "Small Description",
-                  maxLines: 2),
-              _buildTextField(
-                  jobController.descriptionController, "Description",
-                  maxLines: 4),
-              _buildDropdown("Work Type", jobController.workTypes,
-                  jobController.selectedWorkType),
-              _buildDropdown("Job Type", jobController.jobTypes,
-                  jobController.selectedJobType),
-              _buildDropdown("Experience", jobController.experienceLevels,
-                  jobController.selectedExperience),
-              _buildDatePicker(
-                  context, "Deadline", jobController.deadlineController),
+              _buildTextField(jobController.companyNameController, "Company Name"),
+              _buildTextField(jobController.smallDescController, "Small Description", maxLines: 2),
+              _buildTextField(jobController.descriptionController, "Description", maxLines: 4),
+              _buildDropdown("Work Type", jobController.workTypes, jobController.selectedWorkType),
+              _buildDropdown("Job Type", jobController.jobTypes, jobController.selectedJobType),
+              _buildDropdown("Experience", jobController.experienceLevels, jobController.selectedExperience),
+              _buildDatePicker(context, "Deadline", jobController.deadlineController),
               _buildTextField(jobController.jobSalaryController, "Min Salary"),
               _buildTextField(jobController.maxSalaryController, "Max Salary"),
-              _buildTextField(
-                  jobController.jobBenefitsController, "Job Benefits"),
+              _buildTextField(jobController.jobBenefitsController, "Job Benefits"),
               _buildTextField(jobController.jobLocationController, "Location"),
-              _buildTextField(jobController.emailController, "Contact Email",
-                  keyboardType: TextInputType.emailAddress),
-              _buildTextField(
-                  jobController.contactLinkController, "Contact Link"),
-              _buildTextField(
-                  jobController.whatsappController, "WhatsApp Number",
-                  keyboardType: TextInputType.phone),
-              _buildTextField(
-                  jobController.responsibilitiesController, "Responsibilities",
-                  maxLines: 3),
-              _buildTextField(
-                  jobController.requirementsController, "Requirements",
-                  maxLines: 3),
-              _buildTextField(jobController.skillsController, "Skills",
-                  maxLines: 3),
-              _buildTextField(jobController.preferredQualificationController,
-                  "Preferred Qualification",
-                  maxLines: 3),
-              _buildTextField(
-                  jobController.companyWebsiteController, "Company Website"),
-              _buildTextField(
-                  jobController.companyLogoController, "Company Logo URL"),
+              _buildTextField(jobController.emailController, "Contact Email", keyboardType: TextInputType.emailAddress),
+              _buildTextField(jobController.contactLinkController, "Contact Link"),
+              _buildTextField(jobController.whatsappController, "WhatsApp Number", keyboardType: TextInputType.phone),
+              _buildTextField(jobController.responsibilitiesController, "Responsibilities", maxLines: 3),
+              _buildTextField(jobController.requirementsController, "Requirements", maxLines: 3),
+              _buildTextField(jobController.skillsController, "Skills", maxLines: 3),
+              _buildTextField(jobController.preferredQualificationController, "Preferred Qualification", maxLines: 3),
+              _buildTextField(jobController.companyWebsiteController, "Company Website"),
+              TextFormField(
+                controller: jobController.companyLogoController,
+                readOnly: true,
+                onTap: () async {
+                  final ImagePicker picker = ImagePicker();
+
+                  XFile? pickedImages = await picker.pickImage(source: ImageSource.gallery);
+
+                  if (pickedImages != null) {
+                    jobController.selectedLogo = pickedImages!;
+                    jobController.companyLogoController.text =  pickedImages!.name;
+                  }
+                },
+                decoration: InputDecoration(
+                  labelText: "Company Logo",
+                  border: OutlineInputBorder(),
+                ),
+              ),
               SizedBox(height: 10),
               Obx(() => Row(
                     children: [
@@ -94,8 +88,7 @@ class AddJobScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label,
-      {int maxLines = 1, TextInputType keyboardType = TextInputType.text}) {
+  Widget _buildTextField(TextEditingController controller, String label, {int maxLines = 1, TextInputType keyboardType = TextInputType.text}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: TextFormField(
@@ -110,8 +103,7 @@ class AddJobScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDropdown(
-      String label, List<String> items, RxString selectedValue) {
+  Widget _buildDropdown(String label, List<String> items, RxString selectedValue) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Obx(() => DropdownButtonFormField<String>(
@@ -130,8 +122,7 @@ class AddJobScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDatePicker(
-      BuildContext context, String label, TextEditingController controller) {
+  Widget _buildDatePicker(BuildContext context, String label, TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: TextFormField(
