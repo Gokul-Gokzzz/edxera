@@ -159,7 +159,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
         //return Center(child: Container(child: Text("1")));
         return ReelsHome();
       case 1:
-        return MyProfile();
+        return HomeScreen();
       case 2:
         //return Center(child: Container(child: Text("1")));
         return BatchesScreen();

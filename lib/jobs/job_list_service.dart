@@ -38,7 +38,7 @@ class JobService {
     }
   }
 
-  Future<Map<String, dynamic>> addJob(Map<String, dynamic> jobData) async {
+  Future<Map<String, dynamic>> addJob(FormData jobData) async {
     try {
       final response = await _dio.sendRequest.post(ApiConstants.add_job, data: jobData);
       return response.data;

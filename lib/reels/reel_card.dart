@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:edxera/reels/controller/reel_controller.dart';
-import 'package:edxera/reels/model/reel_model.dart';
 import 'package:edxera/repositories/api/api_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
