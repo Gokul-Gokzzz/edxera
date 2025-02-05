@@ -1,6 +1,6 @@
-import 'package:edxera/jobs/job_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:edxera/jobs/job_list_model.dart';
 
 class JobDetailScreen extends StatelessWidget {
   final Datum job;
@@ -13,56 +13,116 @@ class JobDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           job.title ?? "Job Details",
-          style: TextStyle(color: Colors.white38),
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blueGrey[900],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                job.title ?? "No Title",
-                style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey[800]),
-              ),
-              SizedBox(height: 10),
-              Text(
-                job.description ?? "",
-                style: TextStyle(fontSize: 18, color: Colors.black87),
-              ),
-              SizedBox(height: 16),
-              _infoRow(Icons.email, "Contact Email", job.contactEmail),
-              _infoRow(Icons.phone, "WhatsApp", job.contactWhatsappNumber),
-              _infoRow(Icons.work, "Status", job.status),
-              SizedBox(height: 20),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _headerSection(),
+            SizedBox(height: 16),
+            _jobDetailsSection(),
+            SizedBox(height: 16),
+            _applicationProcessSection(),
+          ],
         ),
       ),
-      bottomNavigationBar: job.applyAalowedStatus == 1
-          ? Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () => _showApplyOptions(context),
-                child: Text("Apply Now"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueGrey[900],
-                  padding: EdgeInsets.symmetric(vertical: 14),
-                  textStyle: TextStyle(fontSize: 18),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-              ),
-            )
-          : null,
+      bottomNavigationBar:
+          job.applyAalowedStatus == 1 ? _applyButton(context) : null,
     );
   }
 
+  /// **Header Section: Job Title & Company**
+  Widget _headerSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          job.title ?? "No Title",
+          style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueGrey[800]),
+        ),
+        SizedBox(height: 4),
+        Text(
+          job.companyName ?? "Unknown Company",
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.blueGrey[600]),
+        ),
+      ],
+    );
+  }
+
+  /// **Job Details Section**
+  Widget _jobDetailsSection() {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _infoRow(Icons.location_on, "Location", job.jobLocation),
+            _infoRow(Icons.work_outline, "Work Type", job.workType),
+            _infoRow(Icons.business, "Job Type", job.jobType),
+            _infoRow(Icons.monetization_on, "Salary",
+                "${job.jobSalaryMin} - ${job.jobSalaryMax}"),
+            _infoRow(Icons.star, "Experience", "${job.experience} Years"),
+            _infoRow(Icons.card_giftcard, "Benefits", job.jobBenefits ?? "N/A"),
+            _infoRow(Icons.description, "Description", job.description),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// **Application Process Section**
+  Widget _applicationProcessSection() {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _infoRow(Icons.date_range, "Application Deadline",
+                job.applicationDeadline),
+            _infoRow(Icons.email, "Contact Email", job.contactEmail),
+            _infoRow(Icons.phone, "WhatsApp", job.contactWhatsappNumber),
+            // _infoRow(Icons.link, "Application Link", job.applicationLink),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// **Apply Now Button**
+  Widget _applyButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ElevatedButton(
+        onPressed: () => _showApplyOptions(context),
+        child: Text("Apply Now"),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blueGrey[900],
+          padding: EdgeInsets.symmetric(vertical: 14),
+          textStyle: TextStyle(fontSize: 18),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
+    );
+  }
+
+  /// **Info Row Widget**
   Widget _infoRow(IconData icon, String label, String? value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -81,6 +141,7 @@ class JobDetailScreen extends StatelessWidget {
     );
   }
 
+  /// **Bottom Sheet for Apply Options**
   void _showApplyOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -109,6 +170,8 @@ class JobDetailScreen extends StatelessWidget {
                   context, Icons.chat, "WhatsApp", Colors.green, _openWhatsApp),
               _optionTile(
                   context, Icons.email, "Email", Colors.red, _sendEmail),
+              // _optionTile(context, Icons.link, "Application Link", Colors.blue,
+              //     _openApplicationLink),
             ],
           ),
         );
@@ -116,6 +179,7 @@ class JobDetailScreen extends StatelessWidget {
     );
   }
 
+  /// **Option Tile for Apply Methods**
   Widget _optionTile(BuildContext context, IconData icon, String text,
       Color color, Function() onTap) {
     return ListTile(
@@ -128,6 +192,7 @@ class JobDetailScreen extends StatelessWidget {
     );
   }
 
+  /// **Open WhatsApp**
   void _openWhatsApp() async {
     final phone = job.contactWhatsappNumber;
     if (phone != null && phone.isNotEmpty) {
@@ -138,6 +203,7 @@ class JobDetailScreen extends StatelessWidget {
     }
   }
 
+  /// **Send Email**
   void _sendEmail() async {
     final email = job.contactEmail;
     if (email != null && email.isNotEmpty) {
@@ -147,4 +213,14 @@ class JobDetailScreen extends StatelessWidget {
       }
     }
   }
+
+  /// **Open Application Link**
+  // void _openApplicationLink() async {
+  //   // final link = job.applicationLink;
+  //   if (link != null && link.isNotEmpty) {
+  //     if (await canLaunch(link)) {
+  //       await launch(link);
+  //     }
+  //   }
+  // }
 }

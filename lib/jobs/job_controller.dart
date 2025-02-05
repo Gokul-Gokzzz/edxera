@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:edxera/jobs/job_list_model.dart';
 import 'package:edxera/jobs/job_list_service.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +79,10 @@ class JobController extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white);
     }
+  }
+
+  void setCompanyLogo(File image) {
+    companyLogoController.text = image.path;
   }
 
   Future<void> submitJob(int userId) async {
