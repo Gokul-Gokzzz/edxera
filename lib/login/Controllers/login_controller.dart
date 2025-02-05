@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:edxera/category/category_view.dart';
 import 'package:edxera/home/home_main.dart';
 import 'package:edxera/login/Models/login_data_model.dart';
 import 'package:edxera/login/OtpVerification/otp_verification_screen.dart';
@@ -29,7 +30,9 @@ class LoginControllers extends GetxController {
         PrefData.setLogin(true);
         PrefData.setUserId(classesData?.data?.id ?? 0);
         PrefData.setUserPhone(classesData?.data?.phone ?? "0");
-        Get.offAll(const HomeMainScreen());
+        // Get.offAll(const HomeMainScreen());
+        Get.offAll(const CategoryGridView());
+
         Get.showSnackbar(
           GetSnackBar(
             backgroundColor: Colors.green,

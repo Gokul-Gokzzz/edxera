@@ -4,6 +4,8 @@ import 'package:edxera/jobs/job_list_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../utils/shared_pref.dart';
+
 class JobController extends GetxController {
   final JobService _jobService = JobService();
 
@@ -55,9 +57,9 @@ class JobController extends GetxController {
 
   final RxInt applyStatus = 1.obs; // 1 for allowed, 0 for not allowed
 
-  void loadJobs(int userId) async {
+  void loadJobs() async {
     isLoading(true);
-    JobListModel? result = await _jobService.fetchJobList(userId);
+    JobListModel? result = await _jobService.fetchJobList();
     if (result != null && result.data != null) {
       jobList.assignAll(result.data!);
     }
@@ -69,19 +71,16 @@ class JobController extends GetxController {
     if (success) {
       jobList.removeAt(index);
       Get.snackbar("Success", "Job deleted successfully",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white);
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green, colorText: Colors.white);
     } else {
-      Get.snackbar("Error", "Failed to delete job",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      Get.snackbar("Error", "Failed to delete job", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red, colorText: Colors.white);
     }
   }
 
-  Future<void> submitJob(int userId) async {
+  Future<void> submitJob() async {
     isLoading.value = true;
+    int userId = await PrefData.getUserId();
+
     final jobData = {
       "user_id": userId,
       "title": titleController.text,
@@ -111,10 +110,7 @@ class JobController extends GetxController {
     isLoading.value = false;
 
     if (response["status"] == true) {
-      Get.snackbar("Success", response["message"],
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white);
+      Get.snackbar("Success", response["message"], snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green, colorText: Colors.white);
 
       // Clear controllers after success
       _clearControllers();
@@ -123,10 +119,7 @@ class JobController extends GetxController {
         Get.back(); // Close the AddJobScreen after success
       });
     } else {
-      Get.snackbar("Error", response["message"],
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      Get.snackbar("Error", response["message"], snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red, colorText: Colors.white);
       log(response['message']);
     }
   }

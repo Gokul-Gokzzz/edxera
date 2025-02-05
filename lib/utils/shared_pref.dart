@@ -69,7 +69,7 @@ class PrefData {
   static getUserId() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int id = sharedPreferences.getInt(userid) ?? 0;
-    return id;
+    return  id;
   }
 
   static setUserPhone(String phone) async {

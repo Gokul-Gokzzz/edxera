@@ -1,13 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:edxera/jobs/job_list_model.dart';
+import 'package:edxera/repositories/api/api.dart';
+import 'package:edxera/repositories/api/api_constants.dart';
+
+import '../utils/shared_pref.dart';
 
 class JobService {
-  final Dio _dio = Dio();
-  final String _baseUrl = "https://xianinfotech.in/edxera/api";
+  final _dio = API();
 
-  Future<JobListModel?> fetchJobList(int userId) async {
+  Future<JobListModel?> fetchJobList() async {
     try {
-      Response response = await _dio.post("$_baseUrl/get_job_list", data: {
+      int userId = await PrefData.getUserId();
+
+      Response response = await _dio.sendRequest.post(ApiConstants.get_job_list, data: {
         "user_id": userId,
       });
 
@@ -22,7 +27,7 @@ class JobService {
 
   Future<bool> deleteJob(int jobId) async {
     try {
-      Response response = await _dio.post("$_baseUrl/delete_job", data: {
+      Response response = await _dio.sendRequest.post(ApiConstants.delete_job, data: {
         "job_id": jobId,
       });
 
@@ -35,7 +40,7 @@ class JobService {
 
   Future<Map<String, dynamic>> addJob(Map<String, dynamic> jobData) async {
     try {
-      final response = await _dio.post("$_baseUrl/add_job", data: jobData);
+      final response = await _dio.sendRequest.post(ApiConstants.add_job, data: jobData);
       return response.data;
     } catch (e) {
       return {"status": false, "message": "Error: ${e.toString()}"};

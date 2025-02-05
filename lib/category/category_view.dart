@@ -1,11 +1,11 @@
 import 'dart:developer';
 import 'package:edxera/category/category_controller.dart';
+import 'package:edxera/repositories/api/api_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategoryGridView extends StatefulWidget {
-  final String userId;
-  const CategoryGridView({Key? key, required this.userId}) : super(key: key);
+  const CategoryGridView({Key? key}) : super(key: key);
 
   @override
   _CategoryGridViewState createState() => _CategoryGridViewState();
@@ -18,7 +18,7 @@ class _CategoryGridViewState extends State<CategoryGridView> {
   void initState() {
     super.initState();
     // Fetch categories when the widget is first created
-    categoryController.fetchCategories(widget.userId);
+    categoryController.fetchCategories();
   }
 
   @override
@@ -52,8 +52,7 @@ class _CategoryGridViewState extends State<CategoryGridView> {
               children: [
                 Expanded(
                   child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // Number of columns
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0,
@@ -64,29 +63,24 @@ class _CategoryGridViewState extends State<CategoryGridView> {
                       log("Image URL ui: ${category.image?.originalImage}");
                       return GestureDetector(
                         onTap: () {
-                          categoryController
-                              .toggleCategorySelection(category.id!);
-                          final selectedIds =
-                              categoryController.getSelectedCategoryIds();
+                          categoryController.toggleCategorySelection(category.id!);
+                          final selectedIds = categoryController.getSelectedCategoryIds();
                           log('Selected Categories: $selectedIds');
                         },
                         child: Card(
                           elevation: 4,
-                          color: category.isCategorySelected == 1
-                              ? Colors.blue[50]
-                              : Colors.white,
+                          color: category.isCategorySelected == 1 ? Colors.blue[50] : Colors.white,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               category.image?.originalImage != null
                                   ? Image.network(
-                                      category.image!.originalImage!,
+                                      "${ApiConstants.publicBaseUrl}/${category.image!.originalImage ?? ""}",
                                       height: 80,
                                       width: 80,
                                       fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
+                                      errorBuilder: (context, error, stackTrace) {
                                         return const Icon(
                                           Icons.broken_image,
                                           size: 40,
@@ -117,18 +111,24 @@ class _CategoryGridViewState extends State<CategoryGridView> {
                   onPressed: categoryController.isSubmitting.value
                       ? null // Disable button when submitting
                       : () {
-                          categoryController.submitCategories(widget.userId);
+                          categoryController.submitCategories();
                         },
                   child: categoryController.isSubmitting.value
                       ? const CircularProgressIndicator(
                           color: Colors.white,
                         )
-                      : const Text('Submit'),
+                      : const Text(
+                          'Submit',
+                          style: TextStyle(color: Colors.white),
+                        ),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 45),
                     backgroundColor: Colors.blue,
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                )
               ],
             );
           }

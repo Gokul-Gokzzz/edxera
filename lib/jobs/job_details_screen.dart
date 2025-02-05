@@ -13,9 +13,9 @@ class JobDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           job.title ?? "Job Details",
-          style: TextStyle(color: Colors.white38),
+          style: TextStyle(color: Color(0XFF503494)),
         ),
-        backgroundColor: Colors.blueGrey[900],
+        backgroundColor: Colors.transparent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -25,10 +25,7 @@ class JobDetailScreen extends StatelessWidget {
             children: [
               Text(
                 job.title ?? "No Title",
-                style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey[800]),
+                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.blueGrey[800]),
               ),
               SizedBox(height: 10),
               Text(
@@ -49,13 +46,15 @@ class JobDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () => _showApplyOptions(context),
-                child: Text("Apply Now"),
+                child: Text(
+                  "Apply Now",
+                  style: TextStyle(color: Colors.white),
+                ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueGrey[900],
+                  backgroundColor: Color(0XFF503494),
                   padding: EdgeInsets.symmetric(vertical: 14),
                   textStyle: TextStyle(fontSize: 18),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
               ),
             )
@@ -99,16 +98,11 @@ class JobDetailScreen extends StatelessWidget {
             children: [
               Text(
                 "Apply via",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey[800]),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blueGrey[800]),
               ),
               SizedBox(height: 16),
-              _optionTile(
-                  context, Icons.chat, "WhatsApp", Colors.green, _openWhatsApp),
-              _optionTile(
-                  context, Icons.email, "Email", Colors.red, _sendEmail),
+              _optionTile(context, Icons.chat, "WhatsApp", Colors.green, _openWhatsApp),
+              _optionTile(context, Icons.email, "Email", Colors.red, _sendEmail),
             ],
           ),
         );
@@ -116,8 +110,7 @@ class JobDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _optionTile(BuildContext context, IconData icon, String text,
-      Color color, Function() onTap) {
+  Widget _optionTile(BuildContext context, IconData icon, String text, Color color, Function() onTap) {
     return ListTile(
       leading: Icon(icon, color: color),
       title: Text(text, style: TextStyle(fontSize: 16)),
