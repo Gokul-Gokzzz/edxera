@@ -1,4 +1,5 @@
 import 'package:edxera/batchs/batches_main_screen.dart';
+import 'package:edxera/homes/homes.dart';
 import 'package:edxera/jobs/job_list_view.dart';
 import 'package:edxera/reels/controller/reel_controller.dart';
 import 'package:edxera/reels/reels_home.dart';
@@ -93,10 +94,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
                               color: Color(0XFF503494),
                             ),
                             SizedBox(height: 8.79),
-                            Image(
-                                image: AssetImage("assets/line.png"),
-                                height: 1.75,
-                                width: 24),
+                            Image(image: AssetImage("assets/line.png"), height: 1.75, width: 24),
                           ],
                         ),
                         icon: const Image(
@@ -108,16 +106,9 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
                     BottomNavigationBarItem(
                         activeIcon: Column(
                           children: const [
-                            Image(
-                                image: AssetImage("assets/bottomhomeblue.png"),
-                                height: 24,
-                                width: 24,
-                                color: Color(0XFF503494)),
+                            Image(image: AssetImage("assets/bottomhomeblue.png"), height: 24, width: 24, color: Color(0XFF503494)),
                             SizedBox(height: 8.79),
-                            Image(
-                                image: AssetImage("assets/line.png"),
-                                height: 1.75,
-                                width: 24),
+                            Image(image: AssetImage("assets/line.png"), height: 1.75, width: 24),
                           ],
                         ),
                         icon: const Image(
@@ -166,7 +157,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
     switch (controller.position.value) {
       case 0:
         //return Center(child: Container(child: Text("1")));
-        return HomeScreen();
+        return ReelsHome();
       case 1:
         return MyProfile();
       case 2:
@@ -174,9 +165,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
         return BatchesScreen();
       case 3:
         //return Center(child: Container(child: Text("2")));
-        return JobListScreen(
-          userId: 498,
-        );
+        return JobListScreen();
       case 4:
         //return Center(child: Container(child: Text("3")));
         return const WebviewStore();

@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class JobListScreen extends StatelessWidget {
-  final int userId;
   final JobController jobController = Get.put(JobController());
 
-  JobListScreen({Key? key, required this.userId}) : super(key: key);
+  JobListScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    jobController.loadJobs(userId);
+    jobController.loadJobs();
 
     return Scaffold(
       appBar: AppBar(
@@ -33,10 +34,7 @@ class JobListScreen extends StatelessWidget {
           return Center(
             child: Text(
               "No jobs found",
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),
             ),
           );
         }
@@ -64,8 +62,7 @@ class JobListScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Job Name:',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 4),
                         Text(
@@ -82,32 +79,24 @@ class JobListScreen extends StatelessWidget {
 
                         _buildDetailRow(
                           'Location',
-                          job.jobLocation?.isNotEmpty == true
-                              ? job.jobLocation!
-                              : "Not Provided",
+                          job.jobLocation?.isNotEmpty == true ? job.jobLocation! : "Not Provided",
                         ),
-                        _buildDetailRow('WhatsApp',
-                            job.contactWhatsappNumber ?? "No Number"),
-                        _buildDetailRow(
-                            'Email', job.contactEmail ?? "No Email"),
-                        if (job.contactLink != null &&
-                            job.contactLink!.isNotEmpty)
+                        _buildDetailRow('WhatsApp', job.contactWhatsappNumber ?? "No Number"),
+                        _buildDetailRow('Email', job.contactEmail ?? "No Email"),
+                        if (job.contactLink != null && job.contactLink!.isNotEmpty)
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4),
                             child: Row(
                               children: [
                                 Text(
                                   'Contact Link:',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(width: 4),
                                 Expanded(
                                   child: Text(
                                     job.contactLink!,
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.blue),
+                                    style: TextStyle(fontSize: 14, color: Colors.blue),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -166,9 +155,7 @@ class JobListScreen extends StatelessWidget {
       // Floating Action Button for Adding Job
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => AddJobScreen(
-                userId: userId,
-              ));
+          Get.to(() => AddJobScreen());
         },
         backgroundColor: Colors.blueGrey[900],
         child: Icon(Icons.add, color: Colors.white),

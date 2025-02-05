@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddJobScreen extends StatelessWidget {
-  final int userId;
-  final JobController jobController = Get.find<JobController>();
+   final JobController jobController = Get.find<JobController>();
 
-  AddJobScreen({Key? key, required this.userId}) : super(key: key);
+  AddJobScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +77,7 @@ class AddJobScreen extends StatelessWidget {
               Obx(() => jobController.isLoading.value
                   ? Center(child: CircularProgressIndicator())
                   : ElevatedButton(
-                      onPressed: () => jobController.submitJob(userId),
+                      onPressed: () => jobController.submitJob( ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         padding: EdgeInsets.symmetric(vertical: 12),
