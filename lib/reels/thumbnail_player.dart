@@ -15,6 +15,7 @@ class ThumbnailPlayer extends StatefulWidget {
 
 class _ThumbnailPlayerState extends State<ThumbnailPlayer> {
   // late VideoPlayerController _thumbnailController;
+
   @override
   void initState() {
     super.initState();

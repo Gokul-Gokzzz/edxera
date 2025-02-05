@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:edxera/reels/controller/reel_controller.dart';
 import 'package:edxera/reels/model/reel_model.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
 class ReelCard extends StatefulWidget {
@@ -128,6 +130,10 @@ class _ReelCardState extends State<ReelCard> {
       setState(() {
         isError = true;
       });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -147,7 +153,15 @@ class _ReelCardState extends State<ReelCard> {
       setState(() {
         isLoading = false;
       });
-    } catch (e) {}
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -255,96 +269,119 @@ class _ReelCardState extends State<ReelCard> {
   @override
   Widget build(BuildContext context) {
     final item = reelController.reels[widget.index];
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: isShowComment
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                controller: commentController,
-                focusNode: node,
-                decoration: InputDecoration(
-                  hintText: 'Comment',
-                  hintStyle: TextStyle(fontFamily: 'Gilroy', fontSize: 15.sp, color: const Color(0XFF9B9B9B), fontWeight: FontWeight.w700),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: const Color(0XFFDEDEDE), width: 1.w),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: const Color(0XFF503494), width: 1.w),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: const Color(0XFFDEDEDE), width: 1.w),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  filled: true,
-                  fillColor: const Color(0xFFF5F5F5),
-                  contentPadding: EdgeInsets.only(left: 20.w, top: 20.h, bottom: 20.h),
-                  suffixIcon: isCommentLoading
-                      ? CupertinoActivityIndicator()
-                      : IconButton(
-                          onPressed: () async {
-                            _addComment(item.id!);
-                          },
-                          icon: Icon(Icons.send),
+    return SizedBox(
+      height: isShowComment ? MediaQuery.sizeOf(context).height * 0.7 : MediaQuery.sizeOf(context).height * 0.6,
+      child: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: MediaQuery.sizeOf(context).height * 0.5,
+                  child: isError
+                      ? CachedNetworkImage(
+                          imageUrl: "${ApiConstants.publicBaseUrl}/${reelController.reels[widget.index].courseThumbnail}",
+                          progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                            height: 300,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                value: progress.progress,
+                              ),
+                            ),
+                          ),
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) => Icon(Icons.broken_image),
+                        )
+                      : AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Chewie(
+                            controller: chewieController,
+                          ),
                         ),
                 ),
-              ),
-            )
-          : null,
-      body: isError
-          ? Text("Temporary video is not available...")
-          : isLoading
-              ? Center(child: CircularProgressIndicator())
-              : Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
-                  SizedBox(
-                    height: MediaQuery.sizeOf(context).height * 0.35,
-                    child: AspectRatio(
-                      aspectRatio: 16 / 9,
-
-                      child: Chewie(
-                       controller: chewieController,
-                                                  ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border, color: isLiked ? Colors.red : null),
+                      onPressed: () {
+                        _toggleLike(item.id!);
+                      },
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border, color: isLiked ? Colors.red : null),
-                        onPressed: () {
-                          _toggleLike(item.id!);
-                        },
+                    GestureDetector(
+                      onTap: () {
+                        _showLikeBottomSheet(item.id!);
+                      },
+                      child: Text("${item.courseLikeCount ?? 0}"),
+                    ),
+                    SizedBox(width: 10),
+                    IconButton(
+                      icon: Icon(
+                        Icons.comment,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          _showLikeBottomSheet(item.id!);
-                        },
-                        child: Text("${item.courseLikeCount ?? 0}"),
-                      ),
-                      SizedBox(width: 10),
-                      IconButton(
-                        icon: Icon(
-                          Icons.comment,
+                      onPressed: () {
+                        _showComment();
+                      },
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _showCommentsBottomSheet(item.id!);
+                      },
+                      child: Text("${item.courseCommentCount ?? 0}"),
+                    ),
+                    Spacer(),
+                    IconButton(
+                      icon: Icon(Icons.share),
+                      onPressed: () {
+                        final post = (reelController.reels[widget.index].courseReelVideo ?? "").isEmpty
+                            ? ("${ApiConstants.publicBaseUrl}/${(reelController.reels[widget.index].courseThumbnail ?? "")}")
+                            : ("${ApiConstants.publicBaseUrl}/${(reelController.reels[widget.index].courseReelVideo ?? "")}");
+                        Share.shareUri(Uri.parse(post));
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                if (isShowComment)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: commentController,
+                      focusNode: node,
+                      decoration: InputDecoration(
+                        hintText: 'Comment',
+                        hintStyle: TextStyle(fontFamily: 'Gilroy', fontSize: 15.sp, color: const Color(0XFF9B9B9B), fontWeight: FontWeight.w700),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: const Color(0XFFDEDEDE), width: 1.w),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        onPressed: () {
-                          _showComment();
-                        },
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: const Color(0XFF503494), width: 1.w),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: const Color(0XFFDEDEDE), width: 1.w),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor: const Color(0xFFF5F5F5),
+                        contentPadding: EdgeInsets.only(left: 20.w, top: 20.h, bottom: 20.h),
+                        suffixIcon: isCommentLoading
+                            ? CupertinoActivityIndicator()
+                            : IconButton(
+                                onPressed: () async {
+                                  _addComment(item.id!);
+                                },
+                                icon: Icon(Icons.send),
+                              ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          _showCommentsBottomSheet(item.id!);
-                        },
-                        child: Text("${item.courseCommentCount ?? 0}"),
-                      ),
-                    ],
-                  ),
-                ]),
+                    ),
+                  )
+              ],
+            ),
     );
   }
 }
