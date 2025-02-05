@@ -24,8 +24,11 @@ class _CategoryGridViewState extends State<CategoryGridView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Category Grid View'),
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: const Text('Categories'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -52,10 +55,12 @@ class _CategoryGridViewState extends State<CategoryGridView> {
               children: [
                 Expanded(
                   child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // Number of columns
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0,
+                      childAspectRatio: 2.5,
                     ),
                     itemCount: categoryController.categories.length,
                     itemBuilder: (context, index) {
@@ -63,36 +68,40 @@ class _CategoryGridViewState extends State<CategoryGridView> {
                       log("Image URL ui: ${category.image?.originalImage}");
                       return GestureDetector(
                         onTap: () {
-                          categoryController.toggleCategorySelection(category.id!);
-                          final selectedIds = categoryController.getSelectedCategoryIds();
+                          categoryController
+                              .toggleCategorySelection(category.id!);
+                          final selectedIds =
+                              categoryController.getSelectedCategoryIds();
                           log('Selected Categories: $selectedIds');
                         },
                         child: Card(
                           elevation: 4,
-                          color: category.isCategorySelected == 1 ? Colors.blue[50] : Colors.white,
+                          color: category.isCategorySelected == 1
+                              ? Colors.blue[50]
+                              : Colors.white,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              category.image?.originalImage != null
-                                  ? Image.network(
-                                      "${ApiConstants.publicBaseUrl}/${category.image!.originalImage ?? ""}",
-                                      height: 80,
-                                      width: 80,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return const Icon(
-                                          Icons.broken_image,
-                                          size: 40,
-                                          color: Colors.grey,
-                                        );
-                                      },
-                                    )
-                                  : const Icon(
-                                      Icons.image_not_supported,
-                                      size: 40,
-                                      color: Colors.grey,
-                                    ),
+                              // category.image?.originalImage != null
+                              //     ? Image.network(
+                              //         "${ApiConstants.publicBaseUrl}/${category.image!.originalImage ?? ""}",
+                              //         height: 80,
+                              //         width: 80,
+                              //         fit: BoxFit.cover,
+                              //         errorBuilder: (context, error, stackTrace) {
+                              //           return const Icon(
+                              //             Icons.broken_image,
+                              //             size: 40,
+                              //             color: Colors.grey,
+                              //           );
+                              //         },
+                              //       )
+                              //     : const Icon(
+                              //         Icons.image_not_supported,
+                              //         size: 40,
+                              //         color: Colors.grey,
+                              //       ),
                               const SizedBox(height: 8),
                               Text(
                                 category.title ?? "No Title",

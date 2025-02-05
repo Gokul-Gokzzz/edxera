@@ -50,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Trending> trendingCource = Utils.getTrending();
   List<Recent> recentAdded = Utils.getRecentAdded();
   HomeController homecontroller = Get.put(HomeController());
-  LessonDetailsController lessonDetailsController = Get.put(LessonDetailsController());
+  LessonDetailsController lessonDetailsController =
+      Get.put(LessonDetailsController());
 
   // int currentpage = 0;
   PageController controller = PageController();
@@ -130,67 +131,67 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 16.h),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => EditScreen()));
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: Row(children: [
-                              homecontroller.userDataModel.data != null
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(50.h),
-                                      child: CachedNetworkImage(
-                                        fit: BoxFit.fill,
-                                        height: 50.h,
-                                        width: 49.93.w,
-                                        imageUrl: homecontroller.userDataModel.data?.image ?? '',
-                                        progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-                                          child: Container(
-                                            height: 30.h,
-                                            width: 30.w,
-                                            child: CircularProgressIndicator(value: downloadProgress.progress),
-                                          ),
-                                        ),
-                                        errorWidget: (context, url, error) => ClipRRect(
-                                          borderRadius: BorderRadius.circular(50.h),
-                                          child: Container(
-                                            height: 50.h,
-                                            width: 49.93.w,
-                                            color: Colors.grey.withOpacity(0.2),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Container(),
-                              SizedBox(width: 10.w),
-                              Expanded(
-                                child: Text(mplanguage['welcome'].toString() + ",${homecontroller.userDataModel.data?.name ?? ''}",
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        fontFamily: 'Gilroy',
-                                        color: const Color(0XFF000000),
-                                        fontSize: 22.sp,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.w700)),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Get.to(NotificationScreen())?.then((value) {
-                                    homecontroller.notificationCountDataApi();
-                                  });
-                                },
-                                child: homecontroller.notificationCountDataModel.data?.unreadNotification == 0
-                                    ? Icon(Icons.notifications_outlined, size: 24, color: Colors.black)
-                                    : badges.Badge(
-                                        badgeContent: Text((homecontroller.notificationCountDataModel.data?.unreadNotification ?? 0).toString(),
-                                            style: TextStyle(fontFamily: 'Gilroy', color: const Color(0XFFFFFFFF), fontWeight: FontWeight.w500)),
-                                        child: Icon(Icons.notifications_outlined, size: 24, color: Colors.black),
-                                      ),
-                              ),
-                            ]),
-                          ),
-                        ),
+                        // InkWell(
+                        //   onTap: () {
+                        //     Navigator.push(context, MaterialPageRoute(builder: (context) => EditScreen()));
+                        //   },
+                        //   child: Padding(
+                        //     padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        //     child: Row(children: [
+                        //       homecontroller.userDataModel.data != null
+                        //           ? ClipRRect(
+                        //               borderRadius: BorderRadius.circular(50.h),
+                        //               child: CachedNetworkImage(
+                        //                 fit: BoxFit.fill,
+                        //                 height: 50.h,
+                        //                 width: 49.93.w,
+                        //                 imageUrl: homecontroller.userDataModel.data?.image ?? '',
+                        //                 progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                        //                   child: Container(
+                        //                     height: 30.h,
+                        //                     width: 30.w,
+                        //                     child: CircularProgressIndicator(value: downloadProgress.progress),
+                        //                   ),
+                        //                 ),
+                        //                 errorWidget: (context, url, error) => ClipRRect(
+                        //                   borderRadius: BorderRadius.circular(50.h),
+                        //                   child: Container(
+                        //                     height: 50.h,
+                        //                     width: 49.93.w,
+                        //                     color: Colors.grey.withOpacity(0.2),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //             )
+                        //           : Container(),
+                        //       SizedBox(width: 10.w),
+                        //       Expanded(
+                        //         child: Text(mplanguage['welcome'].toString() + ",${homecontroller.userDataModel.data?.name ?? ''}",
+                        //             maxLines: 1,
+                        //             style: TextStyle(
+                        //                 fontFamily: 'Gilroy',
+                        //                 color: const Color(0XFF000000),
+                        //                 fontSize: 22.sp,
+                        //                 overflow: TextOverflow.ellipsis,
+                        //                 fontWeight: FontWeight.w700)),
+                        //       ),
+                        //       GestureDetector(
+                        //         onTap: () {
+                        //           Get.to(NotificationScreen())?.then((value) {
+                        //             homecontroller.notificationCountDataApi();
+                        //           });
+                        //         },
+                        //         child: homecontroller.notificationCountDataModel.data?.unreadNotification == 0
+                        //             ? Icon(Icons.notifications_outlined, size: 24, color: Colors.black)
+                        //             : badges.Badge(
+                        //                 badgeContent: Text((homecontroller.notificationCountDataModel.data?.unreadNotification ?? 0).toString(),
+                        //                     style: TextStyle(fontFamily: 'Gilroy', color: const Color(0XFFFFFFFF), fontWeight: FontWeight.w500)),
+                        //                 child: Icon(Icons.notifications_outlined, size: 24, color: Colors.black),
+                        //               ),
+                        //       ),
+                        //     ]),
+                        //   ),
+                        // ),
                         Divider(),
                         Expanded(
                           child: ListView(
@@ -248,7 +249,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               // ),
 
                               Obx(
-                                () => homecontroller.homeDashboardDataModel.data != null ? generatepage() : Container(),
+                                () => homecontroller
+                                            .homeDashboardDataModel.data !=
+                                        null
+                                    ? generatepage()
+                                    : Container(),
                               ),
                               // SizedBox(height: 20.h),
                               indicator(),
@@ -260,18 +265,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                   else ...[
                                     Container(
                                       width: double.infinity,
-                                      margin: EdgeInsets.only(left: 10.w, right: 10.w),
+                                      margin: EdgeInsets.only(
+                                          left: 10.w, right: 10.w),
                                       decoration: BoxDecoration(
                                         boxShadow: [
-                                          BoxShadow(color: const Color(0XFF503494).withOpacity(0.14), offset: const Offset(-4, 5), blurRadius: 16),
+                                          BoxShadow(
+                                              color: const Color(0XFF503494)
+                                                  .withOpacity(0.14),
+                                              offset: const Offset(-4, 5),
+                                              blurRadius: 16),
                                         ],
                                         borderRadius: BorderRadius.circular(10),
                                         color: Colors.white,
                                       ),
                                       child: Padding(
-                                        padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                                        padding: EdgeInsets.only(
+                                            left: 10.w, right: 10.w),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: 10.h,
@@ -287,65 +299,131 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   width: 10.h,
                                                 ),
                                                 Expanded(
-                                                  child: (homecontroller.countries != [] || homecontroller.countries.isNotEmpty)
+                                                  child: (homecontroller
+                                                                  .countries !=
+                                                              [] ||
+                                                          homecontroller
+                                                              .countries
+                                                              .isNotEmpty)
                                                       ? Theme(
                                                           data: ThemeData(
                                                             textTheme: TextTheme(
                                                                 titleMedium: TextStyle(
-                                                                    color: Colors.black,
-                                                                    fontSize: 15.sp,
-                                                                    fontFamily: 'Gilroy',
-                                                                    fontWeight: FontWeight.w400)),
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        15.sp,
+                                                                    fontFamily:
+                                                                        'Gilroy',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400)),
                                                           ),
-                                                          child: DropdownSearch<String>(
-                                                            popupProps: PopupProps.menu(
-                                                              showSearchBox: true,
-                                                              showSelectedItems: true,
-                                                              disabledItemFn: (String s) => s.startsWith('I'),
+                                                          child: DropdownSearch<
+                                                              String>(
+                                                            popupProps:
+                                                                PopupProps.menu(
+                                                              showSearchBox:
+                                                                  true,
+                                                              showSelectedItems:
+                                                                  true,
+                                                              disabledItemFn:
+                                                                  (String s) =>
+                                                                      s.startsWith(
+                                                                          'I'),
                                                             ),
-                                                            items: homecontroller.countries,
-                                                            dropdownDecoratorProps: DropDownDecoratorProps(
+                                                            items:
+                                                                homecontroller
+                                                                    .countries,
+                                                            dropdownDecoratorProps:
+                                                                DropDownDecoratorProps(
                                                               baseStyle: TextStyle(
-                                                                  color: Colors.black,
-                                                                  fontSize: 15.sp,
-                                                                  fontFamily: 'Gilroy',
-                                                                  fontWeight: FontWeight.w400),
-                                                              dropdownSearchDecoration: InputDecoration(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      15.sp,
+                                                                  fontFamily:
+                                                                      'Gilroy',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                              dropdownSearchDecoration:
+                                                                  InputDecoration(
                                                                 labelStyle: TextStyle(
-                                                                    color: Color(0XFF9B9B9B),
-                                                                    fontSize: 15.sp,
-                                                                    fontFamily: 'Gilroy',
-                                                                    fontWeight: FontWeight.w400),
-                                                                enabledBorder: UnderlineInputBorder(
-                                                                  borderSide: BorderSide(color: Colors.black),
+                                                                    color: Color(
+                                                                        0XFF9B9B9B),
+                                                                    fontSize:
+                                                                        15.sp,
+                                                                    fontFamily:
+                                                                        'Gilroy',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                                enabledBorder:
+                                                                    UnderlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                          color:
+                                                                              Colors.black),
                                                                 ),
-                                                                focusedBorder: UnderlineInputBorder(
-                                                                  borderSide: BorderSide(color: Colors.black),
+                                                                focusedBorder:
+                                                                    UnderlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                          color:
+                                                                              Colors.black),
                                                                 ),
                                                               ),
                                                             ),
                                                             onChanged: (value) {
-                                                              homecontroller.dropdownvalue.value = value ?? '';
+                                                              homecontroller
+                                                                      .dropdownvalue
+                                                                      .value =
+                                                                  value ?? '';
                                                               for (var element
-                                                                  in homecontroller.studyPlanCourseNameDataModel.data?.userCourses ?? []) {
-                                                                if (element.courseTitle == value) {
-                                                                  homecontroller.batchid.value = element.batchId.toString();
-                                                                  print(element.batchId);
-                                                                  PrefData.setCourseID(element.batchId.toString());
-                                                                  PrefData.setCourseName(value ?? '');
-                                                                  homecontroller.getTodayStudyPlan(element.batchId.toString()).then((value) {
+                                                                  in homecontroller
+                                                                          .studyPlanCourseNameDataModel
+                                                                          .data
+                                                                          ?.userCourses ??
+                                                                      []) {
+                                                                if (element
+                                                                        .courseTitle ==
+                                                                    value) {
+                                                                  homecontroller
+                                                                          .batchid
+                                                                          .value =
+                                                                      element
+                                                                          .batchId
+                                                                          .toString();
+                                                                  print(element
+                                                                      .batchId);
+                                                                  PrefData.setCourseID(
+                                                                      element
+                                                                          .batchId
+                                                                          .toString());
+                                                                  PrefData.setCourseName(
+                                                                      value ??
+                                                                          '');
+                                                                  homecontroller
+                                                                      .getTodayStudyPlan(element
+                                                                          .batchId
+                                                                          .toString())
+                                                                      .then(
+                                                                          (value) {
                                                                     // Future.delayed(
                                                                     //     Duration(
                                                                     //         seconds:
                                                                     //            1),
                                                                     //     () {
-                                                                    setState(() {});
+                                                                    setState(
+                                                                        () {});
                                                                     // });
                                                                   });
                                                                 }
                                                               }
                                                             },
-                                                            onSaved: (newValue) {
+                                                            onSaved:
+                                                                (newValue) {
                                                               // for (var element
                                                               //     in homecontroller
                                                               //             .studyPlanCourseNameDataModel
@@ -360,7 +438,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               //   }
                                                               // }
                                                             },
-                                                            selectedItem: homecontroller.dropdownvalue.value,
+                                                            selectedItem:
+                                                                homecontroller
+                                                                    .dropdownvalue
+                                                                    .value,
                                                           ),
                                                         )
                                                       : Container(),
@@ -560,8 +641,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             Obx(
                                               () => Text(
-                                                homecontroller.dropdownvalue.value,
-                                                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.sp, color: Colors.black),
+                                                homecontroller
+                                                    .dropdownvalue.value,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 20.sp,
+                                                    color: Colors.black),
                                               ),
                                             ),
                                           ],
@@ -570,243 +655,410 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ],
                                   SizedBox(height: 20.h),
-                                  if ((homecontroller.todaysStudyPlanDataModel.data?.studyPlans?.length ?? 0) > 0) ...[
+                                  if ((homecontroller.todaysStudyPlanDataModel
+                                              .data?.studyPlans?.length ??
+                                          0) >
+                                      0) ...[
                                     Container(
                                       width: double.infinity,
-                                      margin: EdgeInsets.only(left: 10.w, right: 10.w),
+                                      margin: EdgeInsets.only(
+                                          left: 10.w, right: 10.w),
                                       decoration: BoxDecoration(
                                         boxShadow: [
-                                          BoxShadow(color: const Color(0XFF503494).withOpacity(0.14), offset: const Offset(-4, 5), blurRadius: 16),
+                                          BoxShadow(
+                                              color: const Color(0XFF503494)
+                                                  .withOpacity(0.14),
+                                              offset: const Offset(-4, 5),
+                                              blurRadius: 16),
                                         ],
                                         borderRadius: BorderRadius.circular(10),
                                         color: Colors.white,
                                       ),
                                       child: Padding(
-                                        padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                                        padding: EdgeInsets.only(
+                                            left: 10.w, right: 10.w),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            if ((homecontroller.todaysStudyPlanDataModel.data?.studyPlans?.length ?? 0) > 0)
+                                            if ((homecontroller
+                                                        .todaysStudyPlanDataModel
+                                                        .data
+                                                        ?.studyPlans
+                                                        ?.length ??
+                                                    0) >
+                                                0)
                                               SizedBox(
                                                 height: 20.h,
                                               ),
-                                            if ((homecontroller.todaysStudyPlanDataModel.data?.studyPlans?.length ?? 0) > 0)
-                                              homecontroller.todaysStudyPlanDataModel.data?.studyPlans != null
+                                            if ((homecontroller
+                                                        .todaysStudyPlanDataModel
+                                                        .data
+                                                        ?.studyPlans
+                                                        ?.length ??
+                                                    0) >
+                                                0)
+                                              homecontroller
+                                                          .todaysStudyPlanDataModel
+                                                          .data
+                                                          ?.studyPlans !=
+                                                      null
                                                   ? Obx(() => ListView.builder(
-                                                        padding: const EdgeInsets.all(10),
-                                                        itemCount: homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?.length,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(10),
+                                                        itemCount: homecontroller
+                                                            .todaysStudyPlanDataModel
+                                                            .data
+                                                            ?.studyPlans?[0]
+                                                            .items
+                                                            ?.length,
                                                         shrinkWrap: true,
-                                                        physics: NeverScrollableScrollPhysics(),
-                                                        itemBuilder: (context, indexs) {
+                                                        physics:
+                                                            NeverScrollableScrollPhysics(),
+                                                        itemBuilder:
+                                                            (context, indexs) {
                                                           return GestureDetector(
                                                             onTap: () {
-                                                              if ((homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].type ??
+                                                              if ((homecontroller
+                                                                          .todaysStudyPlanDataModel
+                                                                          .data
+                                                                          ?.studyPlans?[
+                                                                              0]
+                                                                          .items?[
+                                                                              indexs]
+                                                                          .type ??
                                                                       '') ==
                                                                   'EXAM_MCQ') {
-                                                                Get.to(ExamMcqScreen(
-                                                                  examPogress: homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0]
-                                                                          .items?[indexs].progressStatus ??
+                                                                Get.to(
+                                                                    ExamMcqScreen(
+                                                                  examPogress: homecontroller
+                                                                          .todaysStudyPlanDataModel
+                                                                          .data
+                                                                          ?.studyPlans?[
+                                                                              0]
+                                                                          .items?[
+                                                                              indexs]
+                                                                          .progressStatus ??
                                                                       '',
                                                                   title: homecontroller
-                                                                          .todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].title ??
+                                                                          .todaysStudyPlanDataModel
+                                                                          .data
+                                                                          ?.studyPlans?[
+                                                                              0]
+                                                                          .items?[
+                                                                              indexs]
+                                                                          .title ??
                                                                       '',
                                                                   examid: (homecontroller
-                                                                              .todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].examId ??
+                                                                              .todaysStudyPlanDataModel
+                                                                              .data
+                                                                              ?.studyPlans?[0]
+                                                                              .items?[indexs]
+                                                                              .examId ??
                                                                           0)
                                                                       .toString(),
-                                                                  studyPlanId: (homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0]
-                                                                              .items?[indexs].fkIntStudyPlanItemsId ??
+                                                                  studyPlanId: (homecontroller
+                                                                              .todaysStudyPlanDataModel
+                                                                              .data
+                                                                              ?.studyPlans?[0]
+                                                                              .items?[indexs]
+                                                                              .fkIntStudyPlanItemsId ??
                                                                           0)
                                                                       .toString(),
                                                                 ));
                                                               } else if ((homecontroller
-                                                                          .todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].type ??
+                                                                          .todaysStudyPlanDataModel
+                                                                          .data
+                                                                          ?.studyPlans?[
+                                                                              0]
+                                                                          .items?[
+                                                                              indexs]
+                                                                          .type ??
                                                                       '') ==
                                                                   'EXAM_DESCRIPTION') {
-                                                                Get.to(ExamDescriptionScreen(
-                                                                  examPogress: homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0]
-                                                                          .items?[indexs].progressStatus ??
+                                                                Get.to(
+                                                                    ExamDescriptionScreen(
+                                                                  examPogress: homecontroller
+                                                                          .todaysStudyPlanDataModel
+                                                                          .data
+                                                                          ?.studyPlans?[
+                                                                              0]
+                                                                          .items?[
+                                                                              indexs]
+                                                                          .progressStatus ??
                                                                       '',
                                                                   title: homecontroller
-                                                                          .todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].title ??
+                                                                          .todaysStudyPlanDataModel
+                                                                          .data
+                                                                          ?.studyPlans?[
+                                                                              0]
+                                                                          .items?[
+                                                                              indexs]
+                                                                          .title ??
                                                                       '',
                                                                   examid: (homecontroller
-                                                                              .todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].examId ??
+                                                                              .todaysStudyPlanDataModel
+                                                                              .data
+                                                                              ?.studyPlans?[0]
+                                                                              .items?[indexs]
+                                                                              .examId ??
                                                                           0)
                                                                       .toString(),
-                                                                  studyPlanId: (homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0]
-                                                                              .items?[indexs].fkIntStudyPlanItemsId ??
+                                                                  studyPlanId: (homecontroller
+                                                                              .todaysStudyPlanDataModel
+                                                                              .data
+                                                                              ?.studyPlans?[0]
+                                                                              .items?[indexs]
+                                                                              .fkIntStudyPlanItemsId ??
                                                                           0)
                                                                       .toString(),
                                                                 ));
                                                               } else if ((homecontroller
-                                                                          .todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].type ??
+                                                                          .todaysStudyPlanDataModel
+                                                                          .data
+                                                                          ?.studyPlans?[
+                                                                              0]
+                                                                          .items?[
+                                                                              indexs]
+                                                                          .type ??
                                                                       '') ==
                                                                   'ASSIGMENT') {
-                                                                Get.to(StudyPlanAssigmentScreen(
+                                                                Get.to(
+                                                                    StudyPlanAssigmentScreen(
                                                                   title: homecontroller
-                                                                          .todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].title ??
+                                                                          .todaysStudyPlanDataModel
+                                                                          .data
+                                                                          ?.studyPlans?[
+                                                                              0]
+                                                                          .items?[
+                                                                              indexs]
+                                                                          .title ??
                                                                       '',
-                                                                  assigmentid: (homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0]
-                                                                              .items?[indexs].assigmentId ??
+                                                                  assigmentid: (homecontroller
+                                                                              .todaysStudyPlanDataModel
+                                                                              .data
+                                                                              ?.studyPlans?[0]
+                                                                              .items?[indexs]
+                                                                              .assigmentId ??
                                                                           0)
                                                                       .toString(),
-                                                                  studyPlanId: (homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0]
-                                                                              .items?[indexs].fkIntStudyPlanItemsId ??
+                                                                  studyPlanId: (homecontroller
+                                                                              .todaysStudyPlanDataModel
+                                                                              .data
+                                                                              ?.studyPlans?[0]
+                                                                              .items?[indexs]
+                                                                              .fkIntStudyPlanItemsId ??
                                                                           0)
                                                                       .toString(),
                                                                 ));
                                                               } else if ((homecontroller
-                                                                          .todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].type ??
+                                                                          .todaysStudyPlanDataModel
+                                                                          .data
+                                                                          ?.studyPlans?[
+                                                                              0]
+                                                                          .items?[
+                                                                              indexs]
+                                                                          .type ??
                                                                       '') ==
                                                                   'DIRECT_VIDEO') {
-                                                                if ((homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs]
+                                                                if ((homecontroller
+                                                                            .todaysStudyPlanDataModel
+                                                                            .data
+                                                                            ?.studyPlans?[0]
+                                                                            .items?[indexs]
                                                                             .dvVideoFile ??
                                                                         '') !=
                                                                     '') {
                                                                   var dataVIdeo = jsonDecode(homecontroller
-                                                                          .todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].dvVideoFile ??
+                                                                          .todaysStudyPlanDataModel
+                                                                          .data
+                                                                          ?.studyPlans?[
+                                                                              0]
+                                                                          .items?[
+                                                                              indexs]
+                                                                          .dvVideoFile ??
                                                                       '');
-                                                                  print(dataVIdeo["video"]);
+                                                                  print(dataVIdeo[
+                                                                      "video"]);
 
-                                                                  Navigator.push(
+                                                                  Navigator
+                                                                      .push(
                                                                     context,
                                                                     MaterialPageRoute(
-                                                                      builder: (context) => VidioPlay(
-                                                                          lessonplay: '${ApiConstants.publicBaseUrl}/${dataVIdeo["video"]}'),
+                                                                      builder: (context) =>
+                                                                          VidioPlay(
+                                                                              lessonplay: '${ApiConstants.publicBaseUrl}/${dataVIdeo["video"]}'),
                                                                     ),
                                                                   );
                                                                 } else {
                                                                   Get.to(() => YoutubeVideoPlayerScreen(
-                                                                      url: homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs]
+                                                                      url: homecontroller
+                                                                              .todaysStudyPlanDataModel
+                                                                              .data
+                                                                              ?.studyPlans?[0]
+                                                                              .items?[indexs]
                                                                               .dvYoutubeLink ??
                                                                           ''));
                                                                 }
                                                               } else if ((homecontroller
-                                                                          .todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].type ??
+                                                                          .todaysStudyPlanDataModel
+                                                                          .data
+                                                                          ?.studyPlans?[
+                                                                              0]
+                                                                          .items?[
+                                                                              indexs]
+                                                                          .type ??
                                                                       '') ==
                                                                   'CHAPTER') {
                                                                 homecontroller.chepterInnerApiCall(
-                                                                    (homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs]
-                                                                                .chapterId ??
+                                                                    (homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].chapterId ??
                                                                             0)
                                                                         .toString(),
-                                                                    (homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs]
-                                                                                .pkIntStudyPlanItemsId ??
+                                                                    (homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].pkIntStudyPlanItemsId ??
                                                                             '')
                                                                         .toString());
                                                               }
                                                             },
-                                                            child:
-                                                                (homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].type ??
-                                                                            '') ==
-                                                                        'CHAPTER'
-                                                                    ? Padding(
-                                                                        padding: const EdgeInsets.only(bottom: 20),
-                                                                        child: ListTile(
-                                                                          leading: Container(
-                                                                            height: 60.h,
-                                                                            width: 60.w,
-                                                                            decoration: BoxDecoration(
-                                                                              color: Colors.grey[200],
-                                                                              borderRadius: BorderRadius.circular(10),
-                                                                            ),
-                                                                            child: Column(
-                                                                              children: [
-                                                                                Container(
-                                                                                  width: double.infinity,
-                                                                                  alignment: Alignment.center,
-                                                                                  decoration: BoxDecoration(
-                                                                                      color: Colors.red[400],
-                                                                                      borderRadius: BorderRadius.only(
-                                                                                          topLeft: Radius.circular(10),
-                                                                                          topRight: Radius.circular(10))),
-                                                                                  height: 20.h,
-                                                                                  child: Text(
-                                                                                    mplanguage['day'].toString(),
-                                                                                    style: TextStyle(
-                                                                                        fontWeight: FontWeight.w700,
-                                                                                        fontSize: 15.sp,
-                                                                                        color: Colors.white),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  child: Container(
-                                                                                    width: double.infinity,
-                                                                                    alignment: Alignment.center,
-                                                                                    decoration: BoxDecoration(),
-                                                                                    child: Text(
-                                                                                      homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0]
-                                                                                              .studyPlansDate
-                                                                                              ?.split('-')
-                                                                                              .last ??
-                                                                                          '',
-                                                                                      style: TextStyle(
-                                                                                          fontWeight: FontWeight.w700,
-                                                                                          fontSize: 20.sp,
-                                                                                          color: Colors.black),
-                                                                                    ),
-                                                                                  ),
-                                                                                )
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          title: Text(
-                                                                            homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0]
-                                                                                    .items?[indexs].title ??
-                                                                                '',
-                                                                            style: TextStyle(
-                                                                                fontWeight: FontWeight.w700, fontSize: 20.sp, color: Colors.black),
-                                                                          ),
+                                                            child: (homecontroller
+                                                                            .todaysStudyPlanDataModel
+                                                                            .data
+                                                                            ?.studyPlans?[0]
+                                                                            .items?[indexs]
+                                                                            .type ??
+                                                                        '') ==
+                                                                    'CHAPTER'
+                                                                ? Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .only(
+                                                                        bottom:
+                                                                            20),
+                                                                    child:
+                                                                        ListTile(
+                                                                      leading:
+                                                                          Container(
+                                                                        height:
+                                                                            60.h,
+                                                                        width:
+                                                                            60.w,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              Colors.grey[200],
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10),
                                                                         ),
-                                                                      )
-                                                                    : Container(
-                                                                        margin: EdgeInsets.only(bottom: 20),
-                                                                        child: ListTile(
-                                                                          leading: Container(
-                                                                            height: 60.h,
-                                                                            width: 60.w,
-                                                                            decoration: BoxDecoration(
-                                                                              color: Colors.blue.withOpacity(0.2),
-                                                                              borderRadius: BorderRadius.circular(10),
+                                                                        child:
+                                                                            Column(
+                                                                          children: [
+                                                                            Container(
+                                                                              width: double.infinity,
+                                                                              alignment: Alignment.center,
+                                                                              decoration: BoxDecoration(color: Colors.red[400], borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+                                                                              height: 20.h,
+                                                                              child: Text(
+                                                                                mplanguage['day'].toString(),
+                                                                                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15.sp, color: Colors.white),
+                                                                              ),
                                                                             ),
-                                                                            child: Icon(
-                                                                              Icons.play_circle,
-                                                                              color: Colors.blue,
-                                                                              size: 40,
-                                                                            ),
-                                                                          ),
-                                                                          title: Text(
-                                                                            homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0]
-                                                                                    .items?[indexs].title ??
-                                                                                '',
-                                                                            maxLines: 2,
-                                                                            style: TextStyle(
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                fontWeight: FontWeight.w700,
-                                                                                fontSize: 15.sp,
-                                                                                color: Colors.black),
-                                                                          ),
-                                                                          subtitle: Text(
-                                                                            mplanguage['progress'].toString() +
-                                                                                ':${homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].progressStatus ?? ''}',
-                                                                            maxLines: 2,
-                                                                            style: TextStyle(
-                                                                                fontWeight: FontWeight.w500,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                fontSize: 14.sp,
-                                                                                color: Colors.grey),
-                                                                          ),
+                                                                            Expanded(
+                                                                              child: Container(
+                                                                                width: double.infinity,
+                                                                                alignment: Alignment.center,
+                                                                                decoration: BoxDecoration(),
+                                                                                child: Text(
+                                                                                  homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].studyPlansDate?.split('-').last ?? '',
+                                                                                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.sp, color: Colors.black),
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                          ],
                                                                         ),
                                                                       ),
+                                                                      title:
+                                                                          Text(
+                                                                        homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].title ??
+                                                                            '',
+                                                                        style: TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.w700,
+                                                                            fontSize: 20.sp,
+                                                                            color: Colors.black),
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : Container(
+                                                                    margin: EdgeInsets.only(
+                                                                        bottom:
+                                                                            20),
+                                                                    child:
+                                                                        ListTile(
+                                                                      leading:
+                                                                          Container(
+                                                                        height:
+                                                                            60.h,
+                                                                        width:
+                                                                            60.w,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: Colors
+                                                                              .blue
+                                                                              .withOpacity(0.2),
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10),
+                                                                        ),
+                                                                        child:
+                                                                            Icon(
+                                                                          Icons
+                                                                              .play_circle,
+                                                                          color:
+                                                                              Colors.blue,
+                                                                          size:
+                                                                              40,
+                                                                        ),
+                                                                      ),
+                                                                      title:
+                                                                          Text(
+                                                                        homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].title ??
+                                                                            '',
+                                                                        maxLines:
+                                                                            2,
+                                                                        style: TextStyle(
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            fontWeight: FontWeight.w700,
+                                                                            fontSize: 15.sp,
+                                                                            color: Colors.black),
+                                                                      ),
+                                                                      subtitle:
+                                                                          Text(
+                                                                        mplanguage['progress'].toString() +
+                                                                            ':${homecontroller.todaysStudyPlanDataModel.data?.studyPlans?[0].items?[indexs].progressStatus ?? ''}',
+                                                                        maxLines:
+                                                                            2,
+                                                                        style: TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                            fontSize: 14.sp,
+                                                                            color: Colors.grey),
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                           );
                                                         },
                                                       ))
                                                   : Container(
                                                       child: Center(
                                                         child: Text(
-                                                          mplanguage['nodata'].toString(),
-                                                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+                                                          mplanguage['nodata']
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700),
                                                         ),
                                                       ),
                                                     ),
@@ -824,8 +1076,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => LessonDetailsScreens(
-                                              batchId: homecontroller.batchid.value,
+                                            builder: (context) =>
+                                                LessonDetailsScreens(
+                                              batchId:
+                                                  homecontroller.batchid.value,
                                             ),
                                           ),
                                         );
@@ -833,14 +1087,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: Container(
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(50.h / 2),
+                                          borderRadius:
+                                              BorderRadius.circular(50.h / 2),
                                           color: const Color(0XFF503494),
                                         ),
                                         height: 50.h,
-                                        margin: EdgeInsets.only(left: 30.w, right: 30.w),
+                                        margin: EdgeInsets.only(
+                                            left: 30.w, right: 30.w),
                                         child: Text(
-                                          mplanguage['viewstudyplan'].toString(),
-                                          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.sp, color: Colors.white),
+                                          mplanguage['viewstudyplan']
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 20.sp,
+                                              color: Colors.white),
                                         ),
                                       ),
                                     ),
@@ -850,32 +1110,52 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 20.h,
                               ),
                               Obx(
-                                () => homecontroller.homeDashboardDataModel.data != null ? horizontal_disidn() : Container(),
+                                () => homecontroller
+                                            .homeDashboardDataModel.data !=
+                                        null
+                                    ? horizontal_disidn()
+                                    : Container(),
                               ),
                               SizedBox(height: 30.h),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                child: Text(mplanguage["batchsuccessfull"].toString(),
-                                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700, fontFamily: 'Gilroy')),
+                                child: Text(
+                                    mplanguage["batchsuccessfull"].toString(),
+                                    style: TextStyle(
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'Gilroy')),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(bottom: 20.h, top: 15.h, left: 8.w, right: 8.w),
+                                padding: EdgeInsets.only(
+                                    bottom: 20.h,
+                                    top: 15.h,
+                                    left: 8.w,
+                                    right: 8.w),
                                 child: GestureDetector(
                                   onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => AddBatchViewScreen(),
+                                        builder: (context) =>
+                                            AddBatchViewScreen(),
                                       ),
                                     );
                                   },
                                   child: Container(
                                     width: double.infinity.w,
                                     decoration: BoxDecoration(
-                                        image: DecorationImage(image: AssetImage('assets/batchImages.jpg'), fit: BoxFit.fill),
+                                        image: DecorationImage(
+                                            image: AssetImage(
+                                                'assets/batchImages.jpg'),
+                                            fit: BoxFit.fill),
                                         borderRadius: BorderRadius.circular(12),
                                         boxShadow: [
-                                          BoxShadow(color: const Color(0XFF503494).withOpacity(0.14), offset: const Offset(-4, 5), blurRadius: 16),
+                                          BoxShadow(
+                                              color: const Color(0XFF503494)
+                                                  .withOpacity(0.14),
+                                              offset: const Offset(-4, 5),
+                                              blurRadius: 16),
                                         ],
                                         color: Colors.white),
                                     child: Container(
@@ -883,29 +1163,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                       margin: EdgeInsets.all(15.w),
                                       child: Container(
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(height: 10.w),
                                             Text(
                                               mplanguage['reqtutor'].toString(),
-                                              style: TextStyle(fontSize: 15.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
+                                              style: TextStyle(
+                                                  fontSize: 15.sp,
+                                                  fontFamily: 'Gilroy',
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                             SizedBox(height: 10.w),
                                             Container(
                                               height: 40.h,
-                                              width: MediaQuery.of(context).size.width / 1.8,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  1.8,
                                               //color: Color(0XFF503494),
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(5.h),
+                                                borderRadius:
+                                                    BorderRadius.circular(5.h),
                                                 color: const Color(0XFF503494),
                                               ),
                                               child: Center(
-                                                child: Text(mplanguage["sendjoin"].toString(),
+                                                child: Text(
+                                                    mplanguage["sendjoin"]
+                                                        .toString(),
                                                     style: TextStyle(
-                                                        color: Color(0XFFFFFFFF),
+                                                        color:
+                                                            Color(0XFFFFFFFF),
                                                         fontSize: 18.sp,
-                                                        fontWeight: FontWeight.w700,
+                                                        fontWeight:
+                                                            FontWeight.w700,
                                                         fontFamily: 'Gilroy')),
                                               ),
                                             ),
@@ -947,25 +1240,38 @@ class _HomeScreenState extends State<HomeScreen> {
                               // ),
                               SizedBox(height: 10.h),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w, vertical: 10.h),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Learning that fits", style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w700, fontFamily: 'Gilroy')),
+                                    Text("Learning that fits",
+                                        style: TextStyle(
+                                            fontSize: 28.sp,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'Gilroy')),
                                     Text("Skills for your present (and future)",
-                                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, fontFamily: 'Gilroy')),
+                                        style: TextStyle(
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'Gilroy')),
                                   ],
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w, vertical: 10.h),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Categories",
-                                      style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w700, fontFamily: 'Gilroy'),
+                                      style: TextStyle(
+                                          fontSize: 13.sp,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: 'Gilroy'),
                                     ),
                                     GestureDetector(
                                       onTap: () {
@@ -975,29 +1281,46 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       child: Text(
                                         "See all",
-                                        style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w700, fontFamily: 'Gilroy'),
+                                        style: TextStyle(
+                                            fontSize: 13.sp,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'Gilroy'),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
                               Obx(
-                                () => homecontroller.categoriesData.value.data != null ? all_categories_list() : Container(),
+                                () =>
+                                    homecontroller.categoriesData.value.data !=
+                                            null
+                                        ? all_categories_list()
+                                        : Container(),
                               ),
                               SizedBox(height: 10.h),
 
                               Obx(
-                                () => homecontroller.studyPlanCourseNameDataModel.data != null ? all_cource_list() : Container(),
+                                () => homecontroller
+                                            .studyPlanCourseNameDataModel
+                                            .data !=
+                                        null
+                                    ? all_cource_list()
+                                    : Container(),
                               ),
 
                               Padding(
-                                padding: EdgeInsets.only(bottom: 10.h, top: 10.h, left: 8.w, right: 8.w),
+                                padding: EdgeInsets.only(
+                                    bottom: 10.h,
+                                    top: 10.h,
+                                    left: 8.w,
+                                    right: 8.w),
                                 child: GestureDetector(
                                   onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => FreeStudyMatrialViewScreen(),
+                                        builder: (context) =>
+                                            FreeStudyMatrialViewScreen(),
                                       ),
                                     );
                                   },
@@ -1017,20 +1340,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Container(
                                       margin: EdgeInsets.all(15.w),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            mplanguage['freematerial'].toString(),
-                                            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700, fontFamily: 'Gilroy'),
+                                            mplanguage['freematerial']
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w700,
+                                                fontFamily: 'Gilroy'),
                                           ),
                                           SizedBox(height: 5.w),
                                           Text(
-                                            mplanguage['checkoutfree'].toString(),
-                                            style: TextStyle(fontSize: 15.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
+                                            mplanguage['checkoutfree']
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 15.sp,
+                                                fontFamily: 'Gilroy',
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           Obx(
-                                            () => homecontroller.studyPlanCourseNameDataModel.data != null ? all_free_cource_list() : Container(),
+                                            () => homecontroller
+                                                        .studyPlanCourseNameDataModel
+                                                        .data !=
+                                                    null
+                                                ? all_free_cource_list()
+                                                : Container(),
                                           ),
                                           SizedBox(height: 10.w),
                                           Container(
@@ -1038,15 +1376,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                             height: 50.h,
                                             //color: Color(0XFF503494),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.h),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.h),
                                               color: const Color(0XFF503494),
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.only(top: 14.0, left: 15),
-                                              child: Text(mplanguage['viewstudymaterial'].toString(),
+                                              padding: const EdgeInsets.only(
+                                                  top: 14.0, left: 15),
+                                              child: Text(
+                                                  mplanguage[
+                                                          'viewstudymaterial']
+                                                      .toString(),
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
-                                                      color: Color(0XFFFFFFFF), fontSize: 18.sp, fontWeight: FontWeight.w700, fontFamily: 'Gilroy')),
+                                                      color: Color(0XFFFFFFFF),
+                                                      fontSize: 18.sp,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontFamily: 'Gilroy')),
                                             ),
                                           )
                                         ],
@@ -1172,12 +1519,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 fit: BoxFit.fill,
                 height: 200.h,
                 // width: 49.93.w,
-                imageUrl: homecontroller.homeDashboardDataModel.data?[0].sliders?[index].image ?? '',
-                progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                imageUrl: homecontroller.homeDashboardDataModel.data?[0]
+                        .sliders?[index].image ??
+                    '',
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
                   child: Container(
                     height: 30.h,
                     width: 30.w,
-                    child: CircularProgressIndicator(value: downloadProgress.progress),
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress),
                   ),
                 ),
                 errorWidget: (context, url, error) => ClipRRect(
@@ -1193,14 +1544,17 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       },
-      itemCount: homecontroller.homeDashboardDataModel.data?[0].sliders?.length ?? 0,
+      itemCount:
+          homecontroller.homeDashboardDataModel.data?[0].sliders?.length ?? 0,
     );
   }
 
   Widget indicator() {
     return Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(homecontroller.homeDashboardDataModel.data?[0].sliders?.length ?? 0, (index) {
+        children: List.generate(
+            homecontroller.homeDashboardDataModel.data?[0].sliders?.length ?? 0,
+            (index) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 6.w),
             child: AnimatedContainer(
@@ -1210,7 +1564,9 @@ class _HomeScreenState extends State<HomeScreen> {
               //margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 30),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: (index == homecontroller.currentpage.value) ? const Color(0XFF503494) : const Color(0XFFDEDEDE)),
+                  color: (index == homecontroller.currentpage.value)
+                      ? const Color(0XFF503494)
+                      : const Color(0XFFDEDEDE)),
             ),
           );
         }));
@@ -1223,7 +1579,9 @@ class _HomeScreenState extends State<HomeScreen> {
           shrinkWrap: true,
           primary: false,
           scrollDirection: Axis.horizontal,
-          itemCount: homecontroller.homeDashboardDataModel.data?[0].categories?.length ?? 0,
+          itemCount: homecontroller
+                  .homeDashboardDataModel.data?[0].categories?.length ??
+              0,
           itemBuilder: (BuildContext context, index) {
             return Stack(
               children: [
@@ -1245,7 +1603,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget horizontal_disidn() {
-    return (homecontroller.homeDashboardDataModel.data?.first.categories?.length ?? 0) > 0
+    return (homecontroller
+                    .homeDashboardDataModel.data?.first.categories?.length ??
+                0) >
+            0
         ? Container(
             //color: Colors.red,
 
@@ -1257,13 +1618,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 primary: false,
                 physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
-                itemCount: homecontroller.homeDashboardDataModel.data?.first.categories?.length ?? 0,
+                itemCount: homecontroller.homeDashboardDataModel.data?.first
+                        .categories?.length ??
+                    0,
                 itemBuilder: (BuildContext context, index) {
                   var item = homecontroller.homeDashboardDataModel.data?.first;
                   return GestureDetector(
                     onTap: () {
                       Get.to(CategoryWiseProductScreen(
-                        categoryId: (item?.categories?[index].id ?? 0).toString(),
+                        categoryId:
+                            (item?.categories?[index].id ?? 0).toString(),
                         categoryName: item?.categories?[index].title ?? '',
                       ));
                     },
@@ -1285,12 +1649,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             fit: BoxFit.fill,
                             height: 50.h,
                             width: 50.w,
-                            imageUrl: '${ApiConstants.publicBaseUrl}/${item?.categories?[index].image?.originalImage ?? ''}',
-                            progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                            imageUrl:
+                                '${ApiConstants.publicBaseUrl}/${item?.categories?[index].image?.originalImage ?? ''}',
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Center(
                               child: Container(
                                 height: 30.h,
                                 width: 30.w,
-                                child: CircularProgressIndicator(value: downloadProgress.progress),
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress),
                               ),
                             ),
                             errorWidget: (context, url, error) => ClipRRect(
@@ -1308,7 +1675,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             item?.categories?[index].title ?? '',
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Color(0XFF000000), fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                color: Color(0XFF000000),
+                                fontSize: 14.sp,
+                                fontFamily: 'Gilroy',
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -1330,13 +1701,17 @@ class _HomeScreenState extends State<HomeScreen> {
         primary: false,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemCount: homecontroller.trendingCoursesDataModel.data?.courses?.length,
+        itemCount:
+            homecontroller.trendingCoursesDataModel.data?.courses?.length,
         itemBuilder: (BuildContext context, index) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 4.w),
             child: GestureDetector(
               onTap: () {
-                Get.to(MyCources(), arguments: homecontroller.trendingCoursesDataModel.data?.courses?[index].id ?? 0);
+                Get.to(MyCources(),
+                    arguments: homecontroller.trendingCoursesDataModel.data
+                            ?.courses?[index].id ??
+                        0);
               },
               child: Container(
                 width: 177.w,
@@ -1354,11 +1729,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           // width: 50.w,
                           imageUrl:
                               '${ApiConstants.publicBaseUrl}/${homecontroller.trendingCoursesDataModel.data?.courses?[index].courseThumbnail ?? ''}',
-                          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => Center(
                             child: Container(
                               height: 30.h,
                               width: 30.w,
-                              child: CircularProgressIndicator(value: downloadProgress.progress),
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress),
                             ),
                           ),
                           errorWidget: (context, url, error) => ClipRRect(
@@ -1406,7 +1783,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 8.h),
                     Expanded(
                       child: Text(
-                        homecontroller.trendingCoursesDataModel.data?.courses?[index].title ?? '',
+                        homecontroller.trendingCoursesDataModel.data
+                                ?.courses?[index].title ??
+                            '',
                         maxLines: 2,
                         style: TextStyle(
                           fontFamily: 'Gilroy',
@@ -1439,7 +1818,11 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-          child: Text(mplanguage['courses'].toString(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w700, fontFamily: 'Gilroy')),
+          child: Text(mplanguage['courses'].toString(),
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Gilroy')),
         ),
         SizedBox(
           //color: Colors.red,
@@ -1451,9 +1834,11 @@ class _HomeScreenState extends State<HomeScreen> {
             primary: false,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount: homecontroller.trendingCoursesDataModel.data?.courses?.length,
+            itemCount:
+                homecontroller.trendingCoursesDataModel.data?.courses?.length,
             itemBuilder: (BuildContext context, index) {
-              var course = homecontroller.trendingCoursesDataModel.data?.courses;
+              var course =
+                  homecontroller.trendingCoursesDataModel.data?.courses;
 
               if ((course?[index].is_show ?? 1) == 0) {
                 return SizedBox.shrink();
@@ -1478,12 +1863,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               fit: BoxFit.fill,
                               // height: 50.h,
                               // width: 50.w,
-                              imageUrl: '${ApiConstants.publicBaseUrl}/${course?[index].courseThumbnail ?? ''}',
-                              progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                              imageUrl:
+                                  '${ApiConstants.publicBaseUrl}/${course?[index].courseThumbnail ?? ''}',
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Center(
                                 child: Container(
                                   height: 30.h,
                                   width: 30.w,
-                                  child: CircularProgressIndicator(value: downloadProgress.progress),
+                                  child: CircularProgressIndicator(
+                                      value: downloadProgress.progress),
                                 ),
                               ),
                               errorWidget: (context, url, error) => ClipRRect(
@@ -1594,12 +1982,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           fit: BoxFit.fill,
                           // height: 50.h,
                           // width: 50.w,
-                          imageUrl: '${ApiConstants.publicBaseUrl}/${course?[index].courseThumbnail ?? ''}',
-                          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                          imageUrl:
+                              '${ApiConstants.publicBaseUrl}/${course?[index].courseThumbnail ?? ''}',
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => Center(
                             child: Container(
                               height: 30.h,
                               width: 30.w,
-                              child: CircularProgressIndicator(value: downloadProgress.progress),
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress),
                             ),
                           ),
                           errorWidget: (context, url, error) => ClipRRect(
@@ -1682,7 +2073,9 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Wrap(
           spacing: 8.0,
           runSpacing: 4.0,
-          children: homecontroller.categoriesData.value.data!.categories!.take(5).map((category) {
+          children: homecontroller.categoriesData.value.data!.categories!
+              .take(5)
+              .map((category) {
             return GestureDetector(
               onTap: () {
                 Get.to(SubCategoriesScreen(
@@ -1692,7 +2085,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 padding: EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6), color: WidgetStateColor.transparent, border: Border.all(color: Colors.black)),
+                    borderRadius: BorderRadius.circular(6),
+                    color: WidgetStateColor.transparent,
+                    border: Border.all(color: Colors.black)),
                 child: Text(
                   category.title.toString(),
                   style: TextStyle(
@@ -1738,7 +2133,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
-                        BoxShadow(color: const Color(0XFF503494).withOpacity(0.14), offset: const Offset(-4, 5), blurRadius: 16),
+                        BoxShadow(
+                            color: const Color(0XFF503494).withOpacity(0.14),
+                            offset: const Offset(-4, 5),
+                            blurRadius: 16),
                       ],
                       color: Colors.white),
                   child: Column(
@@ -1756,28 +2154,33 @@ class _HomeScreenState extends State<HomeScreen> {
                               fit: BoxFit.cover),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(right: 230.w, bottom: 120.h, top: 10.h),
+                          padding: EdgeInsets.only(
+                              right: 230.w, bottom: 120.h, top: 10.h),
                           child: Container(
                               height: 20.h,
                               width: 20.w,
-                              decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.white),
                               child: IconButton(
                                   splashRadius: 10,
                                   onPressed: () {
                                     toggleRecent(index);
                                   },
                                   icon: Center(
-                                    child: recentAdded[index].buttonStatus == true
-                                        ? Image(
-                                            image: AssetImage("assets/saveboldblue.png"),
-                                            height: 10.h,
-                                            width: 9.w,
-                                          )
-                                        : Image(
-                                            image: AssetImage("assets/savebold.png"),
-                                            height: 10.h,
-                                            width: 9.w,
-                                          ),
+                                    child:
+                                        recentAdded[index].buttonStatus == true
+                                            ? Image(
+                                                image: AssetImage(
+                                                    "assets/saveboldblue.png"),
+                                                height: 10.h,
+                                                width: 9.w,
+                                              )
+                                            : Image(
+                                                image: AssetImage(
+                                                    "assets/savebold.png"),
+                                                height: 10.h,
+                                                width: 9.w,
+                                              ),
                                   ))),
                         ),
                       ),
@@ -1794,16 +2197,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: const Color(0XFFFAF4E1),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Image(
-                                    image: const AssetImage("assets/staricon.png"),
+                                    image:
+                                        const AssetImage("assets/staricon.png"),
                                     height: 17.h,
                                     width: 17.w,
                                   ),
                                   Text(
                                     recentAdded[index].review!,
-                                    style: TextStyle(fontFamily: 'Gilroy', color: const Color(0XFFFFC403), fontSize: 15.sp),
+                                    style: TextStyle(
+                                        fontFamily: 'Gilroy',
+                                        color: const Color(0XFFFFC403),
+                                        fontSize: 15.sp),
                                   ),
                                 ],
                               ),
@@ -1821,7 +2229,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(width: 4.w),
                                 Text(
                                   recentAdded[index].time!,
-                                  style: TextStyle(fontSize: 15.sp, color: Color(0XFF000000), fontFamily: 'Gilroy'),
+                                  style: TextStyle(
+                                      fontSize: 15.sp,
+                                      color: Color(0XFF000000),
+                                      fontFamily: 'Gilroy'),
                                 )
                               ],
                             ),
@@ -1833,7 +2244,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: EdgeInsets.only(left: 10.w, right: 10.w),
                         child: Text(
                           recentAdded[index].title!,
-                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15.sp, color: Color(0XFF000000), fontFamily: 'Gilroy'),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15.sp,
+                              color: Color(0XFF000000),
+                              fontFamily: 'Gilroy'),
                         ),
                       ),
                       SizedBox(height: 11.h),
@@ -1845,14 +2260,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             Row(
                               children: [
                                 Image(
-                                  image: AssetImage(recentAdded[index].circleimage!),
+                                  image: AssetImage(
+                                      recentAdded[index].circleimage!),
                                   height: 40.h,
                                   width: 40.w,
                                 ),
                                 SizedBox(width: 10.w),
                                 Text(
                                   recentAdded[index].personname!,
-                                  style: TextStyle(fontFamily: 'Gilroy', fontWeight: FontWeight.w400, color: Color(0XFF503494), fontSize: 15.sp),
+                                  style: TextStyle(
+                                      fontFamily: 'Gilroy',
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0XFF503494),
+                                      fontSize: 15.sp),
                                 ),
                               ],
                             ),
@@ -1866,7 +2286,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Center(
                                   child: Text(
                                 recentAdded[index].price!,
-                                style: TextStyle(color: const Color(0XFF503494), fontFamily: 'Gilroy', fontSize: 19.sp, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    color: const Color(0XFF503494),
+                                    fontFamily: 'Gilroy',
+                                    fontSize: 19.sp,
+                                    fontWeight: FontWeight.bold),
                               )),
                             )
                           ],
