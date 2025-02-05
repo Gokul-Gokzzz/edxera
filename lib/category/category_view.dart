@@ -1,11 +1,11 @@
 import 'dart:developer';
 import 'package:edxera/category/category_controller.dart';
+import 'package:edxera/repositories/api/api_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategoryGridView extends StatefulWidget {
-  final String userId;
-  const CategoryGridView({Key? key, required this.userId}) : super(key: key);
+  const CategoryGridView({Key? key}) : super(key: key);
 
   @override
   _CategoryGridViewState createState() => _CategoryGridViewState();
@@ -18,14 +18,17 @@ class _CategoryGridViewState extends State<CategoryGridView> {
   void initState() {
     super.initState();
     // Fetch categories when the widget is first created
-    categoryController.fetchCategories(widget.userId);
+    categoryController.fetchCategories();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Category Grid View'),
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: const Text('Categories'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -57,6 +60,7 @@ class _CategoryGridViewState extends State<CategoryGridView> {
                       crossAxisCount: 2, // Number of columns
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0,
+                      childAspectRatio: 2.5,
                     ),
                     itemCount: categoryController.categories.length,
                     itemBuilder: (context, index) {
@@ -79,26 +83,25 @@ class _CategoryGridViewState extends State<CategoryGridView> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              category.image?.originalImage != null
-                                  ? Image.network(
-                                      category.image!.originalImage!,
-                                      height: 80,
-                                      width: 80,
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                        return const Icon(
-                                          Icons.broken_image,
-                                          size: 40,
-                                          color: Colors.grey,
-                                        );
-                                      },
-                                    )
-                                  : const Icon(
-                                      Icons.image_not_supported,
-                                      size: 40,
-                                      color: Colors.grey,
-                                    ),
+                              // category.image?.originalImage != null
+                              //     ? Image.network(
+                              //         "${ApiConstants.publicBaseUrl}/${category.image!.originalImage ?? ""}",
+                              //         height: 80,
+                              //         width: 80,
+                              //         fit: BoxFit.cover,
+                              //         errorBuilder: (context, error, stackTrace) {
+                              //           return const Icon(
+                              //             Icons.broken_image,
+                              //             size: 40,
+                              //             color: Colors.grey,
+                              //           );
+                              //         },
+                              //       )
+                              //     : const Icon(
+                              //         Icons.image_not_supported,
+                              //         size: 40,
+                              //         color: Colors.grey,
+                              //       ),
                               const SizedBox(height: 8),
                               Text(
                                 category.title ?? "No Title",
@@ -117,18 +120,24 @@ class _CategoryGridViewState extends State<CategoryGridView> {
                   onPressed: categoryController.isSubmitting.value
                       ? null // Disable button when submitting
                       : () {
-                          categoryController.submitCategories(widget.userId);
+                          categoryController.submitCategories();
                         },
                   child: categoryController.isSubmitting.value
                       ? const CircularProgressIndicator(
                           color: Colors.white,
                         )
-                      : const Text('Submit'),
+                      : const Text(
+                          'Submit',
+                          style: TextStyle(color: Colors.white),
+                        ),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 45),
                     backgroundColor: Colors.blue,
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                )
               ],
             );
           }

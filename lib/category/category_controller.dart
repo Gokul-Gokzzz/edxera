@@ -1,5 +1,6 @@
 import 'package:edxera/category/categor_model.dart';
 import 'package:edxera/category/category_service.dart';
+import 'package:edxera/home/home_main.dart';
 import 'package:get/get.dart';
 
 class CategoryController extends GetxController {
@@ -11,11 +12,12 @@ class CategoryController extends GetxController {
   final CategoryService _categoryService = CategoryService();
 
   // Fetch categories for a given userId
-  Future<void> fetchCategories(String userId) async {
+  Future<void> fetchCategories( ) async {
     isLoading.value = true;
     errorMessage.value = '';
+
     try {
-      final result = await _categoryService.fetchCategories(userId);
+      final result = await _categoryService.fetchCategories();
       if (result != null && result.success == true) {
         categories.value = result.data ?? [];
       } else {
@@ -50,20 +52,23 @@ class CategoryController extends GetxController {
   }
 
   // Submit selected categories to the API
-  Future<void> submitCategories(String userId) async {
+  Future<void> submitCategories() async {
     isSubmitting.value = true;
     errorMessage.value = '';
     try {
-      final categoryIds = getSelectedCategoryIds();
+      final categoryIds = getSelectedCategoryIds();//1,1,1,
       if (categoryIds.isEmpty) {
         Get.snackbar('Error', 'No categories selected!');
         return;
       }
 
       final response =
-          await _categoryService.submitCategories(userId, categoryIds);
+          await _categoryService.submitCategories( categoryIds);
       if (response != null && response.statusCode == 200) {
         Get.snackbar('Success', 'Categories added successfully!');
+        Get.offAll(()=>const HomeMainScreen());
+
+
       } else {
         Get.snackbar('Error', 'Failed to add categories.');
       }

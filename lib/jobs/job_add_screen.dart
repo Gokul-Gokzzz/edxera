@@ -4,29 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddJobScreen extends StatefulWidget {
-  final int userId;
-
-  AddJobScreen({Key? key, required this.userId}) : super(key: key);
-
-  @override
-  _AddJobScreenState createState() => _AddJobScreenState();
-}
-
-class _AddJobScreenState extends State<AddJobScreen> {
+class AddJobScreen extends StatelessWidget {
   final JobController jobController = Get.find<JobController>();
-  File? _selectedImage;
 
-  Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-      jobController.setCompanyLogo(_selectedImage!);
-    }
-  }
+  AddJobScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,101 +16,78 @@ class _AddJobScreenState extends State<AddJobScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildTextField(jobController.titleController, "Job Title"),
-                _buildTextField(
-                    jobController.companyNameController, "Company Name"),
-                _buildTextField(
-                    jobController.smallDescController, "Small Description",
-                    maxLines: 2),
-                _buildTextField(
-                    jobController.descriptionController, "Description",
-                    maxLines: 4),
-                _buildDropdown("Work Type", jobController.workTypes,
-                    jobController.selectedWorkType),
-                _buildDropdown("Job Type", jobController.jobTypes,
-                    jobController.selectedJobType),
-                _buildDropdown("Experience", jobController.experienceLevels,
-                    jobController.selectedExperience),
-                _buildDatePicker(
-                    context, "Deadline", jobController.deadlineController),
-                _buildTextField(
-                    jobController.jobSalaryController, "Min Salary"),
-                _buildTextField(
-                    jobController.maxSalaryController, "Max Salary"),
-                _buildTextField(
-                    jobController.jobBenefitsController, "Job Benefits"),
-                _buildTextField(
-                    jobController.jobLocationController, "Location"),
-                _buildTextField(jobController.emailController, "Contact Email",
-                    keyboardType: TextInputType.emailAddress),
-                _buildTextField(
-                    jobController.contactLinkController, "Contact Link"),
-                _buildTextField(
-                    jobController.whatsappController, "WhatsApp Number",
-                    keyboardType: TextInputType.phone),
-                _buildTextField(jobController.responsibilitiesController,
-                    "Responsibilities",
-                    maxLines: 3),
-                _buildTextField(
-                    jobController.requirementsController, "Requirements",
-                    maxLines: 3),
-                _buildTextField(jobController.skillsController, "Skills",
-                    maxLines: 3),
-                _buildTextField(jobController.preferredQualificationController,
-                    "Preferred Qualification",
-                    maxLines: 3),
-                _buildTextField(
-                    jobController.companyWebsiteController, "Company Website"),
-
-                // Image Picker Field
-                Text("Company Logo", style: TextStyle(fontSize: 16)),
-                GestureDetector(
-                  onTap: _pickImage,
-                  child: Container(
-                    height: 150,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: _selectedImage == null
-                        ? Icon(Icons.image, size: 50, color: Colors.grey)
-                        : Image.file(_selectedImage!, fit: BoxFit.cover),
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                Obx(() => Row(
-                      children: [
-                        Text("Allow Apply: ", style: TextStyle(fontSize: 16)),
-                        Switch(
-                          value: jobController.applyStatus.value == 1,
-                          onChanged: (value) {
-                            jobController.applyStatus.value = value ? 1 : 0;
-                          },
-                        ),
-                      ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTextField(jobController.titleController, "Job Title"),
+              _buildTextField(
+                  jobController.companyNameController, "Company Name"),
+              _buildTextField(
+                  jobController.smallDescController, "Small Description",
+                  maxLines: 2),
+              _buildTextField(
+                  jobController.descriptionController, "Description",
+                  maxLines: 4),
+              _buildDropdown("Work Type", jobController.workTypes,
+                  jobController.selectedWorkType),
+              _buildDropdown("Job Type", jobController.jobTypes,
+                  jobController.selectedJobType),
+              _buildDropdown("Experience", jobController.experienceLevels,
+                  jobController.selectedExperience),
+              _buildDatePicker(
+                  context, "Deadline", jobController.deadlineController),
+              _buildTextField(jobController.jobSalaryController, "Min Salary"),
+              _buildTextField(jobController.maxSalaryController, "Max Salary"),
+              _buildTextField(
+                  jobController.jobBenefitsController, "Job Benefits"),
+              _buildTextField(jobController.jobLocationController, "Location"),
+              _buildTextField(jobController.emailController, "Contact Email",
+                  keyboardType: TextInputType.emailAddress),
+              _buildTextField(
+                  jobController.contactLinkController, "Contact Link"),
+              _buildTextField(
+                  jobController.whatsappController, "WhatsApp Number",
+                  keyboardType: TextInputType.phone),
+              _buildTextField(
+                  jobController.responsibilitiesController, "Responsibilities",
+                  maxLines: 3),
+              _buildTextField(
+                  jobController.requirementsController, "Requirements",
+                  maxLines: 3),
+              _buildTextField(jobController.skillsController, "Skills",
+                  maxLines: 3),
+              _buildTextField(jobController.preferredQualificationController,
+                  "Preferred Qualification",
+                  maxLines: 3),
+              _buildTextField(
+                  jobController.companyWebsiteController, "Company Website"),
+              _buildTextField(
+                  jobController.companyLogoController, "Company Logo URL"),
+              SizedBox(height: 10),
+              Obx(() => Row(
+                    children: [
+                      Text("Allow Apply: ", style: TextStyle(fontSize: 16)),
+                      Switch(
+                        value: jobController.applyStatus.value == 1,
+                        onChanged: (value) {
+                          jobController.applyStatus.value = value ? 1 : 0;
+                        },
+                      ),
+                    ],
+                  )),
+              SizedBox(height: 20),
+              Obx(() => jobController.isLoading.value
+                  ? Center(child: CircularProgressIndicator())
+                  : ElevatedButton(
+                      onPressed: () => jobController.submitJob(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        textStyle: TextStyle(fontSize: 18),
+                      ),
+                      child: Center(child: Text("Submit Job")),
                     )),
-                SizedBox(height: 20),
-
-                Obx(() => jobController.isLoading.value
-                    ? Center(child: CircularProgressIndicator())
-                    : ElevatedButton(
-                        onPressed: () => jobController.submitJob(widget.userId),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          textStyle: TextStyle(fontSize: 18),
-                        ),
-                        child: Center(child: Text("Submit Job")),
-                      )),
-              ],
-            ),
+            ],
           ),
         ),
       ),

@@ -13,112 +13,56 @@ class JobDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           job.title ?? "Job Details",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Color(0XFF503494)),
         ),
-        backgroundColor: Colors.blueGrey[900],
+        backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _headerSection(),
-            SizedBox(height: 16),
-            _jobDetailsSection(),
-            SizedBox(height: 16),
-            _applicationProcessSection(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                job.title ?? "No Title",
+                style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey[800]),
+              ),
+              SizedBox(height: 10),
+              Text(
+                job.description ?? "",
+                style: TextStyle(fontSize: 18, color: Colors.black87),
+              ),
+              SizedBox(height: 16),
+              _infoRow(Icons.email, "Contact Email", job.contactEmail),
+              _infoRow(Icons.phone, "WhatsApp", job.contactWhatsappNumber),
+              _infoRow(Icons.work, "Status", job.status),
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar:
-          job.applyAalowedStatus == 1 ? _applyButton(context) : null,
-    );
-  }
-
-  /// **Header Section: Job Title & Company**
-  Widget _headerSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          job.title ?? "No Title",
-          style: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-              color: Colors.blueGrey[800]),
-        ),
-        SizedBox(height: 4),
-        Text(
-          job.companyName ?? "Unknown Company",
-          style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.blueGrey[600]),
-        ),
-      ],
-    );
-  }
-
-  /// **Job Details Section**
-  Widget _jobDetailsSection() {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _infoRow(Icons.location_on, "Location", job.jobLocation),
-            _infoRow(Icons.work_outline, "Work Type", job.workType),
-            _infoRow(Icons.business, "Job Type", job.jobType),
-            _infoRow(Icons.monetization_on, "Salary",
-                "${job.jobSalaryMin} - ${job.jobSalaryMax}"),
-            _infoRow(Icons.star, "Experience", "${job.experience} Years"),
-            _infoRow(Icons.card_giftcard, "Benefits", job.jobBenefits ?? "N/A"),
-            _infoRow(Icons.description, "Description", job.description),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// **Application Process Section**
-  Widget _applicationProcessSection() {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _infoRow(Icons.date_range, "Application Deadline",
-                job.applicationDeadline),
-            _infoRow(Icons.email, "Contact Email", job.contactEmail),
-            _infoRow(Icons.phone, "WhatsApp", job.contactWhatsappNumber),
-            // _infoRow(Icons.link, "Application Link", job.applicationLink),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// **Apply Now Button**
-  Widget _applyButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ElevatedButton(
-        onPressed: () => _showApplyOptions(context),
-        child: Text("Apply Now"),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blueGrey[900],
-          padding: EdgeInsets.symmetric(vertical: 14),
-          textStyle: TextStyle(fontSize: 18),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      ),
+      bottomNavigationBar: job.applyAalowedStatus == 1
+          ? Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () => _showApplyOptions(context),
+                child: Text(
+                  "Apply Now",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0XFF503494),
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  textStyle: TextStyle(fontSize: 18),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+            )
+          : null,
     );
   }
 
@@ -170,8 +114,6 @@ class JobDetailScreen extends StatelessWidget {
                   context, Icons.chat, "WhatsApp", Colors.green, _openWhatsApp),
               _optionTile(
                   context, Icons.email, "Email", Colors.red, _sendEmail),
-              // _optionTile(context, Icons.link, "Application Link", Colors.blue,
-              //     _openApplicationLink),
             ],
           ),
         );
@@ -179,7 +121,6 @@ class JobDetailScreen extends StatelessWidget {
     );
   }
 
-  /// **Option Tile for Apply Methods**
   Widget _optionTile(BuildContext context, IconData icon, String text,
       Color color, Function() onTap) {
     return ListTile(

@@ -65,4 +65,18 @@ class ApiConstants {
   static String viewAnnouncements = 'viewAnnouncements';
   static String studentpaymentdetails = 'studentpaymentdetails';
   static String logout_api = 'logout_api';
+
+
+  static String get_all_categories = '/get_all_categories';
+  static String add_categories_for_user = '/add_categories_for_user';
+  static String get_job_list = '/get_job_list';
+  static String delete_job = '/delete_job';
+  static String add_job = '/add_job';
+  static String get_course_reels = '/get_course_reels';
+  static String get_course_reels_details = '/get_course_reels_details';
+  static String like_or_unlike_course = '/like_or_unlike_course';
+  static String comment_course = '/comment_course';
+  static String view_course_likes = '/view_course_likes';
+  static String view_course_comments = '/view_course_comments';
+
 }

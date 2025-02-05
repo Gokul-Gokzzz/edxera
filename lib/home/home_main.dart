@@ -1,5 +1,8 @@
 import 'package:edxera/batchs/batches_main_screen.dart';
+import 'package:edxera/homes/homes.dart';
 import 'package:edxera/jobs/job_list_view.dart';
+import 'package:edxera/reels/controller/reel_controller.dart';
+import 'package:edxera/reels/reels_home.dart';
 import 'package:edxera/store/webview_store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,9 +25,11 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
   List userDetail = Utils.getUser();
 
   HomeMainController controller = Get.put(HomeMainController());
+  ReelController reelController = Get.put(ReelController());
 
   @override
   void initState() {
+    reelController.getReels();
     controller.feedbackApi();
     super.initState();
   }
@@ -201,17 +206,15 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
     switch (controller.position.value) {
       case 0:
         //return Center(child: Container(child: Text("1")));
-        return HomeScreen();
+        return ReelsHome();
       case 1:
-        return MyProfile();
+        return HomeScreen();
       case 2:
         //return Center(child: Container(child: Text("1")));
         return BatchesScreen();
       case 3:
         //return Center(child: Container(child: Text("2")));
-        return JobListScreen(
-          userId: 498,
-        );
+        return JobListScreen();
       case 4:
         //return Center(child: Container(child: Text("3")));
         return const WebviewStore();

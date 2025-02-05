@@ -5,6 +5,8 @@ import 'package:edxera/jobs/job_list_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../utils/shared_pref.dart';
+
 class JobController extends GetxController {
   final JobService _jobService = JobService();
 
@@ -56,9 +58,9 @@ class JobController extends GetxController {
 
   final RxInt applyStatus = 1.obs; // 1 for allowed, 0 for not allowed
 
-  void loadJobs(int userId) async {
+  void loadJobs() async {
     isLoading(true);
-    JobListModel? result = await _jobService.fetchJobList(userId);
+    JobListModel? result = await _jobService.fetchJobList();
     if (result != null && result.data != null) {
       jobList.assignAll(result.data!);
     }
@@ -85,8 +87,10 @@ class JobController extends GetxController {
     companyLogoController.text = image.path;
   }
 
-  Future<void> submitJob(int userId) async {
+  Future<void> submitJob() async {
     isLoading.value = true;
+    int userId = await PrefData.getUserId();
+
     final jobData = {
       "user_id": userId,
       "title": titleController.text,
