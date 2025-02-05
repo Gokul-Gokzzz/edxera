@@ -4,26 +4,82 @@ import 'package:edxera/jobs/job_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class JobListScreen extends StatelessWidget {
-  final JobController jobController = Get.put(JobController());
-
+class JobListScreen extends StatefulWidget {
   JobListScreen({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<JobListScreen> createState() => _JobListScreenState();
+}
+
+class _JobListScreenState extends State<JobListScreen> {
+  final JobController jobController = Get.put(JobController());
+  bool isSearching = false;
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     jobController.loadJobs();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Job Listings",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white54),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56), // Set a fixed height for the AppBar
+        child: AppBar(
+          backgroundColor: Colors.white,
+          title: isSearching
+              ? Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: TextField(
+                    controller: searchController,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: "Search...",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                      isDense: true,
+                    ),
+                    style: TextStyle(
+                        color: Colors.black), // Set text color to black
+                  ),
+                )
+              : Row(
+                  children: [
+                    Image.asset(
+                      'assets/app_logo.jpeg', // Your logo image
+                      height: 30,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      "Edxera",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purple.shade900),
+                    ),
+                  ],
+                ),
+          actions: [
+            isSearching
+                ? IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        isSearching = false;
+                        searchController.clear();
+                      });
+                    },
+                  )
+                : IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      setState(() {
+                        isSearching = true;
+                      });
+                    },
+                  ),
+          ],
         ),
-        backgroundColor: Colors.blueGrey[900],
-        centerTitle: true,
-        elevation: 0,
       ),
       body: Obx(() {
         if (jobController.isLoading.value) {
@@ -34,7 +90,10 @@ class JobListScreen extends StatelessWidget {
           return Center(
             child: Text(
               "No jobs found",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           );
         }
@@ -62,7 +121,8 @@ class JobListScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Job Name:',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 4),
                         Text(
@@ -79,24 +139,32 @@ class JobListScreen extends StatelessWidget {
 
                         _buildDetailRow(
                           'Location',
-                          job.jobLocation?.isNotEmpty == true ? job.jobLocation! : "Not Provided",
+                          job.jobLocation?.isNotEmpty == true
+                              ? job.jobLocation!
+                              : "Not Provided",
                         ),
-                        _buildDetailRow('WhatsApp', job.contactWhatsappNumber ?? "No Number"),
-                        _buildDetailRow('Email', job.contactEmail ?? "No Email"),
-                        if (job.contactLink != null && job.contactLink!.isNotEmpty)
+                        _buildDetailRow('WhatsApp',
+                            job.contactWhatsappNumber ?? "No Number"),
+                        _buildDetailRow(
+                            'Email', job.contactEmail ?? "No Email"),
+                        if (job.contactLink != null &&
+                            job.contactLink!.isNotEmpty)
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4),
                             child: Row(
                               children: [
                                 Text(
                                   'Contact Link:',
-                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(width: 4),
                                 Expanded(
                                   child: Text(
                                     job.contactLink!,
-                                    style: TextStyle(fontSize: 14, color: Colors.blue),
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.blue),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),

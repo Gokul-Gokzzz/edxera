@@ -12,6 +12,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class ReelCard extends StatefulWidget {
   // final ReelModel model;
@@ -321,9 +322,18 @@ class _ReelCardState extends State<ReelCard> {
                             errorWidget: (context, url, error) =>
                                 Icon(Icons.broken_image),
                           )
-                        : AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: Chewie(controller: chewieController),
+                        : VisibilityDetector(
+                            key: Key(item.id.toString()),
+                            onVisibilityChanged: (visibilityInfo) {
+                              // Start the video when the reel is 50% visible
+                              if (visibilityInfo.visibleFraction > 0.5) {
+                                _loadVideo(item.id!);
+                              }
+                            },
+                            child: AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: Chewie(controller: chewieController),
+                            ),
                           ),
               ),
               Positioned(
@@ -339,9 +349,8 @@ class _ReelCardState extends State<ReelCard> {
                     Expanded(
                       child: Text(
                         'Edxera',
-                        // item.courseName ?? '',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.purple.shade900,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -372,7 +381,21 @@ class _ReelCardState extends State<ReelCard> {
               ),
               GestureDetector(
                 onTap: () => _showCommentsBottomSheet(item.id!),
-                child: Text("${item.courseCommentCount ?? 0}"),
+                child: Row(
+                  children: [
+                    Text("${item.courseCommentCount ?? 0}"),
+                    SizedBox(width: 5),
+                    Text(
+                      "View Comments",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Spacer(),
               IconButton(
@@ -416,5 +439,12 @@ class _ReelCardState extends State<ReelCard> {
         ],
       ),
     );
+  }
+
+  void _loadVideo(int itemId) {
+    // Logic to initialize or load the video based on itemId
+    setState(() {
+      isLoading = false;
+    });
   }
 }

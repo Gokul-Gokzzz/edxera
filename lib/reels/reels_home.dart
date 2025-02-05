@@ -20,8 +20,11 @@ class ReelsHome extends StatefulWidget {
 }
 
 class _ReelsHomeState extends State<ReelsHome> {
+  bool isSearching = false;
+  TextEditingController searchController = TextEditingController();
   ReelController reelController = Get.find();
-  final PageController _pageController = PageController(); // Page controller for the advertisement slider
+  final PageController _pageController =
+      PageController(); // Page controller for the advertisement slider
   int _currentPage = 0;
 
   List<int> highlightList = [];
@@ -46,7 +49,8 @@ class _ReelsHomeState extends State<ReelsHome> {
       setState(() {
         _currentPage = (_currentPage + 1) % 3; // Update the current page index
       });
-      Future.delayed(Duration(seconds: 5), _autoSlideAds); // Repeat every 5 seconds
+      Future.delayed(
+          Duration(seconds: 5), _autoSlideAds); // Repeat every 5 seconds
     }
   }
 
@@ -56,6 +60,64 @@ class _ReelsHomeState extends State<ReelsHome> {
     //  final reels = reelController.reels;
 
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56), // Set a fixed height for the AppBar
+        child: AppBar(
+          backgroundColor: Colors.white,
+          title: isSearching
+              ? Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: TextField(
+                    controller: searchController,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: "Search...",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                      isDense: true,
+                    ),
+                    style: TextStyle(
+                        color: Colors.black), // Set text color to black
+                  ),
+                )
+              : Row(
+                  children: [
+                    Image.asset(
+                      'assets/app_logo.jpeg', // Your logo image
+                      height: 30,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      "Edxera",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purple.shade900),
+                    ),
+                  ],
+                ),
+          actions: [
+            isSearching
+                ? IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        isSearching = false;
+                        searchController.clear();
+                      });
+                    },
+                  )
+                : IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      setState(() {
+                        isSearching = true;
+                      });
+                    },
+                  ),
+          ],
+        ),
+      ),
       body: Obx(
         () {
           return SafeArea(
@@ -87,10 +149,12 @@ class _ReelsHomeState extends State<ReelsHome> {
                                       child: Column(
                                         children: [
                                           Container(
-                                            height: 150, // Fixed height for the advertisement
+                                            height:
+                                                150, // Fixed height for the advertisement
                                             child: PageView.builder(
                                               controller: _pageController,
-                                              itemCount: 3, // Number of advertisements
+                                              itemCount:
+                                                  3, // Number of advertisements
                                               onPageChanged: (index) {
                                                 setState(() {
                                                   _currentPage = index;
@@ -107,8 +171,10 @@ class _ReelsHomeState extends State<ReelsHome> {
                                           SizedBox(height: 10),
                                           SmoothPageIndicator(
                                             controller: _pageController,
-                                            count: 3, // Number of advertisements
-                                            effect: SwapEffect(), // Indicator effect (can be changed)
+                                            count:
+                                                3, // Number of advertisements
+                                            effect:
+                                                SwapEffect(), // Indicator effect (can be changed)
                                           ),
                                         ],
                                       ),
