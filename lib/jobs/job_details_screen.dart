@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:edxera/repositories/api/api_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:edxera/jobs/job_list_model.dart';
@@ -27,38 +29,46 @@ class JobDetailScreen extends StatelessWidget {
               ///title
               Text(
                 job.title ?? "No Title",
-                style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey[800]),
+                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.blueGrey[800]),
               ),
               SizedBox(height: 10),
 
+              Center(
+                child: SizedBox(
+                  height: 150,
+                  child: CachedNetworkImage(
+                    imageUrl: "${ApiConstants.publicBaseUrl}/${job.companyLogo ?? ""}",
+                    errorWidget: (context, url, error) => Center(
+                      child: SizedBox(
+                        height: 100,
+                        child: Icon(
+                          Icons.image_not_supported_outlined,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
               ///Description
               ///
-              Text(job.description ?? "",
-                  style: TextStyle(fontSize: 18, color: Colors.black87)),
+              Text(job.description ?? "", style: TextStyle(fontSize: 18, color: Colors.black87)),
               SizedBox(height: 16),
 
               ///  🏢 Job Title (Text Input)
               _infoRow2("🌍", "Job Location", job.jobLocation),
               _infoRow2("🏠", "Work Type", job.workType),
               _infoRow2("💼", "Job Type", job.jobType),
-              _infoRow2("💰", "Salary Range",
-                  "${job.jobSalaryMin} - ${job.jobSalaryMax}"),
+              _infoRow2("💰", "Salary Range", "${job.jobSalaryMin} - ${job.jobSalaryMax}"),
               _infoRow2("🎓", "Experience Required", job.experience),
 
               ///2️⃣ Job Description
-              _infoRow(Icons.location_on_outlined, "Responsibilities",
-                  job.responsibilities),
-              _infoRow(
-                  Icons.work_history_outlined, "Requirements", job.workType),
-              _infoRow(
-                  Icons.work_history_outlined, "Skills Required", job.jobType),
-              _infoRow(Icons.attach_money, "Salary Range",
-                  "${job.jobSalaryMin} - ${job.jobSalaryMax}"),
-              _infoRow(Icons.workspace_premium, "Preferred Qualifications",
-                  job.experience),
+              _infoRow(Icons.location_on_outlined, "Responsibilities", job.responsibilities),
+              _infoRow(Icons.work_history_outlined, "Requirements", job.workType),
+              _infoRow(Icons.work_history_outlined, "Skills Required", job.jobType),
+              _infoRow(Icons.attach_money, "Salary Range", "${job.jobSalaryMin} - ${job.jobSalaryMax}"),
+              _infoRow(Icons.workspace_premium, "Preferred Qualifications", job.experience),
 
               /// 3️⃣ Application Process
               _infoRow2("📅", "Application Deadline", job.responsibilities),
@@ -68,8 +78,7 @@ class JobDetailScreen extends StatelessWidget {
               /// 4️⃣ Additional Details
               _infoRow2("🎁", "Job Benefits", job.jobBenefits),
               _infoRow2("📂", "Company Logo", job.companyLogo),
-              _infoRow2("🌐", "Company Website", job.companyWebsite,
-                  isLink: true),
+              _infoRow2("🌐", "Company Website", job.companyWebsite, isLink: true),
 
               SizedBox(height: 20),
             ],
@@ -89,8 +98,7 @@ class JobDetailScreen extends StatelessWidget {
                   backgroundColor: Color(0XFF503494),
                   padding: EdgeInsets.symmetric(vertical: 14),
                   textStyle: TextStyle(fontSize: 18),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
               ),
             )
@@ -117,8 +125,7 @@ class JobDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _infoRow2(String icon, String label, String? value,
-      {bool isLink = false}) {
+  Widget _infoRow2(String icon, String label, String? value, {bool isLink = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -137,8 +144,7 @@ class JobDetailScreen extends StatelessWidget {
               },
               child: Text(
                 "$label: ${value ?? "N/A"}",
-                style: TextStyle(
-                    fontSize: 16, color: isLink ? Colors.blue : Colors.black87),
+                style: TextStyle(fontSize: 16, color: isLink ? Colors.blue : Colors.black87),
               ),
             ),
           ),
@@ -196,16 +202,11 @@ class JobDetailScreen extends StatelessWidget {
             children: [
               Text(
                 "Apply via",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey[800]),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blueGrey[800]),
               ),
               SizedBox(height: 16),
-              _optionTile(
-                  context, Icons.chat, "WhatsApp", Colors.green, _openWhatsApp),
-              _optionTile(
-                  context, Icons.email, "Email", Colors.red, _sendEmail),
+              _optionTile(context, Icons.chat, "WhatsApp", Colors.green, _openWhatsApp),
+              _optionTile(context, Icons.email, "Email", Colors.red, _sendEmail),
             ],
           ),
         );
@@ -213,8 +214,7 @@ class JobDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _optionTile(BuildContext context, IconData icon, String text,
-      Color color, Function() onTap) {
+  Widget _optionTile(BuildContext context, IconData icon, String text, Color color, Function() onTap) {
     return ListTile(
       leading: Icon(icon, color: color),
       title: Text(text, style: TextStyle(fontSize: 16)),

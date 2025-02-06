@@ -26,23 +26,27 @@ class _SplashscreenState extends State<Splashscreen> {
   }
 
   getIntro() async {
-    bool isIntro = await PrefData.getIntro();
-    bool isLogin = await PrefData.getLogin();
-    int userId = await PrefData.getUserId();
-    PostRepository postRepository = PostRepository();
-    if (isIntro == false) {
-      Timer(const Duration(seconds: 5), () => Get.offAll(() => const SlidePage()));
-    } else if (isLogin == false) {
-      Get.to(() => const EmptyState());
-    } else if (userId == 0) {
-      Timer(const Duration(seconds: 5), () => Get.offAll(() => const EmptyState()));
-    } else {
-      final isUserExit = await postRepository.checkUserExist();
-      if (isUserExit) {
-        Timer(const Duration(seconds: 3), () => Get.offAll(const HomeMainScreen()));
+    try {
+      bool isIntro = await PrefData.getIntro();
+      bool isLogin = await PrefData.getLogin();
+      int userId = await PrefData.getUserId();
+      PostRepository postRepository = PostRepository();
+      if (isIntro == false) {
+        Get.offAll(() => const SlidePage());
+      } else if (isLogin == false) {
+        Get.to(() => const EmptyState());
+      } else if (userId == 0) {
+        Get.offAll(() => const EmptyState());
       } else {
-        Timer(const Duration(seconds: 5), () => Get.offAll(() => const EmptyState()));
+        final isUserExit = await postRepository.checkUserExist();
+        if (isUserExit) {
+          Get.offAll(const HomeMainScreen());
+        } else {
+          Get.offAll(() => const EmptyState());
+        }
       }
+    } catch (e) {
+      Get.offAll(() => const EmptyState());
     }
   }
 

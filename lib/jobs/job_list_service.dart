@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:edxera/jobs/job_category_model.dart';
 import 'package:edxera/jobs/job_list_model.dart';
 import 'package:edxera/repositories/api/api.dart';
 import 'package:edxera/repositories/api/api_constants.dart';
@@ -23,6 +24,26 @@ class JobService {
       print("Error fetching jobs: $e");
     }
     return null;
+  }
+
+  Future<List<JobCategory>> loadJobCategory() async {
+    try {
+      int userId = await PrefData.getUserId();
+
+      Response response = await _dio.sendRequest.post(ApiConstants.get_job_categories, data: {
+        "user_id": userId,
+      });
+
+      if (response.statusCode == 200) {
+        final list = (response.data['data'] as Iterable).map((e) => JobCategory.fromMap(e)).toList();
+        return list;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print("Error fetching jobs: $e");
+      return [];
+    }
   }
 
   Future<bool> deleteJob(int jobId) async {

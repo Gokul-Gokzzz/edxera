@@ -7,12 +7,13 @@ class ReelController extends GetxController {
   RxList<ReelModel> reels = RxList.empty();
   RxBool isLoading = true.obs;
   bool hasError = false;
-  getReels() async {
+
+  getReels({String? search}) async {
     isLoading.value = true;
     hasError = false;
     reels.value = [];
     try {
-      reels.value = await ReelService().getReels();
+      reels.value = await ReelService().getReels(search: search);
       hasError = false;
     } catch (ex) {
       reels.value = [];
