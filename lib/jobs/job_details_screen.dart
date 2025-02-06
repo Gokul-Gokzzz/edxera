@@ -70,6 +70,11 @@ class JobDetailScreen extends StatelessWidget {
               _infoRow2("📂", "Company Logo", job.companyLogo),
               _infoRow2("🌐", "Company Website", job.companyWebsite,
                   isLink: true),
+              _infoRow2(
+                "📱",
+                "WhatsApp",
+                job.contactWhatsappNumber,
+              ),
 
               SizedBox(height: 20),
             ],

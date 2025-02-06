@@ -1,26 +1,31 @@
-import 'package:dio/dio.dart';
-import 'course_list_model.dart';
+// import 'package:dio/dio.dart';
+// import 'course_list_model.dart'; // import the model
 
-class CourseService {
-  final Dio dio = Dio(); // Initialize Dio
+// class PostService {
+//   final Dio _dio = Dio();
 
-  // Accept the requestBody to pass it in the POST request
-  Future<CourseListModel> fetchCourseList(
-      Map<String, dynamic> requestBody) async {
-    try {
-      // Replace with your API URL
-      final response = await dio.post(
-        'https://your-api-url.com/courses',
-        data: requestBody, // Use the requestBody in the API call
-      );
+//   // Define the API URL
+//   final String _apiUrl = "https://xianinfotech.in/edxera/api/get_all_courses_list"; // Replace with actual API endpoint
 
-      if (response.statusCode == 200) {
-        return CourseListModel.fromJson(response.data);
-      } else {
-        throw Exception('Failed to load courses');
-      }
-    } catch (e) {
-      throw Exception('Error: $e');
-    }
-  }
-}
+//   // Method to send a POST request and get the response
+//   Future<CourseListModel> postCourseListData(CourseListModel courseListModel) async {
+//     try {
+//       // Send a POST request with the data as JSON
+//       Response response = await _dio.post(
+//         _apiUrl,
+//         data: courseListModel.toJson(),
+//       );
+
+//       // If the request is successful, return the parsed response as a model
+//       if (response.statusCode == 200) {
+//         return CourseListModel.fromJson(response.data);
+//       } else {
+//         throw Exception('Failed to load data');
+//       }
+//     } catch (e) {
+//       // Handle any errors here
+//       print('Error during post request: $e');
+//       rethrow; // You can rethrow the error or return a default model, depending on your needs
+//     }
+//   }
+// }

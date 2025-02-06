@@ -143,8 +143,20 @@ class _JobListScreenState extends State<JobListScreen> {
                               ? job.jobLocation!
                               : "Not Provided",
                         ),
-                        _buildDetailRow('WhatsApp',
-                            job.contactWhatsappNumber ?? "No Number"),
+                        _buildDetailRow(
+                          'Experiance',
+                          job.experience?.isNotEmpty == true
+                              ? job.experience!
+                              : "Not Provided",
+                        ),
+                        _buildDetailRow(
+                          'Job_Type',
+                          job.jobType?.isNotEmpty == true
+                              ? job.jobType!
+                              : "Not Provided",
+                        ),
+                        // _buildDetailRow('WhatsApp',
+                        //     job.contactWhatsappNumber ?? "No Number"),
                         // _buildDetailRow(
                         //     'Email', job.contactEmail ?? "No Email"),
                         // if (job.contactLink != null &&

@@ -62,14 +62,12 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF5F5F5),
       ),
       home: DefaultTextStyle(
-          maxLines: 3,
-          style: const TextStyle(
-            overflow: TextOverflow.ellipsis,
-          ),
-          child: Splashscreen(),
-
-
-          ),
+        maxLines: 3,
+        style: const TextStyle(
+          overflow: TextOverflow.ellipsis,
+        ),
+        child: Splashscreen(),
+      ),
     );
   }
 }

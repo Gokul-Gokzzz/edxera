@@ -23,8 +23,6 @@ class BatchesScreen extends StatefulWidget {
 }
 
 class _BatchesScreenState extends State<BatchesScreen> {
-  bool isSearching = false;
-  TextEditingController searchController = TextEditingController();
   BatchMainControleller ongoingCompletedController =
       Get.put(BatchMainControleller());
   PageController pageController = PageController();
@@ -55,58 +53,22 @@ class _BatchesScreenState extends State<BatchesScreen> {
         preferredSize: Size.fromHeight(56), // Set a fixed height for the AppBar
         child: AppBar(
           backgroundColor: Colors.white,
-          title: isSearching
-              ? Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: TextField(
-                    controller: searchController,
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      hintText: "Search...",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      border: InputBorder.none,
-                      isDense: true,
-                    ),
-                    style: TextStyle(
-                        color: Colors.black), // Set text color to black
-                  ),
-                )
-              : Row(
-                  children: [
-                    Image.asset(
-                      'assets/app_logo.jpeg', // Your logo image
-                      height: 30,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "Edxera",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.purple.shade900),
-                    ),
-                  ],
-                ),
-          actions: [
-            isSearching
-                ? IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
-                        isSearching = false;
-                        searchController.clear();
-                      });
-                    },
-                  )
-                : IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {
-                      setState(() {
-                        isSearching = true;
-                      });
-                    },
-                  ),
-          ],
+          title: Row(
+            children: [
+              Image.asset(
+                'assets/app_logo.jpeg', // Your logo image
+                height: 30,
+              ),
+              SizedBox(width: 10),
+              Text(
+                "Edxera",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.purple.shade900),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
