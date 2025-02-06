@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:edxera/repositories/api/api_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:edxera/jobs/job_list_model.dart';
@@ -33,6 +35,25 @@ class JobDetailScreen extends StatelessWidget {
                     color: Colors.blueGrey[800]),
               ),
               SizedBox(height: 10),
+
+              Center(
+                child: SizedBox(
+                  height: 150,
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        "${ApiConstants.publicBaseUrl}/${job.companyLogo ?? ""}",
+                    errorWidget: (context, url, error) => Center(
+                      child: SizedBox(
+                        height: 100,
+                        child: Icon(
+                          Icons.image_not_supported_outlined,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
 
               ///Description
               ///

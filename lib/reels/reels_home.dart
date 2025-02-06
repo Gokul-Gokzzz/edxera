@@ -6,6 +6,7 @@ import 'package:edxera/reels/thumbnail_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../repositories/api/api_constants.dart';
@@ -23,8 +24,7 @@ class _ReelsHomeState extends State<ReelsHome> {
   bool isSearching = false;
   TextEditingController searchController = TextEditingController();
   ReelController reelController = Get.find();
-  final PageController _pageController =
-      PageController(); // Page controller for the advertisement slider
+  final PageController _pageController = PageController(); // Page controller for the advertisement slider
   int _currentPage = 0;
 
   List<int> highlightList = [];
@@ -49,10 +49,11 @@ class _ReelsHomeState extends State<ReelsHome> {
       setState(() {
         _currentPage = (_currentPage + 1) % 3; // Update the current page index
       });
-      Future.delayed(
-          Duration(seconds: 5), _autoSlideAds); // Repeat every 5 seconds
+      Future.delayed(Duration(seconds: 5), _autoSlideAds); // Repeat every 5 seconds
     }
   }
+
+  Debouncer _searchDebouncer = Debouncer(delay: Duration(milliseconds: 500));
 
   @override
   Widget build(BuildContext context) {
@@ -70,14 +71,24 @@ class _ReelsHomeState extends State<ReelsHome> {
                   child: TextField(
                     controller: searchController,
                     autofocus: true,
+                    onChanged: (value) {
+                      _searchDebouncer.call(
+                        () {
+                          if (value.isEmpty) {
+                            reelController.getReels();
+                          } else {
+                            reelController.getReels(search: value);
+                          }
+                        },
+                      );
+                    },
                     decoration: InputDecoration(
                       hintText: "Search...",
                       hintStyle: TextStyle(color: Colors.grey),
                       border: InputBorder.none,
                       isDense: true,
                     ),
-                    style: TextStyle(
-                        color: Colors.black), // Set text color to black
+                    style: TextStyle(color: Colors.black), // Set text color to black
                   ),
                 )
               : Row(
@@ -89,10 +100,7 @@ class _ReelsHomeState extends State<ReelsHome> {
                     SizedBox(width: 10),
                     Text(
                       "Edxera",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.purple.shade900),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purple.shade900),
                     ),
                   ],
                 ),
@@ -104,6 +112,7 @@ class _ReelsHomeState extends State<ReelsHome> {
                       setState(() {
                         isSearching = false;
                         searchController.clear();
+                        reelController.getReels();
                       });
                     },
                   )
@@ -125,107 +134,104 @@ class _ReelsHomeState extends State<ReelsHome> {
               onRefresh: () async {
                 await reelController.getReels();
               },
-              child: reelController.isLoading.value
-                  ? Center(child: CircularProgressIndicator())
-                  : reelController.reels.length > 0
-                      ? SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          child: Column(
-                            children: [
-                              // Advertisement Slider
-                              Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Card(
-                                    color: Colors.white,
-                                    margin: EdgeInsets.all(10),
-                                    elevation: 3,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height:
-                                                150, // Fixed height for the advertisement
-                                            child: PageView.builder(
-                                              controller: _pageController,
-                                              itemCount:
-                                                  3, // Number of advertisements
-                                              onPageChanged: (index) {
-                                                setState(() {
-                                                  _currentPage = index;
-                                                });
-                                              },
-                                              itemBuilder: (context, index) {
-                                                return Image.asset(
-                                                  'assets/adv1.jpg', // Replace with your advertisement images
-                                                  fit: BoxFit.cover,
-                                                );
-                                              },
+              child: Container(
+                color: Colors.white,
+                child: reelController.isLoading.value
+                    ? Center(child: CircularProgressIndicator())
+                    : reelController.reels.length > 0
+                        ? SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              children: [
+                                // Advertisement Slider
+                                Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Card(
+                                      color: Colors.white,
+                                      margin: EdgeInsets.all(10),
+                                      elevation: 3,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 150, // Fixed height for the advertisement
+                                              child: PageView.builder(
+                                                controller: _pageController,
+                                                itemCount: 3, // Number of advertisements
+                                                onPageChanged: (index) {
+                                                  setState(() {
+                                                    _currentPage = index;
+                                                  });
+                                                },
+                                                itemBuilder: (context, index) {
+                                                  return Image.asset(
+                                                    'assets/adv1.jpg', // Replace with your advertisement images
+                                                    fit: BoxFit.cover,
+                                                  );
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(height: 10),
-                                          SmoothPageIndicator(
-                                            controller: _pageController,
-                                            count:
-                                                3, // Number of advertisements
-                                            effect:
-                                                SwapEffect(), // Indicator effect (can be changed)
-                                          ),
-                                        ],
+                                            SizedBox(height: 10),
+                                            SmoothPageIndicator(
+                                              controller: _pageController,
+                                              count: 3, // Number of advertisements
+                                              effect: SwapEffect(), // Indicator effect (can be changed)
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: reelController.reels.length,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                      onTap: () {
-                                        // print("${ApiConstants.publicBaseUrl}/${reelController.reels[index].courseReelVideo}");
-                                        // Get.to(
-                                        //   () => ReelPlayer(
-                                        //     index: index,
-                                        //   ),
-                                        // );
-                                      },
-                                      child:
-                                          // (reelController.reels[index].courseThumbnail ?? "").isEmpty
-                                          //     // ? ThumbnailPlayer(reelController.reels[index])
-                                          //     ?
-                                          ReelCard(
-                                        index: index,
-                                      )
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: reelController.reels.length,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                        onTap: () {
+                                          // print("${ApiConstants.publicBaseUrl}/${reelController.reels[index].courseReelVideo}");
+                                          // Get.to(
+                                          //   () => ReelPlayer(
+                                          //     index: index,
+                                          //   ),
+                                          // );
+                                        },
+                                        child:
+                                            // (reelController.reels[index].courseThumbnail ?? "").isEmpty
+                                            //     // ? ThumbnailPlayer(reelController.reels[index])
+                                            //     ?
+                                            ReelCard(index: index)
 
-                                      // : CachedNetworkImage(
-                                      //     imageUrl: "${ApiConstants.publicBaseUrl}/${reelController.reels[index].courseThumbnail}",
-                                      //     progressIndicatorBuilder: (context, url, progress) => SizedBox(
-                                      //       height: 300,
-                                      //       child: Center(
-                                      //         child: CircularProgressIndicator(
-                                      //           value: progress.progress,
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //     fit: BoxFit.cover,
-                                      //     errorWidget: (context, url, error) => Icon(Icons.broken_image),
-                                      //   ),
-                                      );
-                                },
-                              ),
-                            ],
+                                        // : CachedNetworkImage(
+                                        //     imageUrl: "${ApiConstants.publicBaseUrl}/${reelController.reels[index].courseThumbnail}",
+                                        //     progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                        //       height: 300,
+                                        //       child: Center(
+                                        //         child: CircularProgressIndicator(
+                                        //           value: progress.progress,
+                                        //         ),
+                                        //       ),
+                                        //     ),
+                                        //     fit: BoxFit.cover,
+                                        //     errorWidget: (context, url, error) => Icon(Icons.broken_image),
+                                        //   ),
+                                        );
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        : Center(
+                            child: Text("There is No Reels"),
                           ),
-                        )
-                      : Center(
-                          child: Text("There is No Reels"),
-                        ),
+              ),
             ),
           );
         },

@@ -8,10 +8,16 @@ import '../model/reel_users.dart';
 class ReelService {
   final _dio = API();
 
-  Future<List<ReelModel>> getReels() async {
+  Future<List<ReelModel>> getReels({String? search}) async {
     try {
       int userId = await PrefData.getUserId();
-      final response = await _dio.sendRequest.post(ApiConstants.get_course_reels, data: {"user_id": userId});
+      final response = await _dio.sendRequest.post(
+        ApiConstants.get_course_reels,
+        data: {
+          "user_id": userId,
+          if ((search ?? "").isNotEmpty) "search": search,
+        },
+      );
 
       final data = ReelResponse.fromMap(response.data);
       return data.data ?? [];

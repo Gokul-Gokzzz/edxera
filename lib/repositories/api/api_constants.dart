@@ -70,6 +70,7 @@ class ApiConstants {
   static String get_all_categories = '/get_all_categories';
   static String add_categories_for_user = '/add_categories_for_user';
   static String get_job_list = '/get_job_list';
+  static String get_job_categories = '/get_job_categories';
   static String delete_job = '/delete_job';
   static String add_job = '/add_job';
   static String get_course_reels = '/get_course_reels';
