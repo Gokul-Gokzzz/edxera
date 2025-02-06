@@ -62,6 +62,7 @@ class JobDetailScreen extends StatelessWidget {
               SizedBox(height: 16),
 
               ///  🏢 Job Title (Text Input)
+              _infoRow2("🏚", "Company Name", job.companyName),
               _infoRow2("🌍", "Job Location", job.jobLocation),
               _infoRow2("🏠", "Work Type", job.workType),
               _infoRow2("💼", "Job Type", job.jobType),

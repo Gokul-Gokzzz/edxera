@@ -34,20 +34,33 @@ class JobController extends GetxController {
   final TextEditingController jobSalaryController = TextEditingController();
   final TextEditingController maxSalaryController = TextEditingController();
   final TextEditingController companyNameController = TextEditingController();
-  final TextEditingController responsibilitiesController = TextEditingController();
+  final TextEditingController responsibilitiesController =
+      TextEditingController();
   final TextEditingController requirementsController = TextEditingController();
   final TextEditingController skillsController = TextEditingController();
-  final TextEditingController preferredQualificationController = TextEditingController();
+  final TextEditingController preferredQualificationController =
+      TextEditingController();
   final TextEditingController jobBenefitsController = TextEditingController();
-  final TextEditingController companyWebsiteController = TextEditingController();
+  final TextEditingController companyWebsiteController =
+      TextEditingController();
   final TextEditingController companyLogoController = TextEditingController();
   XFile? selectedLogo;
   final TextEditingController deadlineController = TextEditingController();
 
   // Dropdown options
   final List<String> workTypes = ["On-site", "Remote", "Hybrid"];
-  final List<String> jobTypes = ["Full-time", "Part-time", "Contract", "Internship"];
-  final List<String> experienceLevels = ["0-1 years", "1-3 years", "3-5 years", "5+ years"];
+  final List<String> jobTypes = [
+    "Full-time",
+    "Part-time",
+    "Contract",
+    "Internship"
+  ];
+  final List<String> experienceLevels = [
+    "0-1 years",
+    "1-3 years",
+    "3-5 years",
+    "5+ years"
+  ];
 
   // Selected dropdown values
   final RxString selectedWorkType = "On-site".obs;
@@ -75,9 +88,14 @@ class JobController extends GetxController {
     if (success) {
       jobList.removeAt(index);
       Get.snackbar("Success", "Job deleted successfully",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green, colorText: Colors.white);
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white);
     } else {
-      Get.snackbar("Error", "Failed to delete job", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar("Error", "Failed to delete job",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
     }
   }
 
@@ -91,31 +109,36 @@ class JobController extends GetxController {
       int userId = await PrefData.getUserId();
 
       if (selectedLogo == null) {
-        Get.snackbar("Error", "Select company logo", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar("Error", "Select company logo",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white);
 
         return;
       }
 
       final jobData = dio.FormData.fromMap({
         "user_id": userId,
+        "company_name": companyNameController.text,
         "job_category_id": selectedJobCategoryId.value,
         "title": titleController.text,
-        "shot_description": smallDescController.text,
+        "short_description": smallDescController.text,
         "description": descriptionController.text,
         "contact_email": emailController.text,
         "contact_whatsapp_number": whatsappController.text,
         "contact_link": contactLinkController.text,
         "apply_allowed_status": applyStatus.value,
-        "job_salary": jobSalaryController.text,
-        "max_salary": maxSalaryController.text,
+        "job_salary_min": jobSalaryController.text,
+        "job_salary_max": maxSalaryController.text,
         "job_location": jobLocationController.text,
         "work_type": selectedWorkType.value,
         "job_type": selectedJobType.value,
-        "experience_level": selectedExperience.value,
+        "experience": selectedExperience.value,
         "responsibilities": responsibilitiesController.text,
         "requirements": requirementsController.text,
         "skills": skillsController.text,
-        "preferred_qualification": preferredQualificationController.text,
+        "preferrred_qualifications": preferredQualificationController.text,
+        "application_deadline": deadlineController.value,
         "job_benefits": jobBenefitsController.text,
         "company_website": companyWebsiteController.text,
         "company_logo": [
@@ -131,7 +154,10 @@ class JobController extends GetxController {
 
       if (response["success"] == true) {
         Get.back();
-        Get.snackbar("Success", response["message"], snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green, colorText: Colors.white);
+        Get.snackbar("Success", response["message"],
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.green,
+            colorText: Colors.white);
 
         // Clear controllers after success
         _clearControllers();
@@ -140,7 +166,10 @@ class JobController extends GetxController {
           // Close the AddJobScreen after success
         });
       } else {
-        Get.snackbar("Error", response["message"], snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar("Error", response["message"],
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white);
         log(response['message']);
       }
     } catch (e) {
