@@ -145,32 +145,32 @@ class _JobListScreenState extends State<JobListScreen> {
                         ),
                         _buildDetailRow('WhatsApp',
                             job.contactWhatsappNumber ?? "No Number"),
-                        _buildDetailRow(
-                            'Email', job.contactEmail ?? "No Email"),
-                        if (job.contactLink != null &&
-                            job.contactLink!.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Contact Link:',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(width: 4),
-                                Expanded(
-                                  child: Text(
-                                    job.contactLink!,
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.blue),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        // _buildDetailRow(
+                        //     'Email', job.contactEmail ?? "No Email"),
+                        // if (job.contactLink != null &&
+                        //     job.contactLink!.isNotEmpty)
+                        //   Padding(
+                        //     padding: const EdgeInsets.symmetric(vertical: 4),
+                        //     child: Row(
+                        //       children: [
+                        //         Text(
+                        //           'Contact Link:',
+                        //           style: TextStyle(
+                        //               fontSize: 14,
+                        //               fontWeight: FontWeight.bold),
+                        //         ),
+                        //         SizedBox(width: 4),
+                        //         Expanded(
+                        //           child: Text(
+                        //             job.contactLink!,
+                        //             style: TextStyle(
+                        //                 fontSize: 14, color: Colors.blue),
+                        //             overflow: TextOverflow.ellipsis,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
                         SizedBox(height: 12),
                         // Align(
                         //   alignment: Alignment.centerRight,
