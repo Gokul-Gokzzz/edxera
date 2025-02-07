@@ -78,12 +78,10 @@ class AssigmentListController extends GetxController {
 
     var data = {
       //'user_id': 1.toString(),
-      'user_id': 498,
-      // await PrefData.getUserId(),
-      'assignment_id': 1,
-      //  examid,
-      'study_plan_items_id': 1,
-      // studyPlaniD
+      // 'user_id': 498,
+      'user_id':await PrefData.getUserId(),
+      'assignment_id':  examid,
+      'study_plan_items_id':  studyPlaniD,
     };
     print(data);
 
