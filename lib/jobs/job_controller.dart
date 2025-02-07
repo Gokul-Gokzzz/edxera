@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart'; // Import intl package for date formatting
 
 import '../utils/shared_pref.dart';
 
@@ -117,6 +118,20 @@ class JobController extends GetxController {
         return;
       }
 
+      // Validate deadline
+      if (deadlineController.text.isEmpty) {
+        Get.snackbar("Error", "Deadline cannot be empty",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white);
+        return;
+      }
+
+      // Format deadline
+      String formattedDate = DateFormat('yyyy-MM-dd').format(
+        DateTime.parse(deadlineController.text),
+      );
+
       final jobData = dio.FormData.fromMap({
         "user_id": userId,
         "company_name": companyNameController.text,
@@ -138,7 +153,7 @@ class JobController extends GetxController {
         "requirements": requirementsController.text,
         "skills": skillsController.text,
         "preferrred_qualifications": preferredQualificationController.text,
-        "application_deadline": deadlineController.value,
+        "application_deadline": formattedDate, // Use formatted date
         "job_benefits": jobBenefitsController.text,
         "company_website": companyWebsiteController.text,
         "company_logo": [
@@ -146,7 +161,7 @@ class JobController extends GetxController {
             selectedLogo!.path,
           )
         ],
-        "deadline": deadlineController.text,
+        "deadline": formattedDate, // Use formatted date here as well
       });
 
       final response = await _jobService.addJob(jobData);

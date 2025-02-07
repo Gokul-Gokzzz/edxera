@@ -83,7 +83,7 @@ class JobDetailScreen extends StatelessWidget {
                   job.experience),
 
               /// 3️⃣ Application Process
-              _infoRow2("📅", "Application Deadline", job.responsibilities),
+              _infoRow2("📅", "Application Deadline", job.applicationDeadline),
               _infoRow2("✉️", "How to Apply?", job.contactLink, isLink: true),
               _infoRow2("🔗", "Application Link/Email", job.contactEmail),
 
