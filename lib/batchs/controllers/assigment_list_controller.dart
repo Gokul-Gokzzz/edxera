@@ -14,8 +14,10 @@ import '../../languagecontrols/LanguageCheck.dart';
 class AssigmentListController extends GetxController {
   RxBool isloader = false.obs;
   PostRepository postRepository = PostRepository();
-  final Rx<BatchAssigmentListDataModel> _batchAssigmentListDataModel = BatchAssigmentListDataModel().obs;
-  final Rx<AssigmentResultDataModel> _assigmentResultDataModel = AssigmentResultDataModel().obs;
+  final Rx<BatchAssigmentListDataModel> _batchAssigmentListDataModel =
+      BatchAssigmentListDataModel().obs;
+  final Rx<AssigmentResultDataModel> _assigmentResultDataModel =
+      AssigmentResultDataModel().obs;
   TextEditingController searchcontroller = new TextEditingController();
 
   void batchAssigmentListApi(String examid, text) async {
@@ -30,7 +32,8 @@ class AssigmentListController extends GetxController {
     print(data);
 
     try {
-      BatchAssigmentListDataModel? classesData = await postRepository.batchAssigmentListApi(data);
+      BatchAssigmentListDataModel? classesData =
+          await postRepository.batchAssigmentListApi(data);
       if ((classesData?.success ?? false)) {
         if (classesData?.data != null) {
           _batchAssigmentListDataModel.value = classesData!;
@@ -75,14 +78,18 @@ class AssigmentListController extends GetxController {
 
     var data = {
       //'user_id': 1.toString(),
-      'user_id': await PrefData.getUserId(),
-      'assignment_id': examid,
-      'study_plan_items_id': studyPlaniD
+      'user_id': 498,
+      // await PrefData.getUserId(),
+      'assignment_id': 1,
+      //  examid,
+      'study_plan_items_id': 1,
+      // studyPlaniD
     };
     print(data);
 
     try {
-      AssigmentResultDataModel? classesData = await postRepository.assigmentResultCheckApi(
+      AssigmentResultDataModel? classesData =
+          await postRepository.assigmentResultCheckApi(
         data,
       );
       if ((classesData?.success ?? false)) {
@@ -91,7 +98,8 @@ class AssigmentListController extends GetxController {
 
           String lcode = await PrefData.getLanguage();
 
-          Map<String, dynamic> mplanguage = await LanguageCheck.checkLanguage(lcode);
+          Map<String, dynamic> mplanguage =
+              await LanguageCheck.checkLanguage(lcode);
           rateUs_Assigment_dialogue(classesData, mplanguage);
         }
 
@@ -117,10 +125,13 @@ class AssigmentListController extends GetxController {
     isloader(false);
   }
 
-  BatchAssigmentListDataModel get batchAssigmentListDataModel => _batchAssigmentListDataModel.value;
-  AssigmentResultDataModel get assigmentResultDataModel => _assigmentResultDataModel.value;
+  BatchAssigmentListDataModel get batchAssigmentListDataModel =>
+      _batchAssigmentListDataModel.value;
+  AssigmentResultDataModel get assigmentResultDataModel =>
+      _assigmentResultDataModel.value;
 
-  Future rateUs_Assigment_dialogue(AssigmentResultDataModel result, Map<String, dynamic> mplanguage) {
+  Future rateUs_Assigment_dialogue(
+      AssigmentResultDataModel result, Map<String, dynamic> mplanguage) {
     return Get.defaultDialog(
         barrierDismissible: false,
         title: '',
@@ -131,43 +142,67 @@ class AssigmentListController extends GetxController {
               child: Text(
                 result.data?.assignmentStatus ?? '',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalmarkofassignment'].toString() + ' : ${result.data?.totalMarksOfAssignment ?? ''}',
+                mplanguage['totalmarkofassignment'].toString() +
+                    ' : ${result.data?.totalMarksOfAssignment ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['passmarks'].toString() + ' : ${result.data?.passMarks ?? ''}',
+                mplanguage['passmarks'].toString() +
+                    ' : ${result.data?.passMarks ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalmarks'].toString() + ' : ${result.data?.marksGiven ?? ''}',
+                mplanguage['totalmarks'].toString() +
+                    ' : ${result.data?.marksGiven ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['assignmentresult'].toString() + ' : ${result.data?.assignmentResult ?? ''}',
+                mplanguage['assignmentresult'].toString() +
+                    ' : ${result.data?.assignmentResult ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(
@@ -215,8 +250,10 @@ class TestListController extends GetxController {
   TextEditingController searchcontroller = new TextEditingController();
 
   PostRepository postRepository = PostRepository();
-  final Rx<BatchTestListDataModel> _batchTestListDataModel = BatchTestListDataModel().obs;
-  final Rx<ExamResultCheckDataModel> _examResultCheckDataModel = ExamResultCheckDataModel().obs;
+  final Rx<BatchTestListDataModel> _batchTestListDataModel =
+      BatchTestListDataModel().obs;
+  final Rx<ExamResultCheckDataModel> _examResultCheckDataModel =
+      ExamResultCheckDataModel().obs;
 
   void batchTestListApi(String examid, search) async {
     isloader(true);
@@ -230,7 +267,8 @@ class TestListController extends GetxController {
     print(data);
 
     try {
-      BatchTestListDataModel? classesData = await postRepository.batchTestListApi(data);
+      BatchTestListDataModel? classesData =
+          await postRepository.batchTestListApi(data);
       if ((classesData?.success ?? false)) {
         if (classesData?.data != null) {
           _batchTestListDataModel.value = classesData!;
@@ -279,7 +317,8 @@ class TestListController extends GetxController {
     print(data);
 
     try {
-      ExamResultCheckDataModel? classesData = await postRepository.examResultCheckApi(data, type);
+      ExamResultCheckDataModel? classesData =
+          await postRepository.examResultCheckApi(data, type);
       if ((classesData?.success ?? false)) {
         if (classesData?.data != null) {
           _examResultCheckDataModel.value = classesData!;
@@ -321,10 +360,13 @@ class TestListController extends GetxController {
     isloader(false);
   }
 
-  BatchTestListDataModel get batchTestListDataModel => _batchTestListDataModel.value;
-  ExamResultCheckDataModel get examResultCheckDataModel => _examResultCheckDataModel.value;
+  BatchTestListDataModel get batchTestListDataModel =>
+      _batchTestListDataModel.value;
+  ExamResultCheckDataModel get examResultCheckDataModel =>
+      _examResultCheckDataModel.value;
 
-  Future rateUs_dialogue(ExamResultCheckDataModel result, Map<String, dynamic> mplanguage) {
+  Future rateUs_dialogue(
+      ExamResultCheckDataModel result, Map<String, dynamic> mplanguage) {
     return Get.defaultDialog(
         barrierDismissible: false,
         title: '',
@@ -335,79 +377,123 @@ class TestListController extends GetxController {
               child: Text(
                 result.data?.examStatus ?? '',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalquestions'].toString() + ' : ${result.data?.totalQuestions ?? ''}',
+                mplanguage['totalquestions'].toString() +
+                    ' : ${result.data?.totalQuestions ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalquestionsanswered'].toString() + ': ${result.data?.totalQuestionsAnswered ?? ''}',
+                mplanguage['totalquestionsanswered'].toString() +
+                    ': ${result.data?.totalQuestionsAnswered ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalcorrectanswers'].toString() + ': ${result.data?.totalCorrectAnswers ?? ''}',
+                mplanguage['totalcorrectanswers'].toString() +
+                    ': ${result.data?.totalCorrectAnswers ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalmarksofexam'].toString() + ': ${result.data?.totalMarksOfExam ?? ''}',
+                mplanguage['totalmarksofexam'].toString() +
+                    ': ${result.data?.totalMarksOfExam ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['passmarks'].toString() + ' : ${result.data?.passMarks ?? ''}',
+                mplanguage['passmarks'].toString() +
+                    ' : ${result.data?.passMarks ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalmarks'].toString() + ' : ${result.data?.totalMarksGiven ?? ''}',
+                mplanguage['totalmarks'].toString() +
+                    ' : ${result.data?.totalMarksGiven ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalpercent'].toString() + ' : ${result.data?.totalPercentage ?? ''}',
+                mplanguage['totalpercent'].toString() +
+                    ' : ${result.data?.totalPercentage ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['examresult'].toString() + ' : ${result.data?.examResult ?? ''}',
+                mplanguage['examresult'].toString() +
+                    ' : ${result.data?.examResult ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                    fontSize: 14.sp,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFF000000)),
               ),
             ),
             SizedBox(

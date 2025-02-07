@@ -1,8 +1,10 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:edxera/batchs/BatchDetailsScreen/Modules/lesson_details_screen.dart';
 import 'package:edxera/batchs/BatchDetailsScreen/Modules/study_plan_assigment_screen.dart';
 import 'package:edxera/batchs/controllers/assigment_list_controller.dart';
+import 'package:edxera/controller/controller.dart';
 import 'package:edxera/utils/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +27,9 @@ class AssigmentViewScreen extends StatefulWidget {
 }
 
 class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
-  AssigmentListController _assigmentListController = Get.put(AssigmentListController());
+  HomeController homecontroller = Get.put(HomeController());
+  AssigmentListController _assigmentListController =
+      Get.put(AssigmentListController());
 
   @override
   void initState() {
@@ -58,9 +62,15 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
                 SizedBox(height: 20.h),
                 search_text_field(),
                 Expanded(
-                  child: _assigmentListController.batchAssigmentListDataModel.data?.assignmentCount != 0
+                  child: _assigmentListController.batchAssigmentListDataModel
+                              .data?.assignmentCount !=
+                          0
                       ? ListView.builder(
-                          itemCount: _assigmentListController.batchAssigmentListDataModel.data?.assignmentListForUser?.length,
+                          itemCount: _assigmentListController
+                              .batchAssigmentListDataModel
+                              .data
+                              ?.assignmentListForUser
+                              ?.length,
                           // physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
@@ -68,16 +78,35 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
                                 "LINk:- ${_assigmentListController.batchAssigmentListDataModel.data?.assignmentListForUser?[index].assignmentDescription}");
                             return InkWell(
                               onTap: () {
-                                if ((_assigmentListController.batchAssigmentListDataModel.data?.assignmentListForUser?[index].progressStatus ?? '') !=
+                                if ((_assigmentListController
+                                            .batchAssigmentListDataModel
+                                            .data
+                                            ?.assignmentListForUser?[index]
+                                            .progressStatus ??
+                                        '') !=
                                     'COMPLETED') {
                                   Get.to(
                                     StudyPlanAssigmentScreen(
-                                      title: _assigmentListController.batchAssigmentListDataModel.data?.assignmentListForUser?[index].title ?? '',
-                                      assigmentid:
-                                          (_assigmentListController.batchAssigmentListDataModel.data?.assignmentListForUser?[index].assigmentId ?? 0)
-                                              .toString(),
+                                      title: _assigmentListController
+                                              .batchAssigmentListDataModel
+                                              .data
+                                              ?.assignmentListForUser?[index]
+                                              .title ??
+                                          '',
+                                      assigmentid: (_assigmentListController
+                                                  .batchAssigmentListDataModel
+                                                  .data
+                                                  ?.assignmentListForUser?[
+                                                      index]
+                                                  .assigmentId ??
+                                              0)
+                                          .toString(),
                                       studyPlanId: (_assigmentListController
-                                                  .batchAssigmentListDataModel.data?.assignmentListForUser?[index].fkIntStudyPlanItemsId ??
+                                                  .batchAssigmentListDataModel
+                                                  .data
+                                                  ?.assignmentListForUser?[
+                                                      index]
+                                                  .fkIntStudyPlanItemsId ??
                                               0)
                                           .toString(),
                                     ),
@@ -85,7 +114,11 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
                                 }
                               },
                               child: Container(
-                                margin: EdgeInsets.only(left: 10.w, right: 10.w, bottom: 5.h, top: 10.h),
+                                margin: EdgeInsets.only(
+                                    left: 10.w,
+                                    right: 10.w,
+                                    bottom: 5.h,
+                                    top: 10.h),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(10),
@@ -104,7 +137,8 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
                                     ),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             height: 10.h,
@@ -113,22 +147,38 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
                                             mplanguage['duedate'].toString() +
                                                 ' ${_assigmentListController.batchAssigmentListDataModel.data?.assignmentListForUser?[index].assignmentDeadline ?? ''}',
                                             style: TextStyle(
-                                                color: Color(0XFF503494), fontSize: 17.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
+                                                color: Color(0XFF503494),
+                                                fontSize: 17.sp,
+                                                fontFamily: 'Gilroy',
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           SizedBox(
                                             height: 10.h,
                                           ),
                                           Text(
-                                            _assigmentListController.batchAssigmentListDataModel.data?.assignmentListForUser?[index].title ?? '',
+                                            _assigmentListController
+                                                    .batchAssigmentListDataModel
+                                                    .data
+                                                    ?.assignmentListForUser?[
+                                                        index]
+                                                    .title ??
+                                                '',
                                             style: TextStyle(
-                                                color: Color(0XFF503494), fontSize: 20.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
+                                                color: Color(0XFF503494),
+                                                fontSize: 20.sp,
+                                                fontFamily: 'Gilroy',
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           SizedBox(
                                             height: 10.h,
                                           ),
                                           HtmlWidget(
                                             _assigmentListController
-                                                    .batchAssigmentListDataModel.data?.assignmentListForUser?[index].assignmentDescription ??
+                                                    .batchAssigmentListDataModel
+                                                    .data
+                                                    ?.assignmentListForUser?[
+                                                        index]
+                                                    .assignmentDescription ??
                                                 '',
 
                                             // this callback will be triggered when user taps a link
@@ -160,10 +210,18 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
                                             height: 10.h,
                                           ),
                                           Text(
-                                            _assigmentListController.batchAssigmentListDataModel.data?.assignmentListForUser?[index].progressStatus ??
+                                            _assigmentListController
+                                                    .batchAssigmentListDataModel
+                                                    .data
+                                                    ?.assignmentListForUser?[
+                                                        index]
+                                                    .progressStatus ??
                                                 '',
                                             style: TextStyle(
-                                                color: Color(0XFF503494), fontSize: 15.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
+                                                color: Color(0XFF503494),
+                                                fontSize: 15.sp,
+                                                fontFamily: 'Gilroy',
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           SizedBox(
                                             height: 10.h,
@@ -171,7 +229,11 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
                                         ],
                                       ),
                                     ),
-                                    if ((_assigmentListController.batchAssigmentListDataModel.data?.assignmentListForUser?[index].progressStatus ??
+                                    if ((_assigmentListController
+                                                .batchAssigmentListDataModel
+                                                .data
+                                                ?.assignmentListForUser?[index]
+                                                .progressStatus ??
                                             '') ==
                                         'COMPLETED')
                                       GestureDetector(
@@ -181,18 +243,29 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
                                           //   MaterialPageRoute(
                                           //     builder: (context) =>
                                           //         LessonDetailsScreens(
-                                          //       batchId:
-                                          //           homecontroller.batchid.value,
+                                          //       batchId: homecontroller
+                                          //           .batchid.value,
                                           //     ),
                                           //   ),
-                                          // );pk_int_study_plan_items_id
+                                          // );
+                                          // pk_int_study_plan_items_id
 
-                                          _assigmentListController.resultAssigmentCheckApi(
-                                            (_assigmentListController.batchAssigmentListDataModel.data?.assignmentListForUser?[index].assigmentId ??
+                                          _assigmentListController
+                                              .resultAssigmentCheckApi(
+                                            (_assigmentListController
+                                                        .batchAssigmentListDataModel
+                                                        .data
+                                                        ?.assignmentListForUser?[
+                                                            index]
+                                                        .assigmentId ??
                                                     0)
                                                 .toString(),
                                             (_assigmentListController
-                                                        .batchAssigmentListDataModel.data?.assignmentListForUser?[index].pkIntStudyPlanItemsId ??
+                                                        .batchAssigmentListDataModel
+                                                        .data
+                                                        ?.assignmentListForUser?[
+                                                            index]
+                                                        .pkIntStudyPlanItemsId ??
                                                     0)
                                                 .toString(),
                                           );
@@ -200,7 +273,8 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
                                         child: Container(
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10.h / 2),
+                                            borderRadius:
+                                                BorderRadius.circular(10.h / 2),
                                             color: const Color(0XFF503494),
                                           ),
                                           margin: EdgeInsets.only(right: 10.w),
@@ -208,7 +282,10 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: Text(
                                               "Result",
-                                              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15.sp, color: Colors.white),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 15.sp,
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),
@@ -232,7 +309,11 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
                               Center(
                                 child: Text(
                                   'No assignment created yet!',
-                                  style: TextStyle(color: Color(0XFF503494), fontSize: 17.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      color: Color(0XFF503494),
+                                      fontSize: 17.sp,
+                                      fontFamily: 'Gilroy',
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],
@@ -317,20 +398,27 @@ class _AssigmentViewScreenState extends State<AssigmentViewScreen> {
         child: TextFormField(
             controller: _assigmentListController.searchcontroller,
             onChanged: (value) {
-              _assigmentListController.batchAssigmentListApi(widget.batchid, value);
+              _assigmentListController.batchAssigmentListApi(
+                  widget.batchid, value);
             },
             decoration: InputDecoration(
-              focusedBorder:
-                  OutlineInputBorder(borderSide: BorderSide(color: Color(0XFF503494), width: 1.w), borderRadius: BorderRadius.circular(22)),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0XFF503494), width: 1.w),
+                  borderRadius: BorderRadius.circular(22)),
               hintText: mplanguage['search'].toString(),
-              hintStyle: TextStyle(color: Color(0XFF9B9B9B), fontSize: 15.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.w400),
+              hintStyle: TextStyle(
+                  color: Color(0XFF9B9B9B),
+                  fontSize: 15.sp,
+                  fontFamily: 'Gilroy',
+                  fontWeight: FontWeight.w400),
               prefixIcon: const Image(
                 image: AssetImage('assets/search.png'),
                 height: 24,
                 width: 24,
               ),
-              enabledBorder:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(22.h), borderSide: BorderSide(color: Color(0XFFDEDEDE), width: 1.h)),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(22.h),
+                  borderSide: BorderSide(color: Color(0XFFDEDEDE), width: 1.h)),
             )),
       ),
     );
