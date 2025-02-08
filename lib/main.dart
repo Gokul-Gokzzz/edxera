@@ -32,12 +32,12 @@ void main() async {
   //   };
 
   runApp(const MyApp());
-  // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-  //   if (Platform.isAndroid) {
-  //     await FlutterWindowManagerPlus.addFlags(
-  //         FlutterWindowManagerPlus.FLAG_SECURE);
-  //   }
-  // });
+  WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    if (Platform.isAndroid) {
+      await FlutterWindowManagerPlus.addFlags(
+          FlutterWindowManagerPlus.FLAG_SECURE);
+    }
+  });
 //  }, catchUnhandledExceptions);
 }
 

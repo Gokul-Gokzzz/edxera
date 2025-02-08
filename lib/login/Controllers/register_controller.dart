@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:edxera/category/category_view.dart';
 import 'package:edxera/home/home_main.dart';
 import 'package:edxera/login/Models/login_data_model.dart';
 import 'package:edxera/login/sign_up/verification_screen.dart';
@@ -44,7 +45,7 @@ class RegisterControllers extends GetxController {
         // Get.to(Verification(emailid: emailController.value.text));
         PrefData.setLogin(true);
         PrefData.setUserId(classesData?.data?.id ?? 0);
-        Get.offAll(const HomeMainScreen());
+        Get.offAll(const CategoryGridView());
         Get.showSnackbar(
           GetSnackBar(
             backgroundColor: Colors.green,
@@ -58,19 +59,29 @@ class RegisterControllers extends GetxController {
       if (ex.response?.data is Map<String, dynamic>) {
         Map<String, dynamic> data = ex.response?.data['data'];
         if (data.containsKey('message')) {
-          message = data['message'] is List<dynamic> ? (data['message'] as List<dynamic>).first.toString() : data['message'];
+          message = data['message'] is List<dynamic>
+              ? (data['message'] as List<dynamic>).first.toString()
+              : data['message'];
         }
         if (data.containsKey('phone')) {
-          message = data['phone'] is List<dynamic> ? (data['phone'] as List<dynamic>).first.toString() : data['phone'];
+          message = data['phone'] is List<dynamic>
+              ? (data['phone'] as List<dynamic>).first.toString()
+              : data['phone'];
         }
         if (data.containsKey('email')) {
-          message = data['email'] is List<dynamic> ? (data['email'] as List<dynamic>).first.toString() : data['email'];
+          message = data['email'] is List<dynamic>
+              ? (data['email'] as List<dynamic>).first.toString()
+              : data['email'];
         }
         if (data.containsKey('name')) {
-          message = data['name'] is List<dynamic> ? (data['name'] as List<dynamic>).first.toString() : data['name'];
+          message = data['name'] is List<dynamic>
+              ? (data['name'] as List<dynamic>).first.toString()
+              : data['name'];
         }
         if (data.containsKey('password')) {
-          message = data['password'] is List<dynamic> ? (data['password'] as List<dynamic>).first.toString() : data['password'];
+          message = data['password'] is List<dynamic>
+              ? (data['password'] as List<dynamic>).first.toString()
+              : data['password'];
         }
       }
 
@@ -94,7 +105,8 @@ class RegisterControllers extends GetxController {
       'email': emailController.text,
     };
     try {
-      LoginDataModel? classesData = await postRepository.verificatoionCode(data);
+      LoginDataModel? classesData =
+          await postRepository.verificatoionCode(data);
       if ((classesData?.success ?? false)) {
         PrefData.setLogin(true);
         PrefData.setUserId(classesData?.data?.id ?? 0);
@@ -114,12 +126,18 @@ class RegisterControllers extends GetxController {
                 SizedBox(height: 30.h),
                 Text(
                   "Sucessful !",
-                  style: TextStyle(fontSize: 22.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 22.sp,
+                      fontFamily: 'Gilroy',
+                      fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 20.h),
                 Text(
                   "Your Email Are Verifired !!",
-                  style: TextStyle(fontSize: 15.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                      fontSize: 15.sp,
+                      fontFamily: 'Gilroy',
+                      fontWeight: FontWeight.w700),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 32.h),
@@ -168,7 +186,12 @@ class RegisterControllers extends GetxController {
               color: const Color(0XFF503494),
             ),
             child: Center(
-              child: Text("Ok", style: TextStyle(color: Color(0XFFFFFFFF), fontSize: 18.sp, fontWeight: FontWeight.bold, fontFamily: 'Gilroy')),
+              child: Text("Ok",
+                  style: TextStyle(
+                      color: Color(0XFFFFFFFF),
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Gilroy')),
             ),
           ),
         ),

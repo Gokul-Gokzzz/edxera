@@ -24,10 +24,12 @@ class ApiConstants {
   static String get_live_classes = 'get_live_classes';
   static String join_batch = 'join_batch';
   static String study_plan_exam_mcq_inner = 'study_plan_exam_mcq_inner';
-  static String study_plan_exam_description_inner = 'study_plan_exam_description_inner';
+  static String study_plan_exam_description_inner =
+      'study_plan_exam_description_inner';
   static String get_all_assignment_list_user = 'get_all_assignment_list_user';
   static String get_all_test_list_user = 'get_all_test_list_user';
-  static String get_videos_and_study_materials = 'get_videos_and_study_materials';
+  static String get_videos_and_study_materials =
+      'get_videos_and_study_materials';
   static String submit_answer_mcq = 'submit_answer_mcq';
   static String study_plan_assignment_inner = 'study_plan_assignment_inner';
   static String submit_answer_description = 'submit_answer_description';
@@ -66,18 +68,16 @@ class ApiConstants {
   static String studentpaymentdetails = 'studentpaymentdetails';
   static String logout_api = 'logout_api';
 
-
   static String get_all_categories = '/get_all_categories';
   static String add_categories_for_user = '/add_categories_for_user';
   static String get_job_list = '/get_job_list';
   static String get_job_categories = '/get_job_categories';
   static String delete_job = '/delete_job';
   static String add_job = '/add_job';
-  static String get_course_reels = '/get_course_reels';
-  static String get_course_reels_details = '/get_course_reels_details';
-  static String like_or_unlike_course = '/like_or_unlike_course';
-  static String comment_course = '/comment_course';
-  static String view_course_likes = '/view_course_likes';
-  static String view_course_comments = '/view_course_comments';
-
+  static String get_reels = '/get_course_reels';
+  static String get_reels_details = '/get_course_reels_details';
+  static String like_or_unlike_reels = '/like_or_unlike_course';
+  static String comment_reels = '/comment_course';
+  static String view_reels_likes = '/view_course_likes';
+  static String view_reels_comments = '/view_course_comments';
 }

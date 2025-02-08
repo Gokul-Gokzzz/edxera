@@ -44,7 +44,9 @@ class _ReelCardState extends State<ReelCard> {
         Duration.zero,
         () {
           setState(() {
-            isLiked = (reelController.reels[widget.index].isLiked ?? 0) == 0 ? false : true;
+            isLiked = (reelController.reels[widget.index].isLiked ?? 0) == 0
+                ? false
+                : true;
           });
         },
       );
@@ -54,13 +56,16 @@ class _ReelCardState extends State<ReelCard> {
 
   Future<void> initializePlayer() async {
     log((widget.index.toString()), name: "index");
-    log(("${ApiConstants.publicBaseUrl}/${(reelController.reels[widget.index].courseReelVideo ?? "")}"), name: "initializePlayer");
-    log(("${(reelController.reels[widget.index].title ?? "")}"), name: "initializePlayer");
+    log(("${ApiConstants.publicBaseUrl}/${(reelController.reels[widget.index].courseReelVideo ?? "")}"),
+        name: "initializePlayer");
+    log(("${(reelController.reels[widget.index].title ?? "")}"),
+        name: "initializePlayer");
     try {
       setState(() {
         isLoading = true;
       });
-      final post = (reelController.reels[widget.index].courseReelVideo ?? "").isEmpty
+      final post = (reelController.reels[widget.index].courseReelVideo ?? "")
+              .isEmpty
           ? ("${ApiConstants.publicBaseUrl}/${(reelController.reels[widget.index].courseThumbnail ?? "")}")
           : ("${ApiConstants.publicBaseUrl}/${(reelController.reels[widget.index].courseReelVideo ?? "")}");
       _videoController = VideoPlayerController.networkUrl(Uri.parse(post));
@@ -135,7 +140,9 @@ class _ReelCardState extends State<ReelCard> {
 
     return Container(
       color: Colors.transparent,
-      height: isShowComment ? MediaQuery.sizeOf(context).height * 0.7 : MediaQuery.sizeOf(context).height * 0.6,
+      height: isShowComment
+          ? MediaQuery.sizeOf(context).height * 0.7
+          : MediaQuery.sizeOf(context).height * 0.6,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -151,8 +158,10 @@ class _ReelCardState extends State<ReelCard> {
                             Align(
                               alignment: Alignment.center,
                               child: CachedNetworkImage(
-                                imageUrl: "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
-                                progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                imageUrl:
+                                    "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => SizedBox(
                                   height: 300,
                                   child: Center(
                                     child: SpinKitFadingCircle(
@@ -162,7 +171,8 @@ class _ReelCardState extends State<ReelCard> {
                                   ),
                                 ),
                                 fit: BoxFit.cover,
-                                errorWidget: (context, url, error) => Icon(Icons.broken_image),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.broken_image),
                               ),
                             ),
                             Align(
@@ -179,8 +189,10 @@ class _ReelCardState extends State<ReelCard> {
                     : isError
                         ? Center(
                             child: CachedNetworkImage(
-                              imageUrl: "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
-                              progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                              imageUrl:
+                                  "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
+                              progressIndicatorBuilder:
+                                  (context, url, progress) => SizedBox(
                                 height: 300,
                                 child: Center(
                                   child: SpinKitFadingCircle(
@@ -190,7 +202,8 @@ class _ReelCardState extends State<ReelCard> {
                                 ),
                               ),
                               fit: BoxFit.cover,
-                              errorWidget: (context, url, error) => Icon(Icons.broken_image),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.broken_image),
                             ),
                           )
                         : AspectRatio(
@@ -231,12 +244,14 @@ class _ReelCardState extends State<ReelCard> {
           Row(
             children: [
               IconButton(
-                icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border, color: isLiked ? Colors.red : null),
-                onPressed: () => _toggleLike(item.id!),
+                icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border,
+                    color: isLiked ? Colors.red : null),
+                onPressed: () => _toggleLike(item.id!, item.course_reels_id!),
               ),
               GestureDetector(
-                onTap: () => _showLikeBottomSheet(item.id!),
-                child: Text("${item.courseLikeCount ?? 0}"),
+                onTap: () =>
+                    _showLikeBottomSheet(item.id!, item.course_reels_id!),
+                child: Text("${item.courseReelLikeCount ?? 0}"),
               ),
               SizedBox(width: 10),
               IconButton(
@@ -244,10 +259,11 @@ class _ReelCardState extends State<ReelCard> {
                 onPressed: _showComment,
               ),
               GestureDetector(
-                onTap: () => _showCommentsBottomSheet(item.id!),
+                onTap: () =>
+                    _showCommentsBottomSheet(item.id!, item.course_reels_id!),
                 child: Row(
                   children: [
-                    Text("${item.courseCommentCount ?? 0}"),
+                    Text("${item.courseReelCommentCount ?? 0}"),
                     SizedBox(width: 5),
                     Text(
                       "View Comments",
@@ -293,7 +309,7 @@ class _ReelCardState extends State<ReelCard> {
                         )
                       : IconButton(
                           onPressed: () async {
-                            _addComment(item.id!);
+                            _addComment(item.id!, item.course_reels_id!);
                           },
                           icon: Icon(Icons.send),
                         ),
@@ -305,18 +321,23 @@ class _ReelCardState extends State<ReelCard> {
     );
   }
 
-  Future<void> _toggleLike(int id) async {
+  Future<void> _toggleLike(int id, int course_reels_id) async {
     setState(() {
       isLiked = !isLiked;
     });
     if (isLiked) {
-      int newLike = (reelController.reels[widget.index].courseLikeCount ?? 0) + 1;
-      reelController.reels[widget.index] = reelController.reels[widget.index].copyWith(courseLikeCount: newLike);
+      int newLike =
+          (reelController.reels[widget.index].courseReelLikeCount ?? 0) + 1;
+      reelController.reels[widget.index] = reelController.reels[widget.index]
+          .copyWith(courseReelLikeCount: newLike);
     } else {
-      int newLike = (reelController.reels[widget.index].courseLikeCount ?? 0) - 1;
-      reelController.reels[widget.index] = reelController.reels[widget.index].copyWith(courseLikeCount: newLike);
+      int newLike =
+          (reelController.reels[widget.index].courseReelLikeCount ?? 0) - 1;
+      reelController.reels[widget.index] = reelController.reels[widget.index]
+          .copyWith(courseReelLikeCount: newLike);
     }
-    final result = await reelController.likeDislike(courseId: id);
+    final result = await reelController.likeDislike(
+        courseId: id, course_reels_id: course_reels_id);
     // setState(() {
     //   if (result) {
     //     isLiked = true;
@@ -333,11 +354,14 @@ class _ReelCardState extends State<ReelCard> {
     node.requestFocus();
   }
 
-  Future<void> _addComment(int id) async {
+  Future<void> _addComment(int id, int course_reels_id) async {
     setState(() {
       isCommentLoading = true;
     });
-    final result = await reelController.addComment(courseId: id, comment: commentController.text);
+    final result = await reelController.addComment(
+        courseId: id,
+        comment: commentController.text,
+        course_reels_id: course_reels_id);
 
     // if (result) {
     //   int newCount = (reelController.reels[widget.index].courseCommentCount ?? 0) + 1;
@@ -353,7 +377,7 @@ class _ReelCardState extends State<ReelCard> {
     });
   }
 
-  void _showCommentsBottomSheet(int courseId) {
+  void _showCommentsBottomSheet(int courseId, int course_reels_id) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -363,9 +387,10 @@ class _ReelCardState extends State<ReelCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Comments", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text("Comments",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               FutureBuilder(
-                future: reelController.getComments(courseId),
+                future: reelController.getComments(courseId, course_reels_id),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -400,7 +425,7 @@ class _ReelCardState extends State<ReelCard> {
     );
   }
 
-  void _showLikeBottomSheet(int courseId) {
+  void _showLikeBottomSheet(int courseId, int course_reels_id) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -410,9 +435,10 @@ class _ReelCardState extends State<ReelCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Likes", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text("Likes",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               FutureBuilder(
-                future: reelController.getLikes(courseId),
+                future: reelController.getLikes(courseId, course_reels_id),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
