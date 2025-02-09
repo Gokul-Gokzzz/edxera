@@ -24,10 +24,9 @@ class ReelController extends GetxController {
     }
   }
 
-  getReelById(int courseId, int course_reels_id) async {
+  getReelById(int courseId) async {
     try {
-      final model = await ReelService()
-          .getReelById(courseId: courseId, course_reels_id: course_reels_id);
+      final model = await ReelService().getReelById(courseId: courseId);
 
       if (model != null) {
         int i = reels.indexWhere(
@@ -40,30 +39,26 @@ class ReelController extends GetxController {
     }
   }
 
-  Future<List<ReelUser>> getLikes(int courseId, int course_reels_id) async {
+  Future<List<ReelUser>> getLikes(int courseId) async {
     try {
-      return await ReelService()
-          .getLikes(courseId: courseId, course_reels_id: course_reels_id);
+      return await ReelService().getLikes(courseId: courseId);
     } catch (ex) {
       return [];
     }
   }
 
-  Future<List<ReelUser>> getComments(int courseId, int course_reels_id) async {
+  Future<List<ReelUser>> getComments(int courseId) async {
     try {
-      return await ReelService()
-          .getComments(courseId: courseId, course_reels_id: course_reels_id);
+      return await ReelService().getComments(courseId: courseId);
     } catch (ex) {
       return [];
     }
   }
 
-  Future<bool> likeDislike(
-      {required int courseId, required int course_reels_id}) async {
+  Future<bool> likeDislike({required int courseId}) async {
     try {
-      bool res = await ReelService()
-          .likeDislike(courseId: courseId, course_reels_id: course_reels_id);
-      await getReelById(courseId, course_reels_id);
+      bool res = await ReelService().likeDislike(courseId: courseId);
+      await getReelById(courseId);
       return res;
     } catch (ex) {
       return false;
@@ -71,15 +66,11 @@ class ReelController extends GetxController {
   }
 
   Future<bool> addComment(
-      {required int courseId,
-      required String comment,
-      required int course_reels_id}) async {
+      {required int courseId, required String comment}) async {
     try {
-      bool res = await ReelService().addComment(
-          courseId: courseId,
-          comment: comment,
-          course_reels_id: course_reels_id);
-      await getReelById(courseId, course_reels_id);
+      bool res =
+          await ReelService().addComment(courseId: courseId, comment: comment);
+      await getReelById(courseId);
       return res;
     } catch (ex) {
       return false;

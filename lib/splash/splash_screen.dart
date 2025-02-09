@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -7,7 +6,6 @@ import 'package:edxera/home/home_main.dart';
 import 'package:edxera/login/login_empty_state.dart';
 import 'package:edxera/onboarding/omboarding.dart';
 import 'package:edxera/utils/shared_pref.dart';
-
 import '../repositories/post_repository.dart';
 import '../utils/screen_size.dart';
 
@@ -18,11 +16,23 @@ class Splashscreen extends StatefulWidget {
   State<Splashscreen> createState() => _SplashscreenState();
 }
 
-class _SplashscreenState extends State<Splashscreen> {
+class _SplashscreenState extends State<Splashscreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
     getIntro();
+
+    // Fade-in animation
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _controller.forward();
   }
 
   getIntro() async {
@@ -50,8 +60,6 @@ class _SplashscreenState extends State<Splashscreen> {
     }
   }
 
-  // PrefData.setVarification(true);
-
   @override
   Widget build(BuildContext context) {
     initializeScreenSize(context);
@@ -61,18 +69,76 @@ class _SplashscreenState extends State<Splashscreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-              child: Container(
-                  // height: 95.h,
+            child: Column(
+              children: [
+                // App Logo
+                Container(
                   width: 0.5.sw,
-                  child: Image(
-                    image: const AssetImage("assets/app_logo.jpeg"),
+                  child: Image.asset(
+                    "assets/app_logo.jpeg",
                     fit: BoxFit.cover,
-                  ))),
-          SizedBox(
-            height: 10,
+                  ),
+                ),
+                SizedBox(height: 30),
+
+                // Divider Line
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  child: Divider(
+                    color: Colors.grey.shade300,
+                    thickness: 1.5,
+                  ),
+                ),
+                SizedBox(height: 20),
+
+                // Fade-in "Powered by" section
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Powered by',
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
+                          letterSpacing: 1.0,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+
+                      // Cosysta Logo with Shadow Effect
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                            )
+                          ],
+                        ),
+                        child: Image.asset(
+                          "assets/poweredby.jpeg",
+                          height: 80.h,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
