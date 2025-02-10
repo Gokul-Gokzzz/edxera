@@ -74,10 +74,10 @@ class ApiConstants {
   static String get_job_categories = '/get_job_categories';
   static String delete_job = '/delete_job';
   static String add_job = '/add_job';
-  static String get_reels = '/get_course_reels';
-  static String get_reels_details = '/get_course_reels_details';
-  static String like_or_unlike_reels = '/like_or_unlike_course';
-  static String comment_reels = '/comment_course';
-  static String view_reels_likes = '/view_course_likes';
-  static String view_reels_comments = '/view_course_comments';
+  static String get_reels = '/get_reels';
+  static String get_reels_details = '/get_reels_details';
+  static String like_or_unlike_reels = '/like_or_unlike_reels';
+  static String comment_reels = '/comment_reels';
+  static String view_reels_likes = '/view_reels_likes';
+  static String view_reels_comments = '/view_reels_comments';
 }

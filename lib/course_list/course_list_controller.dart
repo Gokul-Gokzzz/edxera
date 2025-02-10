@@ -1,36 +1,34 @@
-// import 'package:edxera/course_list/course_list_service.dart';
-// import 'package:get/get.dart';
-// import 'course_list_model.dart';
+import 'dart:developer';
 
-// class CourseController extends GetxController {
-//   // Instantiate the PostService
-//   final PostService postService = PostService();
+import 'package:edxera/course_list/course_list_service.dart';
+import 'package:get/get.dart';
+import 'course_list_model.dart';
 
-//   // Rx variable to store the course list
-//   var courseList = <CourseListModel>[].obs;
+class CourseController extends GetxController {
+  // Instantiate the PostService
+  final PostService postService = PostService();
 
-//   // Loading state variable
-//   var isLoading = false.obs;
+  // Rx variable to store the course list
+  var courseList = <CourseListModel>[].obs;
+  // RxList<CourseListModel> courseList = RxList.empty();
 
-//   // Error state variable
-//   var hasError = false.obs;
+  // Loading state variable
+  var isLoading = false.obs;
 
-//   // Method to fetch the course list data
-//   Future<void> fetchCourseList() async {
-//     try {
-//       isLoading.value = true; // Set loading state to true
-//       hasError.value = false; // Reset error state
+  // Error state variable
+  var hasError = false.obs;
+  Future<void> fetchCourseList() async {
+    try {
+      isLoading.value = true;
+      hasError.value = false;
 
-//       // Call the postCourseListData method from the PostService
-//       CourseListModel courseListResponse = await postService.postCourseListData(CourseListModel());
-
-//       // Assign the fetched data to the course list
-//       courseList.value = [courseListResponse]; // Adjust as necessary depending on your response structure
-//     } catch (e) {
-//       print('Error fetching course list: $e');
-//       hasError.value = true; // Set error state to true
-//     } finally {
-//       isLoading.value = false; // Set loading state to false after the request is completed
-//     }
-//   }
-// }
+      List<CourseListModel> courses = await postService.postCourseListData();
+      courseList.assignAll(courses); // Proper way to update RxList
+    } catch (e) {
+      log('Error fetching course list: $e');
+      hasError.value = true;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+}

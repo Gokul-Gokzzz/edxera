@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:edxera/reels/model/reel_model.dart';
 import 'package:edxera/repositories/api/api.dart';
 import 'package:edxera/repositories/api/api_constants.dart';
@@ -18,7 +20,6 @@ class ReelService {
           if ((search ?? "").isNotEmpty) "search": search,
         },
       );
-
       final data = ReelResponse.fromMap(response.data);
       return data.data ?? [];
     } catch (ex) {
@@ -26,15 +27,16 @@ class ReelService {
     }
   }
 
-  Future<ReelModel?> getReelById({required int courseId}) async {
+  Future<ReelModel?> getReelById(
+      {required int courseId, required int courseReelId}) async {
     try {
       int userId = await PrefData.getUserId();
       final response =
           await _dio.sendRequest.post(ApiConstants.get_reels_details, data: {
         "user_id": userId,
         "course_id": courseId,
+        "course_reels_id": courseReelId,
       });
-
       final data = ReelModel.fromMap(response.data['data']);
       return data;
     } catch (ex) {
@@ -42,13 +44,15 @@ class ReelService {
     }
   }
 
-  Future<List<ReelUser>> getLikes({required int courseId}) async {
+  Future<List<ReelUser>> getLikes(
+      {required int courseId, required int courseReelId}) async {
     try {
       int userId = await PrefData.getUserId();
       final response =
           await _dio.sendRequest.post(ApiConstants.view_reels_likes, data: {
         "user_id": userId,
         "course_id": courseId,
+        "course_reels_id": courseReelId,
       });
 
       final List<ReelUser> data = (response.data['data'] as Iterable)
@@ -60,13 +64,15 @@ class ReelService {
     }
   }
 
-  Future<List<ReelUser>> getComments({required int courseId}) async {
+  Future<List<ReelUser>> getComments(
+      {required int courseId, required int courseReelId}) async {
     try {
       int userId = await PrefData.getUserId();
       final response =
           await _dio.sendRequest.post(ApiConstants.view_reels_comments, data: {
         "user_id": userId,
         "course_id": courseId,
+        "course_reels_id": courseReelId,
       });
 
       final List<ReelUser> data = (response.data['data'] as Iterable)
@@ -78,13 +84,15 @@ class ReelService {
     }
   }
 
-  Future<bool> likeDislike({required int courseId}) async {
+  Future<bool> likeDislike(
+      {required int courseId, required int courseReelId}) async {
     try {
       int userId = await PrefData.getUserId();
       final response =
           await _dio.sendRequest.post(ApiConstants.like_or_unlike_reels, data: {
         "user_id": userId,
         "course_id": courseId,
+        "course_reels_id": courseReelId,
       });
       if (response.statusCode == 200) {
         if (response.data['success']) {
@@ -98,7 +106,9 @@ class ReelService {
   }
 
   Future<bool> addComment(
-      {required int courseId, required String comment}) async {
+      {required int courseId,
+      required String comment,
+      required int courseReelId}) async {
     try {
       int userId = await PrefData.getUserId();
       final response =
@@ -106,6 +116,7 @@ class ReelService {
         "user_id": userId,
         "course_id": courseId,
         "comment": comment,
+        "course_reels_id": courseReelId,
       });
       if (response.statusCode == 200) {
         if (response.data['success']) {

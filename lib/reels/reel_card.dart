@@ -240,16 +240,18 @@ class _ReelCardState extends State<ReelCard> {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          Text(item.title.toString()),
           Row(
             children: [
               IconButton(
                 icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border,
                     color: isLiked ? Colors.red : null),
-                onPressed: () => _toggleLike(item.id!),
+                onPressed: () {
+                  _toggleLike(item.id!, item.courseReelId!);
+                },
               ),
               GestureDetector(
-                onTap: () => _showLikeBottomSheet(item.id!),
+                onTap: () => _showLikeBottomSheet(item.id!, item.courseReelId!),
                 child: Text("${item.courseLikeCount ?? 0}"),
               ),
               SizedBox(width: 10),
@@ -258,7 +260,8 @@ class _ReelCardState extends State<ReelCard> {
                 onPressed: _showComment,
               ),
               GestureDetector(
-                onTap: () => _showCommentsBottomSheet(item.id!),
+                onTap: () =>
+                    _showCommentsBottomSheet(item.id!, item.courseReelId!),
                 child: Row(
                   children: [
                     Text("${item.courseCommentCount ?? 0}"),
@@ -307,7 +310,7 @@ class _ReelCardState extends State<ReelCard> {
                         )
                       : IconButton(
                           onPressed: () async {
-                            _addComment(item.id!);
+                            _addComment(item.id!, item.courseReelId!);
                           },
                           icon: Icon(Icons.send),
                         ),
@@ -319,7 +322,7 @@ class _ReelCardState extends State<ReelCard> {
     );
   }
 
-  Future<void> _toggleLike(int id) async {
+  Future<void> _toggleLike(int id, int courseReelId) async {
     setState(() {
       isLiked = !isLiked;
     });
@@ -334,7 +337,8 @@ class _ReelCardState extends State<ReelCard> {
       reelController.reels[widget.index] =
           reelController.reels[widget.index].copyWith(courseLikeCount: newLike);
     }
-    final result = await reelController.likeDislike(courseId: id);
+    final result = await reelController.likeDislike(
+        courseId: id, courseReelId: courseReelId);
     // setState(() {
     //   if (result) {
     //     isLiked = true;
@@ -351,12 +355,14 @@ class _ReelCardState extends State<ReelCard> {
     node.requestFocus();
   }
 
-  Future<void> _addComment(int id) async {
+  Future<void> _addComment(int id, int courseReelId) async {
     setState(() {
       isCommentLoading = true;
     });
     final result = await reelController.addComment(
-        courseId: id, comment: commentController.text);
+        courseId: id,
+        comment: commentController.text,
+        courseReelId: courseReelId);
 
     // if (result) {
     //   int newCount = (reelController.reels[widget.index].courseCommentCount ?? 0) + 1;
@@ -372,7 +378,7 @@ class _ReelCardState extends State<ReelCard> {
     });
   }
 
-  void _showCommentsBottomSheet(int courseId) {
+  void _showCommentsBottomSheet(int courseId, int courseReelId) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -385,7 +391,7 @@ class _ReelCardState extends State<ReelCard> {
               Text("Comments",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               FutureBuilder(
-                future: reelController.getComments(courseId),
+                future: reelController.getComments(courseId, courseReelId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -420,7 +426,7 @@ class _ReelCardState extends State<ReelCard> {
     );
   }
 
-  void _showLikeBottomSheet(int courseId) {
+  void _showLikeBottomSheet(int courseId, int courseReelId) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -433,7 +439,7 @@ class _ReelCardState extends State<ReelCard> {
               Text("Likes",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               FutureBuilder(
-                future: reelController.getLikes(courseId),
+                future: reelController.getLikes(courseId, courseReelId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(

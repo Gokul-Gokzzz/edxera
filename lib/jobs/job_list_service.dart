@@ -9,13 +9,17 @@ import '../utils/shared_pref.dart';
 class JobService {
   final _dio = API();
 
-  Future<JobListModel?> fetchJobList() async {
+  Future<JobListModel?> fetchJobList({String? search}) async {
     try {
       int userId = await PrefData.getUserId();
 
-      Response response = await _dio.sendRequest.post(ApiConstants.get_job_list, data: {
-        "user_id": userId,
-      });
+      Response response = await _dio.sendRequest.post(
+        ApiConstants.get_job_list,
+        data: {
+          "user_id": userId,
+          if ((search ?? "").isNotEmpty) "search": search,
+        },
+      );
 
       if (response.statusCode == 200) {
         return JobListModel.fromJson(response.data);
@@ -30,12 +34,15 @@ class JobService {
     try {
       int userId = await PrefData.getUserId();
 
-      Response response = await _dio.sendRequest.post(ApiConstants.get_job_categories, data: {
+      Response response =
+          await _dio.sendRequest.post(ApiConstants.get_job_categories, data: {
         "user_id": userId,
       });
 
       if (response.statusCode == 200) {
-        final list = (response.data['data'] as Iterable).map((e) => JobCategory.fromMap(e)).toList();
+        final list = (response.data['data'] as Iterable)
+            .map((e) => JobCategory.fromMap(e))
+            .toList();
         return list;
       } else {
         return [];
@@ -48,7 +55,8 @@ class JobService {
 
   Future<bool> deleteJob(int jobId) async {
     try {
-      Response response = await _dio.sendRequest.post(ApiConstants.delete_job, data: {
+      Response response =
+          await _dio.sendRequest.post(ApiConstants.delete_job, data: {
         "job_id": jobId,
       });
 
@@ -61,7 +69,8 @@ class JobService {
 
   Future<Map<String, dynamic>> addJob(FormData jobData) async {
     try {
-      final response = await _dio.sendRequest.post(ApiConstants.add_job, data: jobData);
+      final response =
+          await _dio.sendRequest.post(ApiConstants.add_job, data: jobData);
       return response.data;
     } catch (e) {
       return {"status": false, "message": "Error: ${e.toString()}"};

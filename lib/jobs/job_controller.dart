@@ -71,9 +71,9 @@ class JobController extends GetxController {
 
   final RxInt applyStatus = 1.obs; // 1 for allowed, 0 for not allowed
 
-  Future<void> loadJobs() async {
+  Future<void> loadJobs({String? search}) async {
     isLoading(true);
-    JobListModel? result = await _jobService.fetchJobList();
+    JobListModel? result = await _jobService.fetchJobList(search: search);
     if (result != null && result.data != null) {
       jobList.assignAll(result.data!);
     }

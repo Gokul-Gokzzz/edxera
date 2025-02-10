@@ -3,6 +3,7 @@ import 'package:edxera/jobs/job_details_screen.dart';
 import 'package:edxera/jobs/job_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
 class JobListScreen extends StatefulWidget {
   JobListScreen({
@@ -28,6 +29,8 @@ class _JobListScreenState extends State<JobListScreen> {
     super.initState();
   }
 
+  Debouncer _searchDebouncer = Debouncer(delay: Duration(milliseconds: 500));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +42,17 @@ class _JobListScreenState extends State<JobListScreen> {
               ? Container(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: TextField(
+                    onChanged: (value) {
+                      _searchDebouncer.call(
+                        () {
+                          if (value.isEmpty) {
+                            jobController.loadJobs();
+                          } else {
+                            jobController.loadJobs(search: value);
+                          }
+                        },
+                      );
+                    },
                     controller: searchController,
                     autofocus: true,
                     decoration: InputDecoration(

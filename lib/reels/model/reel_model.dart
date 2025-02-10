@@ -48,20 +48,24 @@ class ReelModel {
   int? id;
   String? title;
   String? courseReelVideo;
+  String? courseReelYoutubeLink;
   String? courseThumbnail;
   int? courseLikeCount;
   int? courseViewCount;
   int? courseCommentCount;
+  int? courseReelId;
   int? isLiked;
 
   ReelModel({
     this.id,
     this.title,
     this.courseReelVideo,
+    this.courseReelYoutubeLink,
     this.courseThumbnail,
     this.courseLikeCount,
     this.courseViewCount,
     this.courseCommentCount,
+    this.courseReelId,
     this.isLiked,
   });
 
@@ -69,10 +73,12 @@ class ReelModel {
     int? id,
     String? title,
     String? courseReelVideo,
+    String? courseReelYoutubeLink,
     String? courseThumbnail,
     int? courseLikeCount,
     int? courseViewCount,
     int? courseCommentCount,
+    int? courseReelId,
     int? isLiked,
   }) =>
       ReelModel(
@@ -84,6 +90,9 @@ class ReelModel {
         courseViewCount: courseViewCount ?? this.courseViewCount,
         courseCommentCount: courseCommentCount ?? this.courseCommentCount,
         isLiked: isLiked ?? this.isLiked,
+        courseReelId: courseReelId ?? this.courseReelId,
+        courseReelYoutubeLink:
+            courseReelYoutubeLink ?? this.courseReelYoutubeLink,
       );
 
   factory ReelModel.fromJson(String str) => ReelModel.fromMap(json.decode(str));
@@ -94,10 +103,12 @@ class ReelModel {
         id: json["id"],
         title: json["title"],
         courseReelVideo: json["course_reel_video"],
+        courseReelYoutubeLink: json["cource_reel_youtube_link"],
         courseThumbnail: json["course_thumbnail"],
-        courseLikeCount: json["course_like_count"],
-        courseViewCount: json["course_view_count"],
-        courseCommentCount: json["course_comment_count"],
+        courseLikeCount: json["course_reel_like_count"],
+        courseViewCount: json["course_reel_view_count"],
+        courseCommentCount: json["course_reel_comment_count"],
+        courseReelId: json["cource_reels_id"],
         isLiked: json["is_liked"],
       );
 
@@ -105,10 +116,12 @@ class ReelModel {
         "id": id,
         "title": title,
         "course_reel_video": courseReelVideo,
+        "cource_reel_youtube_link": courseReelYoutubeLink,
         "course_thumbnail": courseThumbnail,
         "course_like_count": courseLikeCount,
         "course_view_count": courseViewCount,
         "course_comment_count": courseCommentCount,
+        "cource_reels_id": courseReelId,
         "is_liked": isLiked,
       };
 }

@@ -370,3 +370,35 @@
 //     return reverseMap;
 //   }
 // }
+
+class CourseListModel {
+  final int id;
+  final String title;
+  final String duration;
+  final String shortDescription;
+  final String courseThumbnail;
+  final int chapterCount;
+  final int price;
+
+  CourseListModel({
+    required this.id,
+    required this.title,
+    required this.duration,
+    required this.shortDescription,
+    required this.courseThumbnail,
+    required this.chapterCount,
+    required this.price,
+  });
+
+  factory CourseListModel.fromJson(Map<String, dynamic> json) {
+    return CourseListModel(
+      id: json['id'],
+      title: json['title'],
+      shortDescription: json['short_description'],
+      courseThumbnail: json['course_thumbnail'],
+      chapterCount: json['chapter_count'],
+      price: json['price'],
+      duration: json['duration'],
+    );
+  }
+}
