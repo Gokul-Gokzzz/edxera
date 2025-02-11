@@ -372,22 +372,22 @@
 // }
 
 class CourseListModel {
-  final int id;
-  final String title;
-  final String duration;
-  final String shortDescription;
-  final String courseThumbnail;
-  final int chapterCount;
-  final int price;
+  final int? id;
+  final String? title;
+  final String? duration;
+  final String? shortDescription;
+  final String? courseThumbnail;
+  final int? chapterCount;
+  final int? price;
 
   CourseListModel({
-    required this.id,
-    required this.title,
-    required this.duration,
-    required this.shortDescription,
-    required this.courseThumbnail,
-    required this.chapterCount,
-    required this.price,
+    this.id,
+    this.title,
+    this.duration,
+    this.shortDescription,
+    this.courseThumbnail,
+    this.chapterCount,
+    this.price,
   });
 
   factory CourseListModel.fromJson(Map<String, dynamic> json) {

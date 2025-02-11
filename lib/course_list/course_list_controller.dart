@@ -31,4 +31,6 @@ class CourseController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  //selected category
 }

@@ -209,8 +209,8 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
         //return Center(child: Container(child: Text("1")));
         return ReelsHome();
       case 1:
-        // return HomeScreen();
-        return CourseListPage();
+        return HomeScreen();
+      // return CourseListPage();
       case 2:
         //return Center(child: Container(child: Text("1")));
         return BatchesScreen();

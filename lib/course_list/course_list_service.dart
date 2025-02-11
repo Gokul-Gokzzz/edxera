@@ -44,4 +44,6 @@ class PostService {
       rethrow; // Rethrow the error to be handled in the controller
     }
   }
+
+  //selected category
 }
