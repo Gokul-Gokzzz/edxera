@@ -15,6 +15,7 @@ class ApiConstants {
   static String user_notification_clear = 'user_notification_clear';
   static String category_courses = 'category-courses';
   static String course = 'course';
+  static String get_all_courses_list = 'get_all_courses_list';
   static String send_course_purchace_request = 'send_course_purchace_request';
   static String chapters = 'chapters';
   static String testimonial = 'testimonial';
@@ -69,6 +70,7 @@ class ApiConstants {
   static String logout_api = 'logout_api';
 
   static String get_all_categories = '/get_all_categories';
+  static String get_user_categories = '/get_user_categories';
   static String add_categories_for_user = '/add_categories_for_user';
   static String get_job_list = '/get_job_list';
   static String get_job_categories = '/get_job_categories';

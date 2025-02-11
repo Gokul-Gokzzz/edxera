@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:edxera/category/categor_model.dart';
+import 'package:edxera/category/category_service.dart';
 import 'package:edxera/course_list/course_list_service.dart';
 import 'package:get/get.dart';
 import 'course_list_model.dart';
@@ -11,6 +13,7 @@ class CourseController extends GetxController {
   // Rx variable to store the course list
   var courseList = <CourseListModel>[].obs;
   // RxList<CourseListModel> courseList = RxList.empty();
+
 
   // Loading state variable
   var isLoading = false.obs;
@@ -31,6 +34,8 @@ class CourseController extends GetxController {
       isLoading.value = false;
     }
   }
+
+
 
   //selected category
 }

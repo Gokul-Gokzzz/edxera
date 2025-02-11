@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:edxera/My_cources/Models/course_data_model.dart';
 import 'package:edxera/My_cources/lesson_play.dart';
@@ -12,11 +14,15 @@ import 'package:edxera/batchs/Models/exam_result_check_data_model.dart';
 import 'package:edxera/batchs/Models/study_plan_assigment_data_model.dart';
 import 'package:edxera/batchs/Models/study_plan_details_data_model.dart';
 import 'package:edxera/batchs/Models/user_logout_or_not_data_model.dart';
+import 'package:edxera/category/categor_model.dart';
+import 'package:edxera/category/category_service.dart';
+import 'package:edxera/category/user_category_model.dart';
 import 'package:edxera/chate/detail_chate.dart';
 import 'package:edxera/cources/Models/cources_details_data_model.dart';
 import 'package:edxera/cources/Models/course_chapter_list_data_model.dart';
 import 'package:edxera/cources/cources.dart';
 import 'package:edxera/course_list/course_list_model.dart';
+import 'package:edxera/home/Models/all_course_model.dart';
 import 'package:edxera/home/Models/categories_detail_model.dart';
 import 'package:edxera/home/Models/category_wise_product_list_data_model.dart';
 import 'package:edxera/home/Models/chapter_inner_data_model.dart';
@@ -68,20 +74,13 @@ class HomeController extends GetxController {
   Rx<CategoriesModel> categoriesData = CategoriesModel().obs;
   Rx<CategoriesDetailModel> categoriesDetailsData = CategoriesDetailModel().obs;
 
-  final Rx<HomeDashboardDataModel> _homeDashboardDataModel =
-      HomeDashboardDataModel().obs;
-  final Rx<TestimonialDataListDataModel> _testimonialDataListDataModel =
-      TestimonialDataListDataModel().obs;
-  final Rx<TrendingCoursesDataModel> _trendingCoursesDataModel =
-      TrendingCoursesDataModel().obs;
-  final Rx<CategoryWiseCourseListDataModel> _freeCourseDataModel =
-      CategoryWiseCourseListDataModel().obs;
-  final Rx<TodaysStudyPlanDataModel> _todaysStudyPlanDataModel =
-      TodaysStudyPlanDataModel().obs;
-  final Rx<ChapterInnerDataModel> _chapterInnerDataModel =
-      ChapterInnerDataModel().obs;
-  final Rx<StudyPlanCourseNameDataModel> _studyPlanCourseNameDataModel =
-      StudyPlanCourseNameDataModel().obs;
+  final Rx<HomeDashboardDataModel> _homeDashboardDataModel = HomeDashboardDataModel().obs;
+  final Rx<TestimonialDataListDataModel> _testimonialDataListDataModel = TestimonialDataListDataModel().obs;
+  final Rx<AllCourseModel> _trendingCoursesDataModel = AllCourseModel().obs;
+  final Rx<CategoryWiseCourseListDataModel> _freeCourseDataModel = CategoryWiseCourseListDataModel().obs;
+  final Rx<TodaysStudyPlanDataModel> _todaysStudyPlanDataModel = TodaysStudyPlanDataModel().obs;
+  final Rx<ChapterInnerDataModel> _chapterInnerDataModel = ChapterInnerDataModel().obs;
+  final Rx<StudyPlanCourseNameDataModel> _studyPlanCourseNameDataModel = StudyPlanCourseNameDataModel().obs;
   var categotry = CourseListModel();
 
   onChange(RxInt index) {
@@ -130,8 +129,7 @@ class HomeController extends GetxController {
   }
 
   UserDataModel get userDataModel => _userDataModel.value;
-  final Rx<NotificationCountDataModel> _notificationCountDataModel =
-      NotificationCountDataModel().obs;
+  final Rx<NotificationCountDataModel> _notificationCountDataModel = NotificationCountDataModel().obs;
 
   Future<void> notificationCountDataApi() async {
     isloader(true);
@@ -139,11 +137,9 @@ class HomeController extends GetxController {
       'user_id': await PrefData.getUserId(),
     };
     try {
-      NotificationCountDataModel? classesData =
-          await postRepository.notificationCountDataApi(data);
+      NotificationCountDataModel? classesData = await postRepository.notificationCountDataApi(data);
       if ((classesData?.success ?? false)) {
-        if (classesData != null)
-          _notificationCountDataModel.value = classesData;
+        if (classesData != null) _notificationCountDataModel.value = classesData;
       } else {
         Get.showSnackbar(
           GetSnackBar(
@@ -168,15 +164,13 @@ class HomeController extends GetxController {
     isloader(false);
   }
 
-  NotificationCountDataModel get notificationCountDataModel =>
-      _notificationCountDataModel.value;
+  NotificationCountDataModel get notificationCountDataModel => _notificationCountDataModel.value;
 
   Future<void> homeDashboardDatGetApi() async {
     isloader(true);
 
     try {
-      HomeDashboardDataModel? classesData =
-          await postRepository.homeDashboardDatGet();
+      HomeDashboardDataModel? classesData = await postRepository.homeDashboardDatGet();
       if ((classesData?.success ?? false)) {
         if (classesData != null) _homeDashboardDataModel.value = classesData;
       } else {
@@ -248,10 +242,30 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> homeDashboardTrendingDatGetApi() async {
+  final CategoryService categoryService = CategoryService();
+
+  Rx<UserCategory> userCategory = UserCategory(data: []).obs;
+  RxBool ishUserCategories = false.obs;
+
+  Future<UserCategory> fetchUserCategories() async {
     try {
-      TrendingCoursesDataModel? classesData =
-          await postRepository.homeDashboardTrendingDatGet();
+      ishUserCategories.value = true;
+
+      userCategory.value = await categoryService.fetchUserCategories() ?? UserCategory(data: []);
+      return userCategory.value;
+    } catch (e) {
+      userCategory.value = UserCategory(data: []);
+      log('Error fetching course list: $e');
+      return userCategory.value;
+    } finally {
+      update();
+      ishUserCategories.value = false;
+    }
+  }
+
+  Future<void> homeDashboardTrendingDatGetApi({String? search}) async {
+    try {
+      AllCourseModel? classesData = await postRepository.homeDashboardTrendingDatGet(search: search);
       if ((classesData?.success ?? false)) {
         if (classesData != null) _trendingCoursesDataModel.value = classesData;
       } else {
@@ -280,8 +294,7 @@ class HomeController extends GetxController {
   Future<void> chepterInnerApiCall(String id, planId) async {
     isloader(true);
     try {
-      ChapterInnerDataModel? classesData =
-          await postRepository.chepterInnerApiCall(id, planId);
+      ChapterInnerDataModel? classesData = await postRepository.chepterInnerApiCall(id, planId);
       if ((classesData?.success ?? false)) {
         if (classesData != null) _chapterInnerDataModel.value = classesData;
         Get.to(() => ChapteInnerScreen(
@@ -334,11 +347,9 @@ class HomeController extends GetxController {
     isloader(true);
 
     try {
-      TestimonialDataListDataModel? classesData =
-          await postRepository.homeDashboardTestimonailasDatGet();
+      TestimonialDataListDataModel? classesData = await postRepository.homeDashboardTestimonailasDatGet();
       if ((classesData?.success ?? false)) {
-        if (classesData != null)
-          _testimonialDataListDataModel.value = classesData;
+        if (classesData != null) _testimonialDataListDataModel.value = classesData;
       } else {
         Get.showSnackbar(
           GetSnackBar(
@@ -366,8 +377,7 @@ class HomeController extends GetxController {
     isloader(true);
     var data = {'user_id': await PrefData.getUserId(), 'batch_id': id};
     try {
-      TodaysStudyPlanDataModel? classesData =
-          await postRepository.todayStudyPlanApi(data);
+      TodaysStudyPlanDataModel? classesData = await postRepository.todayStudyPlanApi(data);
       if ((classesData?.success ?? false)) {
         if (classesData != null) _todaysStudyPlanDataModel.value = classesData;
       } else {
@@ -400,41 +410,32 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  final Rx<StudyPlanViewDataModel> _studyPlanViewDataModel =
-      StudyPlanViewDataModel().obs;
+  final Rx<StudyPlanViewDataModel> _studyPlanViewDataModel = StudyPlanViewDataModel().obs;
 
-  StudyPlanViewDataModel get studyPlanViewDataModel =>
-      _studyPlanViewDataModel.value;
+  StudyPlanViewDataModel get studyPlanViewDataModel => _studyPlanViewDataModel.value;
 
   Future<void> homeDashboardStudyPlansDatGetApi() async {
     isloader(true);
     countries.clear();
     try {
-      StudyPlanCourseNameDataModel? classesData =
-          await postRepository.homeDashboardStudyPlansDatGet();
+      StudyPlanCourseNameDataModel? classesData = await postRepository.homeDashboardStudyPlansDatGet();
       if ((classesData?.success ?? false)) {
-        if (classesData != null)
-          _studyPlanCourseNameDataModel.value = classesData;
+        if (classesData != null) _studyPlanCourseNameDataModel.value = classesData;
         if ((classesData?.data?.userCourses?.length ?? 0) > 0) {
           for (var element in classesData?.data?.userCourses ?? []) {
             countries.add(element.courseTitle);
           }
 
-          if (await PrefData.getCourseId() != '' &&
-              await PrefData.getCourseName() != '') {
+          if (await PrefData.getCourseId() != '' && await PrefData.getCourseName() != '') {
             print(await PrefData.getCourseId());
             dropdownvalue.value = await PrefData.getCourseName();
             batchid.value = await PrefData.getCourseId();
             studyPlanDetailsApi(batchid.value);
           } else {
-            PrefData.setCourseID(
-                (classesData?.data?.userCourses?[0].batchId ?? '').toString());
-            PrefData.setCourseName(dropdownvalue.value =
-                classesData?.data?.userCourses?[0].courseTitle ?? '');
-            dropdownvalue.value =
-                classesData?.data?.userCourses?[0].courseTitle ?? '';
-            batchid.value =
-                (classesData?.data?.userCourses?[0].batchId ?? '').toString();
+            PrefData.setCourseID((classesData?.data?.userCourses?[0].batchId ?? '').toString());
+            PrefData.setCourseName(dropdownvalue.value = classesData?.data?.userCourses?[0].courseTitle ?? '');
+            dropdownvalue.value = classesData?.data?.userCourses?[0].courseTitle ?? '';
+            batchid.value = (classesData?.data?.userCourses?[0].batchId ?? '').toString();
             studyPlanDetailsApi(batchid.value);
           }
           getTodayStudyPlan(batchid.value);
@@ -473,8 +474,7 @@ class HomeController extends GetxController {
     print(data);
 
     try {
-      StudyPlanViewDataModel? classesData =
-          await postRepository.studyPlanDetailsApi(data);
+      StudyPlanViewDataModel? classesData = await postRepository.studyPlanDetailsApi(data);
       if ((classesData?.success ?? false)) {
         if (classesData?.data != null) {
           _studyPlanViewDataModel.value = classesData!;
@@ -506,30 +506,23 @@ class HomeController extends GetxController {
     isStudyPlan(false);
   }
 
-  HomeDashboardDataModel get homeDashboardDataModel =>
-      _homeDashboardDataModel.value;
+  HomeDashboardDataModel get homeDashboardDataModel => _homeDashboardDataModel.value;
 
-  StudyPlanCourseNameDataModel get studyPlanCourseNameDataModel =>
-      _studyPlanCourseNameDataModel.value;
+  StudyPlanCourseNameDataModel get studyPlanCourseNameDataModel => _studyPlanCourseNameDataModel.value;
 
-  TestimonialDataListDataModel get testimonialDataListDataModel =>
-      _testimonialDataListDataModel.value;
+  TestimonialDataListDataModel get testimonialDataListDataModel => _testimonialDataListDataModel.value;
 
-  TrendingCoursesDataModel get trendingCoursesDataModel =>
-      _trendingCoursesDataModel.value;
+  AllCourseModel get trendingCoursesDataModel => _trendingCoursesDataModel.value;
 
-  CategoryWiseCourseListDataModel get freeCourseDataModel =>
-      _freeCourseDataModel.value;
+  CategoryWiseCourseListDataModel get freeCourseDataModel => _freeCourseDataModel.value;
 
-  TodaysStudyPlanDataModel get todaysStudyPlanDataModel =>
-      _todaysStudyPlanDataModel.value;
+  TodaysStudyPlanDataModel get todaysStudyPlanDataModel => _todaysStudyPlanDataModel.value;
 
   void getFreeCourses() async {
     isloader(true);
     var data = {'category_id': 146};
     try {
-      CategoryWiseCourseListDataModel? classesData =
-          await postRepository.categoryWiseCourseListApi(data);
+      CategoryWiseCourseListDataModel? classesData = await postRepository.categoryWiseCourseListApi(data);
       if ((classesData?.success ?? false)) {
         if (classesData != null) _freeCourseDataModel.value = classesData;
       } else {
@@ -562,14 +555,12 @@ class TrendingController extends GetxController {
   RxString dropdownvalue = ''.obs;
   PostRepository postRepository = PostRepository();
 
-  final Rx<TrendingCoursesDataModel> _trendingCoursesDataModel =
-      TrendingCoursesDataModel().obs;
+  final Rx<AllCourseModel> _trendingCoursesDataModel = AllCourseModel().obs;
 
   void homeDashboardTrendingDatGetApi() async {
     isloader(true);
     try {
-      TrendingCoursesDataModel? classesData =
-          await postRepository.homeDashboardTrendingDatGet();
+      AllCourseModel? classesData = await postRepository.homeDashboardTrendingDatGet();
       if ((classesData?.success ?? false)) {
         if (classesData != null) _trendingCoursesDataModel.value = classesData;
       } else {
@@ -595,8 +586,7 @@ class TrendingController extends GetxController {
     isloader(false);
   }
 
-  TrendingCoursesDataModel get trendingCoursesDataModel =>
-      _trendingCoursesDataModel.value;
+  AllCourseModel get trendingCoursesDataModel => _trendingCoursesDataModel.value;
 }
 
 class FreeStudyMatrialController extends GetxController {
@@ -605,8 +595,7 @@ class FreeStudyMatrialController extends GetxController {
   RxString dropdownvalue = ''.obs;
   PostRepository postRepository = PostRepository();
 
-  final Rx<FreeStudyMatrialListDataModel> _trendingCoursesDataModel =
-      FreeStudyMatrialListDataModel().obs;
+  final Rx<FreeStudyMatrialListDataModel> _trendingCoursesDataModel = FreeStudyMatrialListDataModel().obs;
 
   TextEditingController searchcontroller = new TextEditingController();
 
@@ -622,8 +611,7 @@ class FreeStudyMatrialController extends GetxController {
     isloader(true);
 
     try {
-      FreeStudyMatrialListDataModel? classesData =
-          await postRepository.freestudyMatrialApi(data);
+      FreeStudyMatrialListDataModel? classesData = await postRepository.freestudyMatrialApi(data);
       if ((classesData?.success ?? false)) {
         if (classesData != null) _trendingCoursesDataModel.value = classesData;
       } else {
@@ -649,8 +637,7 @@ class FreeStudyMatrialController extends GetxController {
     isloader(false);
   }
 
-  FreeStudyMatrialListDataModel get freeStudyMatrialListDataModel =>
-      _trendingCoursesDataModel.value;
+  FreeStudyMatrialListDataModel get freeStudyMatrialListDataModel => _trendingCoursesDataModel.value;
 }
 
 class NotificationController extends GetxController {
@@ -658,12 +645,9 @@ class NotificationController extends GetxController {
 
   RxString dropdownvalue = ''.obs;
   PostRepository postRepository = PostRepository();
-  final Rx<ExamResultCheckDataModel> _examResultCheckDataModel =
-      ExamResultCheckDataModel().obs;
-  final Rx<NotificationListDataModel> _trendingCoursesDataModel =
-      NotificationListDataModel().obs;
-  final Rx<AssigmentResultDataModel> _assigmentResultDataModel =
-      AssigmentResultDataModel().obs;
+  final Rx<ExamResultCheckDataModel> _examResultCheckDataModel = ExamResultCheckDataModel().obs;
+  final Rx<NotificationListDataModel> _trendingCoursesDataModel = NotificationListDataModel().obs;
+  final Rx<AssigmentResultDataModel> _assigmentResultDataModel = AssigmentResultDataModel().obs;
 
   // onSearchTextChanged(String text) async {
   //   homeDashboardTrendingDatGetApi(text);
@@ -674,8 +658,7 @@ class NotificationController extends GetxController {
     isloader(true);
 
     try {
-      NotificationListDataModel? classesData =
-          await postRepository.getNotificationDataApi(data);
+      NotificationListDataModel? classesData = await postRepository.getNotificationDataApi(data);
       if ((classesData?.success ?? false)) {
         if (classesData != null) _trendingCoursesDataModel.value = classesData;
       } else {
@@ -709,122 +692,51 @@ class NotificationController extends GetxController {
     isloader(true);
 
     try {
-      SubmitMcqDataModel? classesData =
-          await postRepository.clearNotificationDataApi(data);
+      SubmitMcqDataModel? classesData = await postRepository.clearNotificationDataApi(data);
       if ((classesData?.success ?? false)) {
-        if (_trendingCoursesDataModel
-                .value.data?.userNotification?[index].notificationType ==
-            'ASSIGNMENT_TODAY') {
+        if (_trendingCoursesDataModel.value.data?.userNotification?[index].notificationType == 'ASSIGNMENT_TODAY') {
           Get.to(StudyPlanAssigmentScreen(
-            title: _trendingCoursesDataModel
-                    .value.data?.userNotification?[index].notificationType ??
-                '',
-            assigmentid: (_trendingCoursesDataModel
-                        .value.data?.userNotification?[index].assignmentId ??
-                    '')
-                .toString(),
-            studyPlanId: (_trendingCoursesDataModel.value.data
-                        ?.userNotification?[index].studyPlanItemsId ??
-                    0)
-                .toString(),
+            title: _trendingCoursesDataModel.value.data?.userNotification?[index].notificationType ?? '',
+            assigmentid: (_trendingCoursesDataModel.value.data?.userNotification?[index].assignmentId ?? '').toString(),
+            studyPlanId: (_trendingCoursesDataModel.value.data?.userNotification?[index].studyPlanItemsId ?? 0).toString(),
           ));
-        } else if (_trendingCoursesDataModel
-                .value.data?.userNotification?[index].notificationType ==
-            'EXAM_TODAY') {
-          if (_trendingCoursesDataModel
-                  .value.data?.userNotification?[index].examType ==
-              'DESCRIPTION') {
+        } else if (_trendingCoursesDataModel.value.data?.userNotification?[index].notificationType == 'EXAM_TODAY') {
+          if (_trendingCoursesDataModel.value.data?.userNotification?[index].examType == 'DESCRIPTION') {
             Get.to(ExamDescriptionScreen(
               examPogress: '',
-              title: _trendingCoursesDataModel
-                      .value.data?.userNotification?[index].notificationType ??
-                  '',
-              examid: (_trendingCoursesDataModel
-                          .value.data?.userNotification?[index].examId ??
-                      0)
-                  .toString(),
-              studyPlanId: (_trendingCoursesDataModel.value.data
-                          ?.userNotification?[index].studyPlanItemsId ??
-                      0)
-                  .toString(),
+              title: _trendingCoursesDataModel.value.data?.userNotification?[index].notificationType ?? '',
+              examid: (_trendingCoursesDataModel.value.data?.userNotification?[index].examId ?? 0).toString(),
+              studyPlanId: (_trendingCoursesDataModel.value.data?.userNotification?[index].studyPlanItemsId ?? 0).toString(),
             ));
           } else {
             Get.to(ExamMcqScreen(
               examPogress: '',
-              title: _trendingCoursesDataModel
-                      .value.data?.userNotification?[index].notificationType ??
-                  '',
-              examid: (_trendingCoursesDataModel
-                          .value.data?.userNotification?[index].examId ??
-                      0)
-                  .toString(),
-              studyPlanId: (_trendingCoursesDataModel.value.data
-                          ?.userNotification?[index].studyPlanItemsId ??
-                      0)
-                  .toString(),
+              title: _trendingCoursesDataModel.value.data?.userNotification?[index].notificationType ?? '',
+              examid: (_trendingCoursesDataModel.value.data?.userNotification?[index].examId ?? 0).toString(),
+              studyPlanId: (_trendingCoursesDataModel.value.data?.userNotification?[index].studyPlanItemsId ?? 0).toString(),
             ));
           }
-        } else if (_trendingCoursesDataModel
-                .value.data?.userNotification?[index].notificationType ==
-            'EXAM_RESULT') {
-          if (_trendingCoursesDataModel
-                  .value.data?.userNotification?[index].examType ==
-              'DESCRIPTION') {
-            resultCheckApi(
-                (_trendingCoursesDataModel
-                            .value.data?.userNotification?[index].examId ??
-                        0)
-                    .toString(),
-                (_trendingCoursesDataModel.value.data?.userNotification?[index]
-                            .studyPlanItemsId ??
-                        0)
-                    .toString(),
-                'DESCRIPTION');
+        } else if (_trendingCoursesDataModel.value.data?.userNotification?[index].notificationType == 'EXAM_RESULT') {
+          if (_trendingCoursesDataModel.value.data?.userNotification?[index].examType == 'DESCRIPTION') {
+            resultCheckApi((_trendingCoursesDataModel.value.data?.userNotification?[index].examId ?? 0).toString(),
+                (_trendingCoursesDataModel.value.data?.userNotification?[index].studyPlanItemsId ?? 0).toString(), 'DESCRIPTION');
           } else {
-            resultCheckApi(
-                (_trendingCoursesDataModel
-                            .value.data?.userNotification?[index].examId ??
-                        0)
-                    .toString(),
-                (_trendingCoursesDataModel.value.data?.userNotification?[index]
-                            .studyPlanItemsId ??
-                        0)
-                    .toString(),
-                'EXAM_MCQ');
+            resultCheckApi((_trendingCoursesDataModel.value.data?.userNotification?[index].examId ?? 0).toString(),
+                (_trendingCoursesDataModel.value.data?.userNotification?[index].studyPlanItemsId ?? 0).toString(), 'EXAM_MCQ');
           }
-        } else if (_trendingCoursesDataModel
-                .value.data?.userNotification?[index].notificationType ==
-            'ASSIGNMENT_RESULT') {
+        } else if (_trendingCoursesDataModel.value.data?.userNotification?[index].notificationType == 'ASSIGNMENT_RESULT') {
           resultAssigmentCheckApi(
-            (_trendingCoursesDataModel
-                        .value.data?.userNotification?[index].assignmentId ??
-                    0)
-                .toString(),
-            (_trendingCoursesDataModel.value.data?.userNotification?[index]
-                        .studyPlanItemsId ??
-                    0)
-                .toString(),
+            (_trendingCoursesDataModel.value.data?.userNotification?[index].assignmentId ?? 0).toString(),
+            (_trendingCoursesDataModel.value.data?.userNotification?[index].studyPlanItemsId ?? 0).toString(),
           );
-        } else if (_trendingCoursesDataModel
-                .value.data?.userNotification?[index].notificationType ==
-            'CHAT') {
+        } else if (_trendingCoursesDataModel.value.data?.userNotification?[index].notificationType == 'CHAT') {
           Get.to(DetailChate(
-            name: _trendingCoursesDataModel
-                    .value.data?.userNotification?[index].childIdType ??
-                '',
-            detail: (_trendingCoursesDataModel
-                        .value.data?.userNotification?[index].assignmentId ??
-                    0)
-                .toString(),
+            name: _trendingCoursesDataModel.value.data?.userNotification?[index].childIdType ?? '',
+            detail: (_trendingCoursesDataModel.value.data?.userNotification?[index].assignmentId ?? 0).toString(),
             imege: '',
           ));
-        } else if (_trendingCoursesDataModel
-                .value.data?.userNotification?[index].notificationType ==
-            'COURSE_JOIN_ACCEPTED') {
-          Get.to(MyCources(),
-              arguments: _trendingCoursesDataModel
-                      .value.data?.userNotification?[index].courseId ??
-                  0);
+        } else if (_trendingCoursesDataModel.value.data?.userNotification?[index].notificationType == 'COURSE_JOIN_ACCEPTED') {
+          Get.to(MyCources(), arguments: _trendingCoursesDataModel.value.data?.userNotification?[index].courseId ?? 0);
         }
       } else {
         Get.showSnackbar(
@@ -861,8 +773,7 @@ class NotificationController extends GetxController {
     print(data);
 
     try {
-      ExamResultCheckDataModel? classesData =
-          await postRepository.examResultCheckApi(data, type);
+      ExamResultCheckDataModel? classesData = await postRepository.examResultCheckApi(data, type);
       if ((classesData?.success ?? false)) {
         if (classesData?.data != null) {
           _examResultCheckDataModel.value = classesData!;
@@ -911,8 +822,7 @@ class NotificationController extends GetxController {
     print(data);
 
     try {
-      AssigmentResultDataModel? classesData =
-          await postRepository.assigmentResultCheckApi(
+      AssigmentResultDataModel? classesData = await postRepository.assigmentResultCheckApi(
         data,
       );
       if ((classesData?.success ?? false)) {
@@ -956,8 +866,7 @@ class NotificationController extends GetxController {
     isloader(false);
   }
 
-  Future rateUs_dialogue(
-      ExamResultCheckDataModel result, Map<String, dynamic> mplanguage) {
+  Future rateUs_dialogue(ExamResultCheckDataModel result, Map<String, dynamic> mplanguage) {
     return Get.defaultDialog(
         barrierDismissible: false,
         title: '',
@@ -968,123 +877,79 @@ class NotificationController extends GetxController {
               child: Text(
                 result.data?.examStatus ?? '',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalquestions'].toString() +
-                    ' : ${result.data?.totalQuestions ?? ''}',
+                mplanguage['totalquestions'].toString() + ' : ${result.data?.totalQuestions ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalquestionsanswered'].toString() +
-                    ': ${result.data?.totalQuestionsAnswered ?? ''}',
+                mplanguage['totalquestionsanswered'].toString() + ': ${result.data?.totalQuestionsAnswered ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalcorrectanswers'].toString() +
-                    ': ${result.data?.totalCorrectAnswers ?? ''}',
+                mplanguage['totalcorrectanswers'].toString() + ': ${result.data?.totalCorrectAnswers ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalmarksofexam'].toString() +
-                    ' : ${result.data?.totalMarksOfExam ?? ''}',
+                mplanguage['totalmarksofexam'].toString() + ' : ${result.data?.totalMarksOfExam ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['passmarks'].toString() +
-                    ' : ${result.data?.passMarks ?? ''}',
+                mplanguage['passmarks'].toString() + ' : ${result.data?.passMarks ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalmarks'].toString() +
-                    ' : ${result.data?.totalMarksGiven ?? ''}',
+                mplanguage['totalmarks'].toString() + ' : ${result.data?.totalMarksGiven ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalpercent'].toString() +
-                    ' : ${result.data?.totalPercentage ?? ''}',
+                mplanguage['totalpercent'].toString() + ' : ${result.data?.totalPercentage ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['examresult'].toString() +
-                    ' : ${result.data?.examResult ?? ''}',
+                mplanguage['examresult'].toString() + ' : ${result.data?.examResult ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(
@@ -1126,14 +991,11 @@ class NotificationController extends GetxController {
         ));
   }
 
-  NotificationListDataModel get notificationListDataModel =>
-      _trendingCoursesDataModel.value;
+  NotificationListDataModel get notificationListDataModel => _trendingCoursesDataModel.value;
 
-  AssigmentResultDataModel get assigmentResultDataModel =>
-      _assigmentResultDataModel.value;
+  AssigmentResultDataModel get assigmentResultDataModel => _assigmentResultDataModel.value;
 
-  Future rateUs_Assigment_dialogue(
-      AssigmentResultDataModel result, Map<String, dynamic> mplanguage) {
+  Future rateUs_Assigment_dialogue(AssigmentResultDataModel result, Map<String, dynamic> mplanguage) {
     return Get.defaultDialog(
         barrierDismissible: false,
         title: '',
@@ -1144,67 +1006,43 @@ class NotificationController extends GetxController {
               child: Text(
                 result.data?.assignmentStatus ?? '',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalmarkofassignment'].toString() +
-                    ' : ${result.data?.totalMarksOfAssignment ?? ''}',
+                mplanguage['totalmarkofassignment'].toString() + ' : ${result.data?.totalMarksOfAssignment ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['passmarks'].toString() +
-                    ' : ${result.data?.passMarks ?? ''}',
+                mplanguage['passmarks'].toString() + ' : ${result.data?.passMarks ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['totalmarks'].toString() +
-                    ' : ${result.data?.marksGiven ?? ''}',
+                mplanguage['totalmarks'].toString() + ' : ${result.data?.marksGiven ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Text(
-                mplanguage['assignmentresult'].toString() +
-                    ' : ${result.data?.assignmentResult ?? ''}',
+                mplanguage['assignmentresult'].toString() + ' : ${result.data?.assignmentResult ?? ''}',
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.normal,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.normal, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(
@@ -1253,15 +1091,13 @@ class CategoryWiseSubjectController extends GetxController {
   RxString dropdownvalue = ''.obs;
   PostRepository postRepository = PostRepository();
 
-  final Rx<CategoryWiseCourseListDataModel> _trendingCoursesDataModel =
-      CategoryWiseCourseListDataModel().obs;
+  final Rx<CategoryWiseCourseListDataModel> _trendingCoursesDataModel = CategoryWiseCourseListDataModel().obs;
 
   void homeDashboardTrendingDatGetApi(String id) async {
     isloader(true);
     var data = {'category_id': id};
     try {
-      CategoryWiseCourseListDataModel? classesData =
-          await postRepository.categoryWiseCourseListApi(data);
+      CategoryWiseCourseListDataModel? classesData = await postRepository.categoryWiseCourseListApi(data);
       if ((classesData?.success ?? false)) {
         if (classesData != null) _trendingCoursesDataModel.value = classesData;
       } else {
@@ -1287,16 +1123,14 @@ class CategoryWiseSubjectController extends GetxController {
     isloader(false);
   }
 
-  CategoryWiseCourseListDataModel get categoryWiseCourseListDataModel =>
-      _trendingCoursesDataModel.value;
+  CategoryWiseCourseListDataModel get categoryWiseCourseListDataModel => _trendingCoursesDataModel.value;
 }
 
 class HomeMainController extends GetxController {
   RxBool isloader = false.obs;
   RxInt position = 0.obs;
   PostRepository postRepository = PostRepository();
-  final Rx<UserLogourOrNotDataModel> _userValidOrNotDeviceToken =
-      UserLogourOrNotDataModel().obs;
+  final Rx<UserLogourOrNotDataModel> _userValidOrNotDeviceToken = UserLogourOrNotDataModel().obs;
 
   void feedbackApi() async {
     isloader(true);
@@ -1306,8 +1140,7 @@ class HomeMainController extends GetxController {
     };
     print('Token Device ${PrefData.getdeviceToken()}');
     try {
-      UserLogourOrNotDataModel? classesData =
-          await postRepository.userLogourOrNotApiCall(data);
+      UserLogourOrNotDataModel? classesData = await postRepository.userLogourOrNotApiCall(data);
       if ((classesData?.success ?? false)) {
         if (classesData?.data?.status ?? false) {
           isloader(false);
@@ -1358,12 +1191,10 @@ class CourceController extends GetxController with GetTickerProviderStateMixin {
   TextEditingController nameController = TextEditingController();
   PostRepository postRepository = PostRepository();
   final Rx<CourseDataEntity> _courseDetailsDataModel = CourseDataEntity().obs;
-  final Rx<CourseChapterListDataModel> _courseChapterListDataModel =
-      CourseChapterListDataModel().obs;
+  final Rx<CourseChapterListDataModel> _courseChapterListDataModel = CourseChapterListDataModel().obs;
   int courseId = Get.arguments != null ? Get.arguments : 0;
 
-  final Rx<BatchesListDataModel> _batchesListDataModel =
-      BatchesListDataModel().obs;
+  final Rx<BatchesListDataModel> _batchesListDataModel = BatchesListDataModel().obs;
 
   @override
   void onClose() {
@@ -1395,8 +1226,7 @@ class CourceController extends GetxController with GetTickerProviderStateMixin {
     isloader(true);
 
     try {
-      BatchesListDataModel? classesData =
-          await postRepository.batchListByCourseDataGet(courseId);
+      BatchesListDataModel? classesData = await postRepository.batchListByCourseDataGet(courseId);
       if ((classesData?.success ?? false)) {
         if (classesData != null) _batchesListDataModel.value = classesData;
       } else {
@@ -1432,8 +1262,7 @@ class CourceController extends GetxController with GetTickerProviderStateMixin {
       'id': id,
     };
     try {
-      StudyPlanAssigmentSubmitDataModel? classesData =
-          await postRepository.writeCourseReview(data);
+      StudyPlanAssigmentSubmitDataModel? classesData = await postRepository.writeCourseReview(data);
       if ((classesData?.success ?? false)) {
         if (classesData != null) Get.back();
         Get.showSnackbar(
@@ -1486,8 +1315,7 @@ class CourceController extends GetxController with GetTickerProviderStateMixin {
     };
     //print(data);
     try {
-      CourseDataEntity? classesData =
-          await postRepository.courseDetailsDataGet(courseId.toString());
+      CourseDataEntity? classesData = await postRepository.courseDetailsDataGet(courseId.toString());
       if ((classesData?.success ?? false)) {
         if (classesData != null) {
           _courseDetailsDataModel.value = classesData;
@@ -1497,40 +1325,33 @@ class CourceController extends GetxController with GetTickerProviderStateMixin {
           } else {
             if (_courseDetailsDataModel.value.data?.course?.video is String) {
               flickManager = FlickManager(
-                videoPlayerController:
-                    VideoPlayerController.networkUrl(Uri.parse(
-                  (_courseDetailsDataModel.value.data?.course?.video as String)
-                          .isURL
+                videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(
+                  (_courseDetailsDataModel.value.data?.course?.video as String).isURL
                       ? _courseDetailsDataModel.value.data?.course?.video
                       : '${ApiConstants.publicBaseUrl}/${_courseDetailsDataModel.value.data?.course?.video ?? ''}',
                 )),
                 autoPlay: false,
               );
               isVideoLoaded.value = true;
-              print(
-                  '${ApiConstants.publicBaseUrl}/${_courseDetailsDataModel.value.data?.course?.video ?? ''}');
+              print('${ApiConstants.publicBaseUrl}/${_courseDetailsDataModel.value.data?.course?.video ?? ''}');
             } else {
-              Map<String, dynamic> videoData =
-                  _courseDetailsDataModel.value.data?.course?.video;
+              Map<String, dynamic> videoData = _courseDetailsDataModel.value.data?.course?.video;
               if (videoData.containsKey('image')) {
                 flickManager = FlickManager(
-                  videoPlayerController:
-                      VideoPlayerController.networkUrl(Uri.parse(
+                  videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(
                     '${ApiConstants.publicBaseUrl}/${_courseDetailsDataModel.value.data?.course?.video['image'] ?? ''}',
                   )),
                   autoPlay: false,
                 );
                 isVideoLoaded.value = true;
-                print(
-                    '${ApiConstants.publicBaseUrl}/${_courseDetailsDataModel.value.data?.course?.video['image'] ?? ''}');
+                print('${ApiConstants.publicBaseUrl}/${_courseDetailsDataModel.value.data?.course?.video['image'] ?? ''}');
               } else {
                 isVideoLoaded.value = false;
               }
             }
           }
           update();
-          await courseChapterListDetailsDataGets(
-              _courseDetailsDataModel.value.data?.course?.id ?? 0);
+          await courseChapterListDetailsDataGets(_courseDetailsDataModel.value.data?.course?.id ?? 0);
           Get.showSnackbar(
             GetSnackBar(
               backgroundColor: Colors.green,
@@ -1567,8 +1388,7 @@ class CourceController extends GetxController with GetTickerProviderStateMixin {
       'course_id': courseId.toString(),
     };
     print(data);
-    CourseDetailsDataModel? classesData =
-        await postRepository.coursePurchaseDetails(data);
+    CourseDetailsDataModel? classesData = await postRepository.coursePurchaseDetails(data);
 
     isloader(false);
   }
@@ -1577,11 +1397,9 @@ class CourceController extends GetxController with GetTickerProviderStateMixin {
     isloader(true);
 
     try {
-      CourseChapterListDataModel? classesData = await postRepository
-          .courseChalpterListDetailsDataGet(courseid.toString());
+      CourseChapterListDataModel? classesData = await postRepository.courseChalpterListDetailsDataGet(courseid.toString());
       if ((classesData?.success ?? false)) {
-        if (classesData != null)
-          _courseChapterListDataModel.value = classesData;
+        if (classesData != null) _courseChapterListDataModel.value = classesData;
 
         Get.showSnackbar(
           GetSnackBar(
@@ -1615,8 +1433,7 @@ class CourceController extends GetxController with GetTickerProviderStateMixin {
 
   CourseDataEntity get courseDetailsDataModel => _courseDetailsDataModel.value;
 
-  CourseChapterListDataModel get courseChapterListDataModel =>
-      _courseChapterListDataModel.value;
+  CourseChapterListDataModel get courseChapterListDataModel => _courseChapterListDataModel.value;
 
   BatchesListDataModel get batchmodel => _batchesListDataModel.value;
 }
@@ -1651,8 +1468,7 @@ class PaymentSelectionController extends GetxController {
   }
 }
 
-class OngoingCompletedController extends GetxController
-    with GetTickerProviderStateMixin {
+class OngoingCompletedController extends GetxController with GetTickerProviderStateMixin {
   late PageController pController;
 
   @override
@@ -1870,8 +1686,7 @@ class MyProfileController extends GetxController {
       'rating': rating.value,
     };
     try {
-      StudyPlanAssigmentSubmitDataModel? classesData =
-          await postRepository.ratingAppPoup(data);
+      StudyPlanAssigmentSubmitDataModel? classesData = await postRepository.ratingAppPoup(data);
       if ((classesData?.success ?? false)) {
         if (classesData != null) ;
         Get.back();
@@ -1999,19 +1814,13 @@ class FeedBackController extends GetxController {
 
   TextEditingController nameController = TextEditingController();
 
-  final Rx<StudyPlanAssigmentSubmitDataModel> _userDataModel =
-      StudyPlanAssigmentSubmitDataModel().obs;
+  final Rx<StudyPlanAssigmentSubmitDataModel> _userDataModel = StudyPlanAssigmentSubmitDataModel().obs;
 
   void feedbackApi() async {
     isloader(true);
-    var data = {
-      'user_id': await PrefData.getUserId(),
-      'rating': ratings.value,
-      'comment': nameController.text
-    };
+    var data = {'user_id': await PrefData.getUserId(), 'rating': ratings.value, 'comment': nameController.text};
     try {
-      StudyPlanAssigmentSubmitDataModel? classesData =
-          await postRepository.feedbackApi(data);
+      StudyPlanAssigmentSubmitDataModel? classesData = await postRepository.feedbackApi(data);
       if ((classesData?.success ?? false)) {
         if (classesData != null) _userDataModel.value = classesData;
         Get.back();
@@ -2046,15 +1855,13 @@ class FeedBackController extends GetxController {
     isloader(false);
   }
 
-  StudyPlanAssigmentSubmitDataModel get studyPlanAssigmentSubmitDataModel =>
-      _userDataModel.value;
+  StudyPlanAssigmentSubmitDataModel get studyPlanAssigmentSubmitDataModel => _userDataModel.value;
 }
 
 class MyCertificationScreenConyroller extends GetxController {
   RxBool isloader = false.obs;
   PostRepository postRepository = PostRepository();
-  final Rx<GetCourseCertificateDataModel> _getCourseCertificateDataModel =
-      GetCourseCertificateDataModel().obs;
+  final Rx<GetCourseCertificateDataModel> _getCourseCertificateDataModel = GetCourseCertificateDataModel().obs;
 
   void getCretificate() async {
     isloader(true);
@@ -2062,11 +1869,9 @@ class MyCertificationScreenConyroller extends GetxController {
       'user_id': await PrefData.getUserId(),
     };
     try {
-      GetCourseCertificateDataModel? classesData =
-          await postRepository.getCretificate(data);
+      GetCourseCertificateDataModel? classesData = await postRepository.getCretificate(data);
       if ((classesData?.success ?? false)) {
-        if (classesData != null)
-          _getCourseCertificateDataModel.value = classesData;
+        if (classesData != null) _getCourseCertificateDataModel.value = classesData;
         // Get.back();
         // Get.showSnackbar(
         //   GetSnackBar(
@@ -2099,16 +1904,14 @@ class MyCertificationScreenConyroller extends GetxController {
     isloader(false);
   }
 
-  GetCourseCertificateDataModel get getCourseCertificateDataModel =>
-      _getCourseCertificateDataModel.value;
+  GetCourseCertificateDataModel get getCourseCertificateDataModel => _getCourseCertificateDataModel.value;
 }
 
 class CertificatePaymentController extends GetxController {}
 
 class RateUsScreenCpontroller extends GetxController {}
 
-class HelpCenterController extends GetxController
-    with GetTickerProviderStateMixin {
+class HelpCenterController extends GetxController with GetTickerProviderStateMixin {
   late TabController tabController;
   late PageController pController;
   RxBool isloader = false.obs;
@@ -2194,8 +1997,7 @@ class HelpCenterController extends GetxController
   }
 }
 
-class ContactusController extends GetxController
-    with GetTickerProviderStateMixin {
+class ContactusController extends GetxController with GetTickerProviderStateMixin {
   RxBool isloader = false.obs;
   PostRepository postRepository = PostRepository();
   final Rx<ContactUsDataModel> _contactUsDataModel = ContactUsDataModel().obs;
@@ -2233,8 +2035,7 @@ class ContactusController extends GetxController
   ContactUsDataModel get contactUsDataModel => _contactUsDataModel.value;
 }
 
-class PrivacyPolicyController extends GetxController
-    with GetTickerProviderStateMixin {
+class PrivacyPolicyController extends GetxController with GetTickerProviderStateMixin {
   RxBool isloader = false.obs;
   PostRepository postRepository = PostRepository();
   final Rx<PrivacypolicyEntity> _contactUsDataModel = PrivacypolicyEntity().obs;
@@ -2272,8 +2073,7 @@ class PrivacyPolicyController extends GetxController
     return classesData;
   }
 
-  PrivacypolicyEntity get privacyPolicyPagesDataModel =>
-      _contactUsDataModel.value;
+  PrivacypolicyEntity get privacyPolicyPagesDataModel => _contactUsDataModel.value;
 }
 
 class SearchScreenController extends GetxController {}

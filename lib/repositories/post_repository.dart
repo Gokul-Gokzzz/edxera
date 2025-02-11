@@ -19,6 +19,7 @@ import 'package:edxera/batchs/Models/test_list_data_model.dart';
 import 'package:edxera/chate/models/intructort_chat_list_data_model.dart';
 import 'package:edxera/cources/Models/cources_details_data_model.dart';
 import 'package:edxera/cources/Models/course_chapter_list_data_model.dart';
+import 'package:edxera/home/Models/all_course_model.dart';
 import 'package:edxera/home/Models/category_wise_product_list_data_model.dart';
 import 'package:edxera/home/Models/chapter_inner_data_model.dart';
 import 'package:edxera/home/Models/free_study_matrial_data_model.dart';
@@ -390,10 +391,17 @@ class PostRepository {
     }
   }
 
-  Future<TrendingCoursesDataModel?> homeDashboardTrendingDatGet() async {
+  Future<AllCourseModel?> homeDashboardTrendingDatGet({String? search}) async {
     try {
-      var response = await api.sendRequest.get(
-        ApiConstants.latestCourses,
+      int userId = await PrefData.getUserId();
+
+      var response = await api.sendRequest.post(
+        // ApiConstants.latestCourses,
+        ApiConstants.get_all_courses_list,
+        data: {
+          "user_id": userId,
+          if ((search ?? "").isNotEmpty) "search": search,
+        },
 
         //  options: Options(contentType: 'multipart/form-data'),
       );
@@ -401,11 +409,11 @@ class PostRepository {
 
       if (response.statusCode == 200) {
         if (response.data['success'] == true) {
-          return TrendingCoursesDataModel.fromJson(response.data);
+          return AllCourseModel.fromMap(response.data);
         } else {
           Fluttertoast.showToast(msg: response.data['message']);
 
-          return TrendingCoursesDataModel.fromJson(response.data);
+          return AllCourseModel.fromJson(response.data);
         }
       }
     } catch (ex) {

@@ -145,7 +145,7 @@ class _TrendingCourceState extends State<TrendingCource> {
         crossAxisSpacing: 18.73,
         mainAxisSpacing: 20,
         childAspectRatio: 0.650,
-        children: (homecontroller.trendingCoursesDataModel.data?.courses ?? [])
+        children: (homecontroller.trendingCoursesDataModel.data ?? [])
             .map((index) => GestureDetector(
                   onTap: () {
                     Get.to(MyCources(), arguments: index.id ?? 0);

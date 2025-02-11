@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:edxera/category/categor_model.dart';
+import 'package:edxera/category/user_category_model.dart';
 import 'package:edxera/repositories/api/api.dart';
 import 'package:edxera/repositories/api/api_constants.dart';
 
@@ -17,6 +18,24 @@ class CategoryService {
       if (response.statusCode == 200) {
         log('API response: ${response.data}');
         return CategoryModel.fromJson(response.data);
+      } else {
+        log("Failed to fetch categories: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      log("Error fetching categories: $e");
+      return null;
+    }
+  }
+
+  Future<UserCategory?> fetchUserCategories() async {
+    int userId = await PrefData.getUserId();
+
+    try {
+      final Response response = await api.sendRequest.post(ApiConstants.get_user_categories, data: {"user_id": userId});
+      if (response.statusCode == 200) {
+        log('API response: ${response.data}');
+        return UserCategory.fromJson(response.data);
       } else {
         log("Failed to fetch categories: ${response.statusCode}");
         return null;
