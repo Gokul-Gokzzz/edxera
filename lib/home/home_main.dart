@@ -1,5 +1,4 @@
 import 'package:edxera/batchs/batches_main_screen.dart';
-import 'package:edxera/course_list/course_list.dart';
 import 'package:edxera/homes/homes.dart';
 import 'package:edxera/jobs/job_list_view.dart';
 import 'package:edxera/reels/controller/reel_controller.dart';
