@@ -3736,49 +3736,32 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          //alignment: Alignment.topLeft,
-                          // child:
-                          // Padding(
-                          //   padding: EdgeInsets.only(
-                          //       left: 10.w, right: 147.w, bottom: 142.h),
-                          //   child: Container(
-                          //     height: 20.h,
-                          //     width: 20.w,
-                          //     decoration: const BoxDecoration(
-                          //         shape: BoxShape.circle, color: Colors.white),
-                          //     child: Center(
-                          //       child: GestureDetector(
-                          //         onTap: () {
-                          //           // toggle(index);
-                          //         },
-                          //         child: trendingCource[index].buttonStatus == true
-                          //             ? Image(
-                          //                 image:
-                          //                     AssetImage("assets/saveboldblue.png"),
-                          //                 height: 10.h,
-                          //                 width: 9.w,
-                          //               )
-                          //             : Image(
-                          //                 image: AssetImage("assets/savebold.png"),
-                          //                 height: 10.h,
-                          //                 width: 9.w,
-                          //               ),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
                         ),
                         SizedBox(height: 8.h),
                         Expanded(
-                          child: Text(
-                            course?[index].title ?? '',
-                            maxLines: 5,
-                            style: TextStyle(
-                              fontFamily: 'Gilroy',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15.sp,
-                              color: const Color(0XFF000000),
-                            ),
+                          child: Column(
+                            children: [
+                              Text(
+                                course?[index].title ?? '',
+                                maxLines: 5,
+                                style: TextStyle(
+                                  fontFamily: 'Gilroy',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15.sp,
+                                  color: const Color(0XFF000000),
+                                ),
+                              ),
+                              Text(
+                                course?[index].title ?? '',
+                                maxLines: 5,
+                                style: TextStyle(
+                                  fontFamily: 'Gilroy',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15.sp,
+                                  color: const Color(0XFF000000),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(height: 5.h),

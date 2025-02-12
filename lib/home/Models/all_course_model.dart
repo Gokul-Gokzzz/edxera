@@ -22,21 +22,25 @@ class AllCourseModel {
         data: data ?? this.data,
       );
 
-  factory AllCourseModel.fromJson(String str) => AllCourseModel.fromMap(json.decode(str));
+  factory AllCourseModel.fromJson(String str) =>
+      AllCourseModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
   factory AllCourseModel.fromMap(Map<String, dynamic> json) => AllCourseModel(
-    success: json["success"],
-    message: json["message"],
-    data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromMap(x))),
-  );
+        success: json["success"],
+        message: json["message"],
+        data: json["data"] == null
+            ? []
+            : List<Datum>.from(json["data"]!.map((x) => Datum.fromMap(x))),
+      );
 
   Map<String, dynamic> toMap() => {
-    "success": success,
-    "message": message,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
-  };
+        "success": success,
+        "message": message,
+        "data":
+            data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
+      };
 }
 
 class Datum {
@@ -89,6 +93,7 @@ class Datum {
   String? status;
   DateTime? createdAt;
   DateTime? updatedAt;
+  Category? category;
 
   Datum({
     this.id,
@@ -140,6 +145,7 @@ class Datum {
     this.status,
     this.createdAt,
     this.updatedAt,
+    this.category,
   });
 
   Datum copyWith({
@@ -192,6 +198,7 @@ class Datum {
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
+    Category? category,
   }) =>
       Datum(
         id: id ?? this.id,
@@ -243,6 +250,7 @@ class Datum {
         status: status ?? this.status,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
+        category: category ?? this.category,
       );
 
   factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
@@ -250,108 +258,128 @@ class Datum {
   String toJson() => json.encode(toMap());
 
   factory Datum.fromMap(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    isShow: json["is_show"],
-    courseThumbnail: json["course_thumbnail"],
-    courseReelVideo: json["course_reel_video"],
-    chapterCount: json["chapter_count"],
-    title: json["title"],
-    slug: json["slug"],
-    shortDescription: json["short_description"],
-    userId: json["user_id"],
-    instructorIds: json["instructor_ids"] == null ? [] : List<String>.from(json["instructor_ids"]!.map((x) => x)),
-    categoryId: json["category_id"],
-    courseType: json["course_type"],
-    capacity: json["capacity"],
-    classEndsAt: json["class_ends_at"],
-    languageId: json["language_id"],
-    organizationId: json["organization_id"],
-    description: json["description"],
-    isPrivate: json["is_private"],
-    videoSource: json["video_source"],
-    video: json["video"] == null ? null : Video.fromMap(json["video"]),
-    imageMediaId: json["image_media_id"],
-    image: json["image"] == null ? null : Image.fromMap(json["image"]),
-    duration: json["duration"],
-    isDownloadable: json["is_downloadable"],
-    isFree: json["is_free"],
-    price: json["price"],
-    isDiscountable: json["is_discountable"],
-    discountType: json["discount_type"],
-    discount: json["discount"],
-    discountStartAt: json["discount_start_at"] == null ? null : DateTime.parse(json["discount_start_at"]),
-    discountEndAt: json["discount_end_at"] == null ? null : DateTime.parse(json["discount_end_at"]),
-    isFeatured: json["is_featured"],
-    deletedAt: json["deleted_at"],
-    tags: json["tags"] == null ? [] : List<String>.from(json["tags"]!.map((x) => x)),
-    levelId: json["level_id"],
-    subjectId: json["subject_id"],
-    isRenewable: json["is_renewable"],
-    renewAfter: json["renew_after"],
-    metaTitle: json["meta_title"],
-    metaKeywords: json["meta_keywords"],
-    metaDescription: json["meta_description"],
-    metaImage: json["meta_image"] == null ? null : Image.fromMap(json["meta_image"]),
-    totalLesson: json["total_lesson"],
-    totalEnrolled: json["total_enrolled"],
-    totalRating: json["total_rating"],
-    isPublished: json["is_published"],
-    status: json["status"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-  );
+        id: json["id"],
+        isShow: json["is_show"],
+        courseThumbnail: json["course_thumbnail"],
+        courseReelVideo: json["course_reel_video"],
+        chapterCount: json["chapter_count"],
+        title: json["title"],
+        slug: json["slug"],
+        shortDescription: json["short_description"],
+        userId: json["user_id"],
+        instructorIds: json["instructor_ids"] == null
+            ? []
+            : List<String>.from(json["instructor_ids"]!.map((x) => x)),
+        categoryId: json["category_id"],
+        courseType: json["course_type"],
+        capacity: json["capacity"],
+        classEndsAt: json["class_ends_at"],
+        languageId: json["language_id"],
+        organizationId: json["organization_id"],
+        description: json["description"],
+        isPrivate: json["is_private"],
+        videoSource: json["video_source"],
+        video: json["video"] == null ? null : Video.fromMap(json["video"]),
+        imageMediaId: json["image_media_id"],
+        image: json["image"] == null ? null : Image.fromMap(json["image"]),
+        duration: json["duration"],
+        isDownloadable: json["is_downloadable"],
+        isFree: json["is_free"],
+        price: json["price"],
+        isDiscountable: json["is_discountable"],
+        discountType: json["discount_type"],
+        discount: json["discount"],
+        discountStartAt: json["discount_start_at"] == null
+            ? null
+            : DateTime.parse(json["discount_start_at"]),
+        discountEndAt: json["discount_end_at"] == null
+            ? null
+            : DateTime.parse(json["discount_end_at"]),
+        isFeatured: json["is_featured"],
+        deletedAt: json["deleted_at"],
+        tags: json["tags"] == null
+            ? []
+            : List<String>.from(json["tags"]!.map((x) => x)),
+        levelId: json["level_id"],
+        subjectId: json["subject_id"],
+        isRenewable: json["is_renewable"],
+        renewAfter: json["renew_after"],
+        metaTitle: json["meta_title"],
+        metaKeywords: json["meta_keywords"],
+        metaDescription: json["meta_description"],
+        metaImage: json["meta_image"] == null
+            ? null
+            : Image.fromMap(json["meta_image"]),
+        totalLesson: json["total_lesson"],
+        totalEnrolled: json["total_enrolled"],
+        totalRating: json["total_rating"],
+        isPublished: json["is_published"],
+        status: json["status"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        category: json["category"] == null
+            ? null
+            : Category.fromMap(json["category"]),
+      );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "is_show": isShow,
-    "course_thumbnail": courseThumbnail,
-    "course_reel_video": courseReelVideo,
-    "chapter_count": chapterCount,
-    "title": title,
-    "slug": slug,
-    "short_description": shortDescription,
-    "user_id": userId,
-    "instructor_ids": instructorIds == null ? [] : List<dynamic>.from(instructorIds!.map((x) => x)),
-    "category_id": categoryId,
-    "course_type": courseType,
-    "capacity": capacity,
-    "class_ends_at": classEndsAt,
-    "language_id": languageId,
-    "organization_id": organizationId,
-    "description": description,
-    "is_private": isPrivate,
-    "video_source": videoSource,
-    "video": video?.toMap(),
-    "image_media_id": imageMediaId,
-    "image": image?.toMap(),
-    "duration": duration,
-    "is_downloadable": isDownloadable,
-    "is_free": isFree,
-    "price": price,
-    "is_discountable": isDiscountable,
-    "discount_type": discountType,
-    "discount": discount,
-    "discount_start_at": discountStartAt?.toIso8601String(),
-    "discount_end_at": discountEndAt?.toIso8601String(),
-    "is_featured": isFeatured,
-    "deleted_at": deletedAt,
-    "tags": tags == null ? [] : List<dynamic>.from(tags!.map((x) => x)),
-    "level_id": levelId,
-    "subject_id": subjectId,
-    "is_renewable": isRenewable,
-    "renew_after": renewAfter,
-    "meta_title": metaTitle,
-    "meta_keywords": metaKeywords,
-    "meta_description": metaDescription,
-    "meta_image": metaImage?.toMap(),
-    "total_lesson": totalLesson,
-    "total_enrolled": totalEnrolled,
-    "total_rating": totalRating,
-    "is_published": isPublished,
-    "status": status,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-  };
+        "id": id,
+        "is_show": isShow,
+        "course_thumbnail": courseThumbnail,
+        "course_reel_video": courseReelVideo,
+        "chapter_count": chapterCount,
+        "title": title,
+        "slug": slug,
+        "short_description": shortDescription,
+        "user_id": userId,
+        "instructor_ids": instructorIds == null
+            ? []
+            : List<dynamic>.from(instructorIds!.map((x) => x)),
+        "category_id": categoryId,
+        "course_type": courseType,
+        "capacity": capacity,
+        "class_ends_at": classEndsAt,
+        "language_id": languageId,
+        "organization_id": organizationId,
+        "description": description,
+        "is_private": isPrivate,
+        "video_source": videoSource,
+        "video": video?.toMap(),
+        "image_media_id": imageMediaId,
+        "image": image?.toMap(),
+        "duration": duration,
+        "is_downloadable": isDownloadable,
+        "is_free": isFree,
+        "price": price,
+        "is_discountable": isDiscountable,
+        "discount_type": discountType,
+        "discount": discount,
+        "discount_start_at": discountStartAt?.toIso8601String(),
+        "discount_end_at": discountEndAt?.toIso8601String(),
+        "is_featured": isFeatured,
+        "deleted_at": deletedAt,
+        "tags": tags == null ? [] : List<dynamic>.from(tags!.map((x) => x)),
+        "level_id": levelId,
+        "subject_id": subjectId,
+        "is_renewable": isRenewable,
+        "renew_after": renewAfter,
+        "meta_title": metaTitle,
+        "meta_keywords": metaKeywords,
+        "meta_description": metaDescription,
+        "meta_image": metaImage?.toMap(),
+        "total_lesson": totalLesson,
+        "total_enrolled": totalEnrolled,
+        "total_rating": totalRating,
+        "is_published": isPublished,
+        "status": status,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "category": category?.toMap()
+      };
 }
 
 class Image {
@@ -421,36 +449,36 @@ class Image {
   String toJson() => json.encode(toMap());
 
   factory Image.fromMap(Map<String, dynamic> json) => Image(
-    storage: json["storage"],
-    originalImage: json["original_image"],
-    image40X40: json["image_40x40"],
-    image80X80: json["image_80x80"],
-    image68X48: json["image_68x48"],
-    image190X230: json["image_190x230"],
-    image163X116: json["image_163x116"],
-    image295X248: json["image_295x248"],
-    image417X384: json["image_417x384"],
-    imageThumbnail: json["image_thumbnail"],
-    image305X150: json["image_305x150"],
-    image402X248: json["image_402x248"],
-    image1200X630: json["image_1200x630"],
-  );
+        storage: json["storage"],
+        originalImage: json["original_image"],
+        image40X40: json["image_40x40"],
+        image80X80: json["image_80x80"],
+        image68X48: json["image_68x48"],
+        image190X230: json["image_190x230"],
+        image163X116: json["image_163x116"],
+        image295X248: json["image_295x248"],
+        image417X384: json["image_417x384"],
+        imageThumbnail: json["image_thumbnail"],
+        image305X150: json["image_305x150"],
+        image402X248: json["image_402x248"],
+        image1200X630: json["image_1200x630"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "storage": storage,
-    "original_image": originalImage,
-    "image_40x40": image40X40,
-    "image_80x80": image80X80,
-    "image_68x48": image68X48,
-    "image_190x230": image190X230,
-    "image_163x116": image163X116,
-    "image_295x248": image295X248,
-    "image_417x384": image417X384,
-    "image_thumbnail": imageThumbnail,
-    "image_305x150": image305X150,
-    "image_402x248": image402X248,
-    "image_1200x630": image1200X630,
-  };
+        "storage": storage,
+        "original_image": originalImage,
+        "image_40x40": image40X40,
+        "image_80x80": image80X80,
+        "image_68x48": image68X48,
+        "image_190x230": image190X230,
+        "image_163x116": image163X116,
+        "image_295x248": image295X248,
+        "image_417x384": image417X384,
+        "image_thumbnail": imageThumbnail,
+        "image_305x150": image305X150,
+        "image_402x248": image402X248,
+        "image_1200x630": image1200X630,
+      };
 }
 
 class Video {
@@ -476,12 +504,44 @@ class Video {
   String toJson() => json.encode(toMap());
 
   factory Video.fromMap(Map<String, dynamic> json) => Video(
-    storage: json["storage"],
-    image: json["image"],
-  );
+        storage: json["storage"],
+        image: json["image"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "storage": storage,
-    "image": image,
-  };
+        "storage": storage,
+        "image": image,
+      };
+}
+
+class Category {
+  int? id;
+  String? title;
+  String? slug;
+  int? parentId;
+  Image? image;
+
+  Category({
+    this.id,
+    this.title,
+    this.slug,
+    this.parentId,
+    this.image,
+  });
+
+  factory Category.fromMap(Map<String, dynamic> json) => Category(
+        id: json["id"],
+        title: json["title"],
+        slug: json["slug"],
+        parentId: json["parent_id"],
+        image: json["image"] != null ? Image.fromMap(json["image"]) : null,
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "title": title,
+        "slug": slug,
+        "parent_id": parentId,
+        "image": image?.toMap(),
+      };
 }

@@ -247,12 +247,12 @@ class _ReelCardState extends State<ReelCard> {
                 icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border,
                     color: isLiked ? Colors.red : null),
                 onPressed: () {
-                  _toggleLike(item.id!, item.courseReelId!);
+                  _toggleLike(item.courseId!, item.courseReelId!);
                 },
               ),
               GestureDetector(
                 onTap: () => _showLikeBottomSheet(item.id!, item.courseReelId!),
-                child: Text("${item.courseLikeCount ?? 0}"),
+                child: Text("${item.courseReelLikeCount ?? 0}"),
               ),
               SizedBox(width: 10),
               IconButton(
@@ -260,11 +260,11 @@ class _ReelCardState extends State<ReelCard> {
                 onPressed: _showComment,
               ),
               GestureDetector(
-                onTap: () =>
-                    _showCommentsBottomSheet(item.id!, item.courseReelId!),
+                onTap: () => _showCommentsBottomSheet(
+                    item.courseId!, item.courseReelId!),
                 child: Row(
                   children: [
-                    Text("${item.courseCommentCount ?? 0}"),
+                    Text("${item.courseReelCommentCount ?? 0}"),
                     SizedBox(width: 5),
                     Text(
                       "View Comments",
@@ -310,7 +310,7 @@ class _ReelCardState extends State<ReelCard> {
                         )
                       : IconButton(
                           onPressed: () async {
-                            _addComment(item.id!, item.courseReelId!);
+                            _addComment(item.courseId!, item.courseReelId!);
                           },
                           icon: Icon(Icons.send),
                         ),
@@ -328,12 +328,12 @@ class _ReelCardState extends State<ReelCard> {
     });
     if (isLiked) {
       int newLike =
-          (reelController.reels[widget.index].courseLikeCount ?? 0) + 1;
+          (reelController.reels[widget.index].courseReelLikeCount ?? 0) + 1;
       reelController.reels[widget.index] =
           reelController.reels[widget.index].copyWith(courseLikeCount: newLike);
     } else {
       int newLike =
-          (reelController.reels[widget.index].courseLikeCount ?? 0) - 1;
+          (reelController.reels[widget.index].courseReelLikeCount ?? 0) - 1;
       reelController.reels[widget.index] =
           reelController.reels[widget.index].copyWith(courseLikeCount: newLike);
     }
@@ -355,12 +355,12 @@ class _ReelCardState extends State<ReelCard> {
     node.requestFocus();
   }
 
-  Future<void> _addComment(int id, int courseReelId) async {
+  Future<void> _addComment(int courseId, int courseReelId) async {
     setState(() {
       isCommentLoading = true;
     });
     final result = await reelController.addComment(
-        courseId: id,
+        courseId: courseId,
         comment: commentController.text,
         courseReelId: courseReelId);
 

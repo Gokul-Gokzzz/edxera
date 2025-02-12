@@ -46,25 +46,27 @@ class ReelResponse {
 
 class ReelModel {
   int? id;
+  int? courseId;
   String? title;
   String? courseReelVideo;
   String? courseReelYoutubeLink;
   String? courseThumbnail;
-  int? courseLikeCount;
-  int? courseViewCount;
-  int? courseCommentCount;
+  int? courseReelLikeCount;
+  int? courseReelViewCount;
+  int? courseReelCommentCount;
   int? courseReelId;
   int? isLiked;
 
   ReelModel({
     this.id,
+    this.courseId,
     this.title,
     this.courseReelVideo,
     this.courseReelYoutubeLink,
     this.courseThumbnail,
-    this.courseLikeCount,
-    this.courseViewCount,
-    this.courseCommentCount,
+    this.courseReelLikeCount,
+    this.courseReelViewCount,
+    this.courseReelCommentCount,
     this.courseReelId,
     this.isLiked,
   });
@@ -83,12 +85,14 @@ class ReelModel {
   }) =>
       ReelModel(
         id: id ?? this.id,
+        courseId: courseId ?? this.courseId,
         title: title ?? this.title,
         courseReelVideo: courseReelVideo ?? this.courseReelVideo,
         courseThumbnail: courseThumbnail ?? this.courseThumbnail,
-        courseLikeCount: courseLikeCount ?? this.courseLikeCount,
-        courseViewCount: courseViewCount ?? this.courseViewCount,
-        courseCommentCount: courseCommentCount ?? this.courseCommentCount,
+        courseReelLikeCount: courseLikeCount ?? this.courseReelLikeCount,
+        courseReelViewCount: courseViewCount ?? this.courseReelViewCount,
+        courseReelCommentCount:
+            courseCommentCount ?? this.courseReelCommentCount,
         isLiked: isLiked ?? this.isLiked,
         courseReelId: courseReelId ?? this.courseReelId,
         courseReelYoutubeLink:
@@ -101,27 +105,29 @@ class ReelModel {
 
   factory ReelModel.fromMap(Map<String, dynamic> json) => ReelModel(
         id: json["id"],
+        courseId: json["course_id"],
         title: json["title"],
         courseReelVideo: json["course_reel_video"],
         courseReelYoutubeLink: json["cource_reel_youtube_link"],
         courseThumbnail: json["course_thumbnail"],
-        courseLikeCount: json["course_reel_like_count"],
-        courseViewCount: json["course_reel_view_count"],
-        courseCommentCount: json["course_reel_comment_count"],
-        courseReelId: json["cource_reels_id"],
+        courseReelLikeCount: json["course_reel_like_count"],
+        courseReelViewCount: json["course_reel_view_count"],
+        courseReelCommentCount: json["course_reel_comment_count"],
+        courseReelId: json["course_reels_id"],
         isLiked: json["is_liked"],
       );
 
   Map<String, dynamic> toMap() => {
         "id": id,
+        "course_id": courseId,
         "title": title,
         "course_reel_video": courseReelVideo,
         "cource_reel_youtube_link": courseReelYoutubeLink,
         "course_thumbnail": courseThumbnail,
-        "course_like_count": courseLikeCount,
-        "course_view_count": courseViewCount,
-        "course_comment_count": courseCommentCount,
-        "cource_reels_id": courseReelId,
+        "course_like_count": courseReelLikeCount,
+        "course_view_count": courseReelViewCount,
+        "course_comment_count": courseReelCommentCount,
+        "course_reels_id": courseReelId,
         "is_liked": isLiked,
       };
 }

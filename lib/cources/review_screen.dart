@@ -60,20 +60,30 @@ class _ReviewState extends State<Review> {
                 child: Text(
                   mplanguage['writereview'].toString(),
                   style: TextStyle(
-                      fontSize: 16.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
+                      fontSize: 16.sp,
+                      fontFamily: 'Gilroy',
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.normal,
+                      color: Color(0XFF000000)),
                 ),
               ),
               SizedBox(height: 15.h),
               TextFormField(
                 controller: courceController.nameController,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12.h))),
-                    focusedBorder:
-                        OutlineInputBorder(borderRadius: BorderRadius.circular(12.h), borderSide: BorderSide(color: Color(0XFF503494), width: 1.w)),
-                    enabledBorder:
-                        OutlineInputBorder(borderRadius: BorderRadius.circular(12.h), borderSide: BorderSide(color: Color(0XFFDFDFDF), width: 1.w)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12.h))),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.h),
+                        borderSide:
+                            BorderSide(color: Color(0XFF503494), width: 1.w)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.h),
+                        borderSide:
+                            BorderSide(color: Color(0XFFDFDFDF), width: 1.w)),
                     hintText: mplanguage['writefeedback'].toString(),
-                    hintStyle: TextStyle(color: Color(0XFF6E758A), fontSize: 14.sp)),
+                    hintStyle:
+                        TextStyle(color: Color(0XFF6E758A), fontSize: 14.sp)),
                 maxLines: 5,
               ),
               SizedBox(height: 15.h),
@@ -136,7 +146,10 @@ class _ReviewState extends State<Review> {
                         child: GestureDetector(
                       onTap: () {
                         // Get.off(HomeMainScreen());
-                        courceController.feedbackApi((courceController.courseDetailsDataModel.data?.course?.id ?? 0).toString());
+                        courceController.feedbackApi((courceController
+                                    .courseDetailsDataModel.data?.course?.id ??
+                                0)
+                            .toString());
                         // controller.onChange(0);
                       },
                       child: Container(
@@ -185,9 +198,17 @@ class _ReviewState extends State<Review> {
                 children: [
                   Text(
                     mplanguage['ratingreview'].toString(),
-                    style: TextStyle(fontSize: 13.sp, fontFamily: 'Gilroy', color: const Color(0XFF000000), fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 13.sp,
+                        fontFamily: 'Gilroy',
+                        color: const Color(0XFF000000),
+                        fontWeight: FontWeight.w500),
                   ),
-                  Text(mplanguage['viewall'].toString(), style: TextStyle(fontSize: 12.sp, fontFamily: 'Gilroy', color: const Color(0XFF000000))),
+                  Text(mplanguage['viewall'].toString(),
+                      style: TextStyle(
+                          fontSize: 12.sp,
+                          fontFamily: 'Gilroy',
+                          color: const Color(0XFF000000))),
                 ],
               ),
               SizedBox(height: 15.h),
@@ -198,11 +219,19 @@ class _ReviewState extends State<Review> {
                     children: [
                       Text(
                         "4.5",
-                        style: TextStyle(fontFamily: 'Gilroy', fontSize: 36.sp, color: const Color(0XFF000000), fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                            fontFamily: 'Gilroy',
+                            fontSize: 36.sp,
+                            color: const Color(0XFF000000),
+                            fontWeight: FontWeight.w700),
                       ),
                       Text(
                         mplanguage['outof'].toString(),
-                        style: TextStyle(fontFamily: 'Gilroy', fontSize: 13.sp, color: Color(0XFF000000), fontWeight: FontWeight.normal),
+                        style: TextStyle(
+                            fontFamily: 'Gilroy',
+                            fontSize: 13.sp,
+                            color: Color(0XFF000000),
+                            fontWeight: FontWeight.normal),
                       ),
                     ],
                   ),
@@ -219,7 +248,8 @@ class _ReviewState extends State<Review> {
                             allowHalfRating: true,
                             itemCount: 5,
                             itemSize: 10,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 2.17.h),
+                            itemPadding:
+                                EdgeInsets.symmetric(horizontal: 2.17.h),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star_border,
                               color: Color(0XFF503494),
@@ -246,7 +276,8 @@ class _ReviewState extends State<Review> {
                             allowHalfRating: true,
                             itemCount: 4,
                             itemSize: 10,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 2.17.w),
+                            itemPadding:
+                                EdgeInsets.symmetric(horizontal: 2.17.w),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star_border,
                               color: Color(0XFF503494),
@@ -273,7 +304,8 @@ class _ReviewState extends State<Review> {
                             allowHalfRating: true,
                             itemCount: 3,
                             itemSize: 10,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 2.17.w),
+                            itemPadding:
+                                EdgeInsets.symmetric(horizontal: 2.17.w),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star_border,
                               color: Color(0XFF503494),
@@ -300,7 +332,8 @@ class _ReviewState extends State<Review> {
                             allowHalfRating: true,
                             itemCount: 2,
                             itemSize: 10,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 2.17.w),
+                            itemPadding:
+                                EdgeInsets.symmetric(horizontal: 2.17.w),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star_border,
                               color: Color(0XFF503494),
@@ -327,7 +360,8 @@ class _ReviewState extends State<Review> {
                             allowHalfRating: true,
                             itemCount: 1,
                             itemSize: 10,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 2.17.w),
+                            itemPadding:
+                                EdgeInsets.symmetric(horizontal: 2.17.w),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star_border,
                               color: Color(0XFF503494),
@@ -348,12 +382,12 @@ class _ReviewState extends State<Review> {
                 ],
               ),
               SizedBox(height: 8.h),
-              Align(
-                  child: Text(
-                    "1k " + mplanguage['reviews'].toString(),
-                    style: TextStyle(fontFamily: 'Gilroy', fontSize: 12.sp, color: Color(0XFF000000), fontWeight: FontWeight.normal),
-                  ),
-                  alignment: Alignment.centerRight),
+              // Align(
+              //     child: Text(
+              //       "1k " + mplanguage['reviews'].toString(),
+              //       style: TextStyle(fontFamily: 'Gilroy', fontSize: 12.sp, color: Color(0XFF000000), fontWeight: FontWeight.normal),
+              //     ),
+              //     alignment: Alignment.centerRight),
               SizedBox(height: 12.h),
               Row(
                 children: [
@@ -363,7 +397,11 @@ class _ReviewState extends State<Review> {
                     },
                     child: Text(
                       mplanguage['writereview'].toString(),
-                      style: TextStyle(fontFamily: 'Gilroy', fontSize: 12.sp, color: const Color(0XFF000000), fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          fontFamily: 'Gilroy',
+                          fontSize: 12.sp,
+                          color: const Color(0XFF000000),
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                   const SizedBox(width: 11),
@@ -392,7 +430,8 @@ class _ReviewState extends State<Review> {
               ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: courceController.courseDetailsDataModel.data?.reviews?.length,
+                  itemCount: courceController
+                      .courseDetailsDataModel.data?.reviews?.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: EdgeInsets.only(left: 15.5.w),
@@ -409,15 +448,25 @@ class _ReviewState extends State<Review> {
                                     fit: BoxFit.fill,
                                     height: 32.h,
                                     width: 32.w,
-                                    imageUrl: courceController.courseDetailsDataModel.data?.reviews?[index].user?.images ?? '',
-                                    progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                                    imageUrl: courceController
+                                            .courseDetailsDataModel
+                                            .data
+                                            ?.reviews?[index]
+                                            .user
+                                            ?.images ??
+                                        '',
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            Center(
                                       child: Container(
                                         height: 32.h,
                                         width: 32.w,
-                                        child: CircularProgressIndicator(value: downloadProgress.progress),
+                                        child: CircularProgressIndicator(
+                                            value: downloadProgress.progress),
                                       ),
                                     ),
-                                    errorWidget: (context, url, error) => ClipRRect(
+                                    errorWidget: (context, url, error) =>
+                                        ClipRRect(
                                       borderRadius: BorderRadius.circular(32.h),
                                       child: Container(
                                         height: 32.h,
@@ -443,7 +492,9 @@ class _ReviewState extends State<Review> {
                                 SizedBox(width: 15.w),
                                 Expanded(
                                   child: Text(
-                                    courceController.courseDetailsDataModel.data?.reviews?[index].comment ?? '',
+                                    courceController.courseDetailsDataModel.data
+                                            ?.reviews?[index].comment ??
+                                        '',
                                     style: TextStyle(
                                         fontSize: 12.sp,
                                         color: const Color(0XFF292929),
@@ -454,10 +505,20 @@ class _ReviewState extends State<Review> {
                                 ),
                                 Spacer(),
                                 Padding(
-                                  padding: EdgeInsets.only(top: 33.h, bottom: 11.h),
+                                  padding:
+                                      EdgeInsets.only(top: 33.h, bottom: 11.h),
                                   child: Text(
-                                    convertToAgo(courceController.courseDetailsDataModel.data?.reviews?[index].createdAt?.toIso8601String() ?? ''),
-                                    style: TextStyle(fontSize: 12.sp, color: Color(0XFF503494), fontFamily: 'Gilroy'),
+                                    convertToAgo(courceController
+                                            .courseDetailsDataModel
+                                            .data
+                                            ?.reviews?[index]
+                                            .createdAt
+                                            ?.toIso8601String() ??
+                                        ''),
+                                    style: TextStyle(
+                                        fontSize: 12.sp,
+                                        color: Color(0XFF503494),
+                                        fontFamily: 'Gilroy'),
                                   ),
                                 ),
                               ],
@@ -475,7 +536,8 @@ class _ReviewState extends State<Review> {
   }
 
   String convertToAgo(String dateTime) {
-    DateTime input = DateFormat('yyyy-MM-DDTHH:mm:ss.SSSSSSZ').parse(dateTime, true);
+    DateTime input =
+        DateFormat('yyyy-MM-DDTHH:mm:ss.SSSSSSZ').parse(dateTime, true);
     Duration diff = DateTime.now().difference(input);
 
     if (diff.inDays >= 1) {
