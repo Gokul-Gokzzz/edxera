@@ -93,7 +93,7 @@ class Datum {
   String? status;
   DateTime? createdAt;
   DateTime? updatedAt;
-  Category? category;
+  String? categoryTile;
 
   Datum({
     this.id,
@@ -145,7 +145,7 @@ class Datum {
     this.status,
     this.createdAt,
     this.updatedAt,
-    this.category,
+    this.categoryTile,
   });
 
   Datum copyWith({
@@ -198,7 +198,7 @@ class Datum {
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
-    Category? category,
+    String? categoryTile,
   }) =>
       Datum(
         id: id ?? this.id,
@@ -250,7 +250,7 @@ class Datum {
         status: status ?? this.status,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
-        category: category ?? this.category,
+        categoryTile: categoryTile ?? this.categoryTile,
       );
 
   factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
@@ -321,9 +321,7 @@ class Datum {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
-        category: json["category"] == null
-            ? null
-            : Category.fromJson(json["category"]),
+        categoryTile: json["CATEGORY_TITLE"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -378,7 +376,7 @@ class Datum {
         "status": status,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
-        "category": category?.toJson(),
+        "CATEGORY_TITLE": categoryTile,
       };
 }
 
@@ -511,101 +509,5 @@ class Video {
   Map<String, dynamic> toMap() => {
         "storage": storage,
         "image": image,
-      };
-}
-
-class Category {
-  int? id;
-  String? title;
-  String? slug;
-  int? parentId;
-  dynamic icon;
-  Image? image;
-  String? imageMediaId;
-  dynamic position;
-  int? ordering;
-  int? isFeatured;
-  int? totalCourses;
-  String? metaTitle;
-  String? metaKeywords;
-  String? metaDescription;
-  String? metaImage;
-  int? status;
-  Type? type;
-  int? isCategorySelected;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-
-  Category({
-    this.id,
-    this.title,
-    this.slug,
-    this.parentId,
-    this.icon,
-    this.image,
-    this.imageMediaId,
-    this.position,
-    this.ordering,
-    this.isFeatured,
-    this.totalCourses,
-    this.metaTitle,
-    this.metaKeywords,
-    this.metaDescription,
-    this.metaImage,
-    this.status,
-    this.type,
-    this.isCategorySelected,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
-        id: json["id"],
-        title: json["title"],
-        slug: json["slug"],
-        parentId: json["parent_id"],
-        icon: json["icon"],
-        image: json["image"] == null ? null : Image.fromJson(json["image"]),
-        imageMediaId: json["image_media_id"],
-        position: json["position"],
-        ordering: json["ordering"],
-        isFeatured: json["is_featured"],
-        totalCourses: json["total_courses"],
-        metaTitle: json["meta_title"],
-        metaKeywords: json["meta_keywords"],
-        metaDescription: json["meta_description"],
-        metaImage: json["meta_image"],
-        status: json["status"],
-        // type: typeValues.map[json["type"]]!,
-        isCategorySelected: json["is_category_selected"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "slug": slug,
-        "parent_id": parentId,
-        "icon": icon,
-        "image": image?.toJson(),
-        "image_media_id": imageMediaId,
-        "position": position,
-        "ordering": ordering,
-        "is_featured": isFeatured,
-        "total_courses": totalCourses,
-        "meta_title": metaTitle,
-        "meta_keywords": metaKeywords,
-        "meta_description": metaDescription,
-        "meta_image": metaImage,
-        "status": status,
-        // "type": typeValues.reverse[type],
-        "is_category_selected": isCategorySelected,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
       };
 }

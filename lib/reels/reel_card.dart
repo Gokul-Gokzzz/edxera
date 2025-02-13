@@ -35,6 +35,7 @@ class _ReelCardState extends State<ReelCard> {
   bool isCommentLoading = false;
   bool _isInitialized = false;
   bool _isYoutubeVideo = false;
+  //  bool _isMuted = true;
 
   TextEditingController commentController = TextEditingController();
   FocusNode node = FocusNode();
@@ -53,6 +54,7 @@ class _ReelCardState extends State<ReelCard> {
           });
         },
       );
+      // _isMuted = true;
       initializePlayer();
     });
   }
@@ -70,7 +72,7 @@ class _ReelCardState extends State<ReelCard> {
         _youtubeController = YoutubePlayerController(
           initialVideoId: videoId,
           flags: const YoutubePlayerFlags(
-            autoPlay: true,
+            autoPlay: false,
             mute: false,
           ),
         );

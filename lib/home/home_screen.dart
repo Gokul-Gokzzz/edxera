@@ -3159,7 +3159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             .studyPlanCourseNameDataModel
                                             .data !=
                                         null
-                                    ? all_cource_list()
+                                    ? all_course_list()
                                     : Container(),
                               ),
 
@@ -3666,21 +3666,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget all_cource_list() {
+  Widget all_course_list() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-          child: Text(mplanguage['courses'].toString(),
-              style: TextStyle(
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Gilroy')),
+          child: Text(
+            mplanguage['courses'].toString(),
+            style: TextStyle(
+              fontSize: 13.sp,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'Gilroy',
+            ),
+          ),
         ),
         SizedBox(
-          //color: Colors.red,
-          height: 234.h,
+          height: 250.h, // Increased height to adjust category title
           width: double.infinity.w,
           child: ListView.builder(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -3688,13 +3690,11 @@ class _HomeScreenState extends State<HomeScreen> {
             primary: false,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount: homecontroller.trendingCoursesDataModel.data?.length,
+            itemCount:
+                homecontroller.trendingCoursesDataModel.data?.length ?? 0,
             itemBuilder: (BuildContext context, index) {
               var course = homecontroller.trendingCoursesDataModel.data;
 
-              // if ((course?[index].is_show ?? 1) == 0) {
-              //   return SizedBox.shrink();
-              // }
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: GestureDetector(
@@ -3706,71 +3706,67 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          height: 177.h,
-                          width: 250.w,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.fill,
-                              // height: 50.h,
-                              // width: 50.w,
-                              imageUrl:
-                                  '${ApiConstants.publicBaseUrl}/${course?[index].courseThumbnail ?? ''}',
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Center(
-                                child: Container(
-                                  height: 30.h,
-                                  width: 30.w,
-                                  child: CircularProgressIndicator(
-                                      value: downloadProgress.progress),
+                        // Category Name Above the Image
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 8.h), // Add spacing
+                          child: Text(
+                            course?[index].categoryTile?.isNotEmpty == true
+                                ? course![index].categoryTile!
+                                : 'Category',
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue, // Change color to visible
+                            ),
+                          ),
+                        ),
+
+                        // Course Image
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: CachedNetworkImage(
+                            height: 177.h,
+                            width: 250.w,
+                            fit: BoxFit.fill,
+                            imageUrl:
+                                '${ApiConstants.publicBaseUrl}/${course?[index].courseThumbnail ?? ''}',
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Center(
+                              child: SizedBox(
+                                height: 30.h,
+                                width: 30.w,
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
                                 ),
                               ),
-                              errorWidget: (context, url, error) => ClipRRect(
-                                borderRadius: BorderRadius.circular(10.h),
-                                child: Container(
-                                  // height: 50.h,
-                                  // width: 50.w,
-                                  color: Colors.grey.withOpacity(0.2),
-                                ),
+                            ),
+                            errorWidget: (context, url, error) => ClipRRect(
+                              borderRadius: BorderRadius.circular(10.h),
+                              child: Container(
+                                color: Colors.grey.withOpacity(0.2),
                               ),
                             ),
                           ),
                         ),
+
                         SizedBox(height: 8.h),
+
+                        // Course Title
                         Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                course?[index].title ?? '',
-                                maxLines: 5,
-                                style: TextStyle(
-                                  fontFamily: 'Gilroy',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15.sp,
-                                  color: const Color(0XFF000000),
-                                ),
-                              ),
-                              Text(
-                                course?[index].title ?? '',
-                                maxLines: 5,
-                                style: TextStyle(
-                                  fontFamily: 'Gilroy',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15.sp,
-                                  color: const Color(0XFF000000),
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            course?[index].title ?? '',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: 'Gilroy',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15.sp,
+                              color: const Color(0XFF000000),
+                            ),
                           ),
                         ),
+
                         SizedBox(height: 5.h),
-                        // Text(trendingCource[index].subtitle!,
-                        //     style: TextStyle(
-                        //         fontFamily: 'Gilroy',
-                        //         fontWeight: FontWeight.w700,
-                        //         fontSize: 15.sp,
-                        //         color: const Color(0XFF000000))),
                       ],
                     ),
                   ),
