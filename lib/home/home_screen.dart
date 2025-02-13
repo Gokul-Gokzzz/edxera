@@ -3782,7 +3782,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
-
   // Widget all_cource_list() {
   //   return Column(
   //     crossAxisAlignment: CrossAxisAlignment.start,

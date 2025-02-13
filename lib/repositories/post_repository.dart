@@ -125,7 +125,8 @@ class PostRepository {
     }
   }
 
-  Future<LogoutDataModel?> forgotPasswordLoginData(Map<String, String> data) async {
+  Future<LogoutDataModel?> forgotPasswordLoginData(
+      Map<String, String> data) async {
     try {
       var response = await api.sendRequest.post(
         ApiConstants.get_verification_otp,
@@ -173,7 +174,8 @@ class PostRepository {
     return null;
   }
 
-  Future<ChangePasswordDataModel?> changePassword(Map<String, dynamic> data) async {
+  Future<ChangePasswordDataModel?> changePassword(
+      Map<String, dynamic> data) async {
     // try {
     var response = await api.sendRequest.post(
       ApiConstants.change_password,
@@ -199,7 +201,8 @@ class PostRepository {
     return null;
   }
 
-  Future<ChangePasswordDataModel?> delteAccountApi(Map<String, dynamic> data) async {
+  Future<ChangePasswordDataModel?> delteAccountApi(
+      Map<String, dynamic> data) async {
     // try {
     var response = await api.sendRequest.post(
       ApiConstants.delete_account,
@@ -273,7 +276,8 @@ class PostRepository {
     return null;
   }
 
-  Future<LogoutDataModel?> verificatoionCodePassword(Map<String, String> data) async {
+  Future<LogoutDataModel?> verificatoionCodePassword(
+      Map<String, String> data) async {
     try {
       var response = await api.sendRequest.post(
         ApiConstants.verify_otp,
@@ -422,12 +426,14 @@ class PostRepository {
     return null;
   }
 
-  Future<FreeStudyMatrialListDataModel?> freestudyMatrialApi(Map<String, dynamic> data) async {
+  Future<FreeStudyMatrialListDataModel?> freestudyMatrialApi(
+      Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.free_study_materials, data: data
+      var response = await api.sendRequest
+          .post(ApiConstants.free_study_materials, data: data
 
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -452,10 +458,11 @@ class PostRepository {
       'study_plan_items_id': planId,
     };
     try {
-      var response = await api.sendRequest.post(ApiConstants.study_plan_chapter_inner, data: data
+      var response = await api.sendRequest
+          .post(ApiConstants.study_plan_chapter_inner, data: data
 
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -473,12 +480,14 @@ class PostRepository {
     return null;
   }
 
-  Future<NotificationListDataModel?> getNotificationDataApi(Map<String, dynamic> data) async {
+  Future<NotificationListDataModel?> getNotificationDataApi(
+      Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.get_user_notifications, data: data
+      var response = await api.sendRequest
+          .post(ApiConstants.get_user_notifications, data: data
 
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -496,12 +505,14 @@ class PostRepository {
     return null;
   }
 
-  Future<SubmitMcqDataModel?> clearNotificationDataApi(Map<String, dynamic> data) async {
+  Future<SubmitMcqDataModel?> clearNotificationDataApi(
+      Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.user_notification_clear, data: data
+      var response = await api.sendRequest
+          .post(ApiConstants.user_notification_clear, data: data
 
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -519,12 +530,14 @@ class PostRepository {
     return null;
   }
 
-  Future<CategoryWiseCourseListDataModel?> categoryWiseCourseListApi(Map<String, dynamic> data) async {
+  Future<CategoryWiseCourseListDataModel?> categoryWiseCourseListApi(
+      Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.category_courses, data: data
+      var response =
+          await api.sendRequest.post(ApiConstants.category_courses, data: data
 
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -542,7 +555,8 @@ class PostRepository {
     return null;
   }
 
-  Future<TestimonialDataListDataModel?> homeDashboardTestimonailasDatGet() async {
+  Future<TestimonialDataListDataModel?>
+      homeDashboardTestimonailasDatGet() async {
     try {
       var response = await api.sendRequest.get(
         ApiConstants.testimonial,
@@ -566,7 +580,8 @@ class PostRepository {
     return null;
   }
 
-  Future<TodaysStudyPlanDataModel?> todayStudyPlanApi(Map<String, dynamic> data) async {
+  Future<TodaysStudyPlanDataModel?> todayStudyPlanApi(
+      Map<String, dynamic> data) async {
     try {
       var response = await api.sendRequest.post(
         ApiConstants.get_today_study_plans, data: data,
@@ -594,9 +609,10 @@ class PostRepository {
       'user_id': await PrefData.getUserId(),
     };
     try {
-      var response = await api.sendRequest.post(ApiConstants.study_plan_my_courses, data: data
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+      var response = await api.sendRequest
+          .post(ApiConstants.study_plan_my_courses, data: data
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -644,10 +660,12 @@ class PostRepository {
     return null;
   }
 
-  Future<CourseDetailsDataModel?> coursePurchaseDetails(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.send_course_purchace_request, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<CourseDetailsDataModel?> coursePurchaseDetails(
+      Map<String, dynamic> data) async {
+    var response = await api.sendRequest
+        .post(ApiConstants.send_course_purchace_request, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -671,9 +689,10 @@ class PostRepository {
       'user_id': await PrefData.getUserId(),
     };
     print(data);
-    var response = await api.sendRequest.post(ApiConstants.get_all_batchs, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+    var response =
+        await api.sendRequest.post(ApiConstants.get_all_batchs, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -696,9 +715,10 @@ class PostRepository {
       'course_id': id,
       'user_id': await PrefData.getUserId(),
     };
-    var response = await api.sendRequest.post(ApiConstants.get_all_batchs_by_course, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+    var response = await api.sendRequest
+        .post(ApiConstants.get_all_batchs_by_course, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -716,10 +736,12 @@ class PostRepository {
     return null;
   }
 
-  Future<BatcheDetailsDataModel?> batchDataGet(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.get_batch_details, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<BatcheDetailsDataModel?> batchDataGet(
+      Map<String, dynamic> data) async {
+    var response =
+        await api.sendRequest.post(ApiConstants.get_batch_details, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -737,10 +759,12 @@ class PostRepository {
     return null;
   }
 
-  Future<StudyPlanViewDataModel?> studyPlanDetailsApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.get_study_plans, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<StudyPlanViewDataModel?> studyPlanDetailsApi(
+      Map<String, dynamic> data) async {
+    var response =
+        await api.sendRequest.post(ApiConstants.get_study_plans, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -758,10 +782,12 @@ class PostRepository {
     return null;
   }
 
-  Future<LiveClassListDataModel?> liveClassApiCall(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.get_live_classes, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<LiveClassListDataModel?> liveClassApiCall(
+      Map<String, dynamic> data) async {
+    var response =
+        await api.sendRequest.post(ApiConstants.get_live_classes, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -780,9 +806,10 @@ class PostRepository {
   }
 
   Future<ExamMcqDataModel?> examMcqDataApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.study_plan_exam_mcq_inner, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+    var response = await api.sendRequest
+        .post(ApiConstants.study_plan_exam_mcq_inner, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -800,10 +827,12 @@ class PostRepository {
     return null;
   }
 
-  Future<StudyPlanAssigmentDataModel?> assigmentDataApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.study_plan_assignment_inner, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<StudyPlanAssigmentDataModel?> assigmentDataApi(
+      Map<String, dynamic> data) async {
+    var response = await api.sendRequest
+        .post(ApiConstants.study_plan_assignment_inner, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -821,10 +850,12 @@ class PostRepository {
     return null;
   }
 
-  Future<StudyPlanAssigmentSubmitDataModel?> submitAssigment(FormData formData) async {
-    var response = await api.sendRequest.post(ApiConstants.submit_assignment, data: formData
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<StudyPlanAssigmentSubmitDataModel?> submitAssigment(
+      FormData formData) async {
+    var response = await api.sendRequest
+        .post(ApiConstants.submit_assignment, data: formData
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -842,10 +873,12 @@ class PostRepository {
     return null;
   }
 
-  Future<ExamMcqDataModel?> examDescriptionDataApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.study_plan_exam_description_inner, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<ExamMcqDataModel?> examDescriptionDataApi(
+      Map<String, dynamic> data) async {
+    var response = await api.sendRequest
+        .post(ApiConstants.study_plan_exam_description_inner, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -863,10 +896,12 @@ class PostRepository {
     return null;
   }
 
-  Future<BatchAssigmentListDataModel?> batchAssigmentListApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.get_all_assignment_list_user, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<BatchAssigmentListDataModel?> batchAssigmentListApi(
+      Map<String, dynamic> data) async {
+    var response = await api.sendRequest
+        .post(ApiConstants.get_all_assignment_list_user, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -884,10 +919,12 @@ class PostRepository {
     return null;
   }
 
-  Future<AttendencePresentDataModel?> attendencePresentAPi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.attendence_present, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<AttendencePresentDataModel?> attendencePresentAPi(
+      Map<String, dynamic> data) async {
+    var response =
+        await api.sendRequest.post(ApiConstants.attendence_present, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -903,10 +940,12 @@ class PostRepository {
     return null;
   }
 
-  Future<GetChatHeadsDataModel?> getChatHeadsApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.get_chat_heads, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<GetChatHeadsDataModel?> getChatHeadsApi(
+      Map<String, dynamic> data) async {
+    var response =
+        await api.sendRequest.post(ApiConstants.get_chat_heads, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -922,10 +961,12 @@ class PostRepository {
     return null;
   }
 
-  Future<IntructorsChatListDataModel?> getChatInstructorHeadsApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.get_all_chat_intructors, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<IntructorsChatListDataModel?> getChatInstructorHeadsApi(
+      Map<String, dynamic> data) async {
+    var response = await api.sendRequest
+        .post(ApiConstants.get_all_chat_intructors, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -941,10 +982,12 @@ class PostRepository {
     return null;
   }
 
-  Future<GetChatDetailsDataModel?> getChatDetailsAPi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.get_chat_details, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<GetChatDetailsDataModel?> getChatDetailsAPi(
+      Map<String, dynamic> data) async {
+    var response =
+        await api.sendRequest.post(ApiConstants.get_chat_details, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -960,10 +1003,12 @@ class PostRepository {
     return null;
   }
 
-  Future<AttendencePresentDataModel?> sendMessageApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.sent_message, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<AttendencePresentDataModel?> sendMessageApi(
+      Map<String, dynamic> data) async {
+    var response =
+        await api.sendRequest.post(ApiConstants.sent_message, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -979,10 +1024,12 @@ class PostRepository {
     return null;
   }
 
-  Future<GetAttendenceDataModel?> getAttendencePresentAPi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.get_batch_attendence, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<GetAttendenceDataModel?> getAttendencePresentAPi(
+      Map<String, dynamic> data) async {
+    var response =
+        await api.sendRequest.post(ApiConstants.get_batch_attendence, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -998,10 +1045,12 @@ class PostRepository {
     return null;
   }
 
-  Future<BatchTestListDataModel?> batchTestListApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.get_all_test_list_user, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<BatchTestListDataModel?> batchTestListApi(
+      Map<String, dynamic> data) async {
+    var response = await api.sendRequest
+        .post(ApiConstants.get_all_test_list_user, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -1019,8 +1068,13 @@ class PostRepository {
     return null;
   }
 
-  Future<ExamResultCheckDataModel?> examResultCheckApi(Map<String, dynamic> data, String type) async {
-    var response = await api.sendRequest.post(type == 'EXAM_MCQ' ? ApiConstants.mcq_exam_result : ApiConstants.description_exam_result, data: data
+  Future<ExamResultCheckDataModel?> examResultCheckApi(
+      Map<String, dynamic> data, String type) async {
+    var response = await api.sendRequest.post(
+        type == 'EXAM_MCQ'
+            ? ApiConstants.mcq_exam_result
+            : ApiConstants.description_exam_result,
+        data: data
         //  options: Options(contentType: 'multipart/form-data'),
         );
     //final body = jsonDecode(response.data);
@@ -1040,10 +1094,12 @@ class PostRepository {
     return null;
   }
 
-  Future<AssigmentResultDataModel?> assigmentResultCheckApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.assignment_result, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<AssigmentResultDataModel?> assigmentResultCheckApi(
+      Map<String, dynamic> data) async {
+    var response =
+        await api.sendRequest.post(ApiConstants.assignment_result, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -1061,10 +1117,12 @@ class PostRepository {
     return null;
   }
 
-  Future<BatchVideoStudyMatrialDataModel?> batchVideoListApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.get_videos_and_study_materials, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<BatchVideoStudyMatrialDataModel?> batchVideoListApi(
+      Map<String, dynamic> data) async {
+    var response = await api.sendRequest
+        .post(ApiConstants.get_videos_and_study_materials, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -1082,10 +1140,12 @@ class PostRepository {
     return null;
   }
 
-  Future<SubmitMcqDataModel?> submitAnswerMCQDataApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.submit_answer_mcq, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<SubmitMcqDataModel?> submitAnswerMCQDataApi(
+      Map<String, dynamic> data) async {
+    var response =
+        await api.sendRequest.post(ApiConstants.submit_answer_mcq, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -1103,10 +1163,12 @@ class PostRepository {
     return null;
   }
 
-  Future<SubmitMcqDataModel?> submitAnswerDescriptionDataApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.submit_answer_description, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<SubmitMcqDataModel?> submitAnswerDescriptionDataApi(
+      Map<String, dynamic> data) async {
+    var response = await api.sendRequest
+        .post(ApiConstants.submit_answer_description, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -1124,10 +1186,12 @@ class PostRepository {
     return null;
   }
 
-  Future<ExamResultCheckDataModel?> finishAnswerMCQDataApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.finish_exam_mcq, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<ExamResultCheckDataModel?> finishAnswerMCQDataApi(
+      Map<String, dynamic> data) async {
+    var response =
+        await api.sendRequest.post(ApiConstants.finish_exam_mcq, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -1145,10 +1209,12 @@ class PostRepository {
     return null;
   }
 
-  Future<ExamResultCheckDataModel?> finishAnswerDescriptionDataApi(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.finish_exam_description, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<ExamResultCheckDataModel?> finishAnswerDescriptionDataApi(
+      Map<String, dynamic> data) async {
+    var response = await api.sendRequest
+        .post(ApiConstants.finish_exam_description, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -1167,9 +1233,10 @@ class PostRepository {
   }
 
   Future<SuccesFullDataModel?> joinClassData(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.join_batch, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+    var response =
+        await api.sendRequest.post(ApiConstants.join_batch, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -1187,10 +1254,12 @@ class PostRepository {
     return null;
   }
 
-  Future<BatchesJoinCodeDataModel?> joinBatchData(Map<String, dynamic> data) async {
-    var response = await api.sendRequest.post(ApiConstants.join_request_by_batchcode, data: data
-        //  options: Options(contentType: 'multipart/form-data'),
-        );
+  Future<BatchesJoinCodeDataModel?> joinBatchData(
+      Map<String, dynamic> data) async {
+    var response = await api.sendRequest
+        .post(ApiConstants.join_request_by_batchcode, data: data
+            //  options: Options(contentType: 'multipart/form-data'),
+            );
     //final body = jsonDecode(response.data);
 
     if (response.statusCode == 200) {
@@ -1208,7 +1277,8 @@ class PostRepository {
     return null;
   }
 
-  Future<CourseChapterListDataModel?> courseChalpterListDetailsDataGet(String id) async {
+  Future<CourseChapterListDataModel?> courseChalpterListDetailsDataGet(
+      String id) async {
     var data = {
       'user_id': await PrefData.getUserId(),
       'course_id': id,
@@ -1216,9 +1286,10 @@ class PostRepository {
     };
     print(data);
     try {
-      var response = await api.sendRequest.post(ApiConstants.chapters, data: data
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+      var response =
+          await api.sendRequest.post(ApiConstants.chapters, data: data
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -1238,9 +1309,10 @@ class PostRepository {
 
   Future<CourseDataModel?> courseDataApi(Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.user_my_courses, data: data
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+      var response =
+          await api.sendRequest.post(ApiConstants.user_my_courses, data: data
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -1260,9 +1332,10 @@ class PostRepository {
 
   Future<UserDataModel?> userDataApi(Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.user_profile, data: data
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+      var response =
+          await api.sendRequest.post(ApiConstants.user_profile, data: data
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -1280,11 +1353,13 @@ class PostRepository {
     return null;
   }
 
-  Future<NotificationCountDataModel?> notificationCountDataApi(Map<String, dynamic> data) async {
+  Future<NotificationCountDataModel?> notificationCountDataApi(
+      Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.get_user_notifications_count, data: data
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+      var response = await api.sendRequest
+          .post(ApiConstants.get_user_notifications_count, data: data
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -1302,11 +1377,13 @@ class PostRepository {
     return null;
   }
 
-  Future<StudyPlanAssigmentSubmitDataModel?> feedbackApi(Map<String, dynamic> data) async {
+  Future<StudyPlanAssigmentSubmitDataModel?> feedbackApi(
+      Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.add_app_feedback, data: data
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+      var response =
+          await api.sendRequest.post(ApiConstants.add_app_feedback, data: data
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -1324,11 +1401,13 @@ class PostRepository {
     return null;
   }
 
-  Future<GetCourseCertificateDataModel?> getCretificate(Map<String, dynamic> data) async {
+  Future<GetCourseCertificateDataModel?> getCretificate(
+      Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.get_course_certificate, data: data
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+      var response = await api.sendRequest
+          .post(ApiConstants.get_course_certificate, data: data
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -1346,11 +1425,13 @@ class PostRepository {
     return null;
   }
 
-  Future<StudyPlanAssigmentSubmitDataModel?> writeCourseReview(Map<String, dynamic> data) async {
+  Future<StudyPlanAssigmentSubmitDataModel?> writeCourseReview(
+      Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.userwritereview, data: data
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+      var response =
+          await api.sendRequest.post(ApiConstants.userwritereview, data: data
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -1366,11 +1447,13 @@ class PostRepository {
     return null;
   }
 
-  Future<UserLogourOrNotDataModel?> userLogourOrNotApiCall(Map<String, dynamic> data) async {
+  Future<UserLogourOrNotDataModel?> userLogourOrNotApiCall(
+      Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.verify_user_device_token, data: data
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+      var response = await api.sendRequest
+          .post(ApiConstants.verify_user_device_token, data: data
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -1386,11 +1469,13 @@ class PostRepository {
     return null;
   }
 
-  Future<StudyPlanAssigmentSubmitDataModel?> ratingAppPoup(Map<String, dynamic> data) async {
+  Future<StudyPlanAssigmentSubmitDataModel?> ratingAppPoup(
+      Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.add_app_rating, data: data
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+      var response =
+          await api.sendRequest.post(ApiConstants.add_app_rating, data: data
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -1410,9 +1495,10 @@ class PostRepository {
 
   Future<LogoutDataModel?> logoutApiCall(Map<String, dynamic> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.logout_api, data: data
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+      var response =
+          await api.sendRequest.post(ApiConstants.logout_api, data: data
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -3147,12 +3233,14 @@ class PostRepository {
   //   return null;
   // }
 
-  Future<AnnouncementsEntity?> getAnnouncements(Map<String, String> data) async {
+  Future<AnnouncementsEntity?> getAnnouncements(
+      Map<String, String> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.viewAnnouncements, data: data
+      var response =
+          await api.sendRequest.post(ApiConstants.viewAnnouncements, data: data
 
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
@@ -3170,12 +3258,14 @@ class PostRepository {
     return null;
   }
 
-  Future<PaymentDetailsEntity?> getPaymentDetails(Map<String, String> data) async {
+  Future<PaymentDetailsEntity?> getPaymentDetails(
+      Map<String, String> data) async {
     try {
-      var response = await api.sendRequest.post(ApiConstants.studentpaymentdetails, data: data
+      var response = await api.sendRequest
+          .post(ApiConstants.studentpaymentdetails, data: data
 
-          //  options: Options(contentType: 'multipart/form-data'),
-          );
+              //  options: Options(contentType: 'multipart/form-data'),
+              );
       //final body = jsonDecode(response.data);
 
       if (response.statusCode == 200) {

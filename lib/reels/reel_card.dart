@@ -10,6 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ReelCard extends StatefulWidget {
   final int index;
@@ -24,6 +25,7 @@ class _ReelCardState extends State<ReelCard> {
   ReelController reelController = Get.find();
 
   VideoPlayerController? _videoController;
+  YoutubePlayerController? _youtubeController;
   bool isLoading = true;
   bool isError = false;
   bool isImage = false;
@@ -32,6 +34,7 @@ class _ReelCardState extends State<ReelCard> {
   bool isShowComment = false;
   bool isCommentLoading = false;
   bool _isInitialized = false;
+  bool _isYoutubeVideo = false;
 
   TextEditingController commentController = TextEditingController();
   FocusNode node = FocusNode();
@@ -56,37 +59,67 @@ class _ReelCardState extends State<ReelCard> {
 
   Future<void> initializePlayer() async {
     log((widget.index.toString()), name: "index");
-    log(("${ApiConstants.publicBaseUrl}/${(reelController.reels[widget.index].courseReelVideo ?? "")}"),
-        name: "initializePlayer");
-    log(("${(reelController.reels[widget.index].title ?? "")}"),
-        name: "initializePlayer");
-    try {
-      setState(() {
-        isLoading = true;
-      });
-      final post = (reelController.reels[widget.index].courseReelVideo ?? "")
-              .isEmpty
-          ? ("${ApiConstants.publicBaseUrl}/${(reelController.reels[widget.index].courseThumbnail ?? "")}")
-          : ("${ApiConstants.publicBaseUrl}/${(reelController.reels[widget.index].courseReelVideo ?? "")}");
-      _videoController = VideoPlayerController.networkUrl(Uri.parse(post));
-      await _videoController!.initialize();
+    final item = reelController.reels[widget.index];
 
-      if (mounted) {
-        setState(() => _isInitialized = true);
-        _videoController!.setLooping(true);
+    if (item.courseReelYoutubeLink != null &&
+        item.courseReelYoutubeLink!.isNotEmpty) {
+      _isYoutubeVideo = true;
+      String? videoId =
+          YoutubePlayer.convertUrlToId(item.courseReelYoutubeLink!);
+      if (videoId != null) {
+        _youtubeController = YoutubePlayerController(
+          initialVideoId: videoId,
+          flags: const YoutubePlayerFlags(
+            autoPlay: true,
+            mute: false,
+          ),
+        );
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isError = true;
+          isLoading = false;
+        });
       }
+    } else if (item.courseReelVideo != null &&
+        item.courseReelVideo!.isNotEmpty) {
+      _isYoutubeVideo = false;
+      log(("${ApiConstants.publicBaseUrl}/${(item.courseReelVideo)}"),
+          name: "initializePlayer");
+      try {
+        setState(() {
+          isLoading = true;
+        });
 
-      _createChewieController();
-    } on PlatformException catch (err) {
+        final post = "${ApiConstants.publicBaseUrl}/${item.courseReelVideo}";
+        _videoController = VideoPlayerController.networkUrl(Uri.parse(post));
+        await _videoController!.initialize();
+
+        if (mounted) {
+          setState(() => _isInitialized = true);
+          _videoController!.setLooping(true);
+        }
+
+        _createChewieController();
+      } on PlatformException catch (err) {
+        setState(() {
+          isError = true;
+        });
+      } catch (e) {
+        setState(() {
+          isError = true;
+        });
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } else {
+      _isYoutubeVideo = false;
       setState(() {
         isError = true;
-      });
-    } catch (e) {
-      setState(() {
-        isError = true;
-      });
-    } finally {
-      setState(() {
         isLoading = false;
       });
     }
@@ -132,6 +165,9 @@ class _ReelCardState extends State<ReelCard> {
     if (_videoController != null) {
       _videoController!.dispose();
     }
+    if (_youtubeController != null) {
+      _youtubeController!.dispose();
+    }
   }
 
   @override
@@ -151,41 +187,8 @@ class _ReelCardState extends State<ReelCard> {
             children: [
               SizedBox(
                 height: MediaQuery.sizeOf(context).height * 0.5,
-                child: isLoading && !_isInitialized
-                    ? Center(
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.center,
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
-                                progressIndicatorBuilder:
-                                    (context, url, progress) => SizedBox(
-                                  height: 300,
-                                  child: Center(
-                                    child: SpinKitFadingCircle(
-                                      color: Colors.blue,
-                                      size: 50.0,
-                                    ),
-                                  ),
-                                ),
-                                fit: BoxFit.cover,
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.broken_image),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.center,
-                              child: CircularProgressIndicator(),
-                            )
-                          ],
-                        ),
-                        // child: SpinKitSquareCircle(
-                        //   color: Colors.blue,
-                        //   size: 70.0,
-                        // ),
-                      )
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator())
                     : isError
                         ? Center(
                             child: CachedNetworkImage(
@@ -194,7 +197,7 @@ class _ReelCardState extends State<ReelCard> {
                               progressIndicatorBuilder:
                                   (context, url, progress) => SizedBox(
                                 height: 300,
-                                child: Center(
+                                child: const Center(
                                   child: SpinKitFadingCircle(
                                     color: Colors.blue,
                                     size: 50.0,
@@ -203,15 +206,24 @@ class _ReelCardState extends State<ReelCard> {
                               ),
                               fit: BoxFit.cover,
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.broken_image),
+                                  const Icon(Icons.broken_image),
                             ),
                           )
-                        : AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: Chewie(
-                              controller: _chewieController!,
-                            ),
-                          ),
+                        : _isYoutubeVideo && _youtubeController != null
+                            ? YoutubePlayer(
+                                controller: _youtubeController!,
+                                showVideoProgressIndicator: true,
+                                progressIndicatorColor: Colors.amber,
+                              )
+                            : _chewieController != null
+                                ? AspectRatio(
+                                    aspectRatio: 16 / 9,
+                                    child: Chewie(
+                                      controller: _chewieController!,
+                                    ),
+                                  )
+                                : const Center(
+                                    child: Text("No video or Youtube link")),
               ),
               Positioned(
                 top: 10,
@@ -219,14 +231,13 @@ class _ReelCardState extends State<ReelCard> {
                 right: 10,
                 child: Row(
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       backgroundImage: AssetImage('assets/app_logo.jpeg'),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         'Edxera',
-                        // item.courseName ?? '',
                         style: TextStyle(
                           color: Colors.purple.shade900,
                           fontSize: 16,
@@ -282,9 +293,23 @@ class _ReelCardState extends State<ReelCard> {
               IconButton(
                 icon: Icon(Icons.share),
                 onPressed: () {
-                  final post = (item.courseReelVideo ?? "").isEmpty
-                      ? ("${ApiConstants.publicBaseUrl}/${(item.courseThumbnail ?? "")}")
-                      : ("${ApiConstants.publicBaseUrl}/${(item.courseReelVideo ?? "")}");
+                  String post;
+
+                  if (item.courseReelYoutubeLink != null &&
+                      item.courseReelYoutubeLink!.isNotEmpty) {
+                    // Share the YouTube link if available
+                    post = item.courseReelYoutubeLink!;
+                  } else if (item.courseReelVideo != null &&
+                      item.courseReelVideo!.isNotEmpty) {
+                    // Share the normal video link
+                    post =
+                        "${ApiConstants.publicBaseUrl}/${item.courseReelVideo}";
+                  } else {
+                    // Share the thumbnail if no video is available
+                    post =
+                        "${ApiConstants.publicBaseUrl}/${item.courseThumbnail ?? ""}";
+                  }
+
                   Share.shareUri(Uri.parse(post));
                 },
               ),
