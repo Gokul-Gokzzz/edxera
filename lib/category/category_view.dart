@@ -60,7 +60,7 @@ class _CategoryGridViewState extends State<CategoryGridView> {
                       crossAxisCount: 2, // Number of columns
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0,
-                      childAspectRatio: 2.5,
+                      childAspectRatio: 1.3,
                     ),
                     itemCount: categoryController.categories.length,
                     itemBuilder: (context, index) {
@@ -103,10 +103,13 @@ class _CategoryGridViewState extends State<CategoryGridView> {
                               //         color: Colors.grey,
                               //       ),
                               const SizedBox(height: 8),
-                              Text(
-                                category.title ?? "No Title",
-                                style: const TextStyle(color: Colors.black),
-                                textAlign: TextAlign.center,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  category.title ?? "No Title",
+                                  style: const TextStyle(color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ],
                           ),

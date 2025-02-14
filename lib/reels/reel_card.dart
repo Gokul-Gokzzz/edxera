@@ -177,176 +177,186 @@ class _ReelCardState extends State<ReelCard> {
     final item = reelController.reels[widget.index];
 
     return Container(
-      color: Colors.transparent,
-      height: isShowComment
-          ? MediaQuery.sizeOf(context).height * 0.7
-          : MediaQuery.sizeOf(context).height * 0.6,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Stack(
+        color: Colors.transparent,
+        height: isShowComment
+            ? MediaQuery.sizeOf(context).height * 0.7
+            : MediaQuery.sizeOf(context).height * 0.6,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.5,
-                child: isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : isError
-                        ? Center(
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
-                              progressIndicatorBuilder:
-                                  (context, url, progress) => SizedBox(
-                                height: 300,
-                                child: const Center(
-                                  child: SpinKitFadingCircle(
-                                    color: Colors.blue,
-                                    size: 50.0,
-                                  ),
-                                ),
-                              ),
-                              fit: BoxFit.cover,
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.broken_image),
-                            ),
-                          )
-                        : _isYoutubeVideo && _youtubeController != null
-                            ? YoutubePlayer(
-                                controller: _youtubeController!,
-                                showVideoProgressIndicator: true,
-                                progressIndicatorColor: Colors.amber,
-                              )
-                            : _chewieController != null
-                                ? AspectRatio(
-                                    aspectRatio: 16 / 9,
-                                    child: Chewie(
-                                      controller: _chewieController!,
+              Stack(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height * 0.5,
+                    child: isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : isError
+                            ? Center(
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) => SizedBox(
+                                    height: 300,
+                                    child: const Center(
+                                      child: SpinKitFadingCircle(
+                                        color: Colors.blue,
+                                        size: 50.0,
+                                      ),
                                     ),
+                                  ),
+                                  fit: BoxFit.cover,
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.broken_image),
+                                ),
+                              )
+                            : _isYoutubeVideo && _youtubeController != null
+                                ? YoutubePlayer(
+                                    controller: _youtubeController!,
+                                    showVideoProgressIndicator: true,
+                                    progressIndicatorColor: Colors.amber,
                                   )
-                                : const Center(
-                                    child: Text("No video or Youtube link")),
-              ),
-              Positioned(
-                top: 10,
-                left: 10,
-                right: 10,
-                child: Row(
-                  children: [
-                    const CircleAvatar(
-                      backgroundImage: AssetImage('assets/app_logo.jpeg'),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'Edxera',
-                        style: TextStyle(
-                          color: Colors.purple.shade900,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Text(item.title.toString()),
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border,
-                    color: isLiked ? Colors.red : null),
-                onPressed: () {
-                  _toggleLike(item.courseId!, item.courseReelId!);
-                },
-              ),
-              GestureDetector(
-                onTap: () => _showLikeBottomSheet(item.id!, item.courseReelId!),
-                child: Text("${item.courseReelLikeCount ?? 0}"),
-              ),
-              SizedBox(width: 10),
-              IconButton(
-                icon: Icon(Icons.comment),
-                onPressed: _showComment,
-              ),
-              GestureDetector(
-                onTap: () => _showCommentsBottomSheet(
-                    item.courseId!, item.courseReelId!),
-                child: Row(
-                  children: [
-                    Text("${item.courseReelCommentCount ?? 0}"),
-                    SizedBox(width: 5),
-                    Text(
-                      "View Comments",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Spacer(),
-              IconButton(
-                icon: Icon(Icons.share),
-                onPressed: () {
-                  String post;
-
-                  if (item.courseReelYoutubeLink != null &&
-                      item.courseReelYoutubeLink!.isNotEmpty) {
-                    // Share the YouTube link if available
-                    post = item.courseReelYoutubeLink!;
-                  } else if (item.courseReelVideo != null &&
-                      item.courseReelVideo!.isNotEmpty) {
-                    // Share the normal video link
-                    post =
-                        "${ApiConstants.publicBaseUrl}/${item.courseReelVideo}";
-                  } else {
-                    // Share the thumbnail if no video is available
-                    post =
-                        "${ApiConstants.publicBaseUrl}/${item.courseThumbnail ?? ""}";
-                  }
-
-                  Share.shareUri(Uri.parse(post));
-                },
-              ),
-            ],
-          ),
-          if (isShowComment)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                controller: commentController,
-                focusNode: node,
-                decoration: InputDecoration(
-                  hintText: 'Comment',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                                : _chewieController != null
+                                    ? AspectRatio(
+                                        aspectRatio: 16 / 9,
+                                        child: Chewie(
+                                          controller: _chewieController!,
+                                        ),
+                                      )
+                                    : const Center(
+                                        child:
+                                            Text("No video or Youtube link")),
                   ),
-                  filled: true,
-                  fillColor: const Color(0xFFF5F5F5),
-                  suffixIcon: isCommentLoading
-                      ? SpinKitFadingCircle(
-                          color: Colors.blue,
-                          size: 20.0,
-                        )
-                      : IconButton(
-                          onPressed: () async {
-                            _addComment(item.courseId!, item.courseReelId!);
-                          },
-                          icon: Icon(Icons.send),
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    right: 10,
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          backgroundImage: AssetImage('assets/app_logo.jpeg'),
                         ),
-                ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'Edxera',
+                            style: TextStyle(
+                              color: Colors.purple.shade900,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ),
-        ],
-      ),
-    );
+              Text(item.title.toString()),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border,
+                        color: isLiked ? Colors.red : null),
+                    onPressed: () {
+                      _toggleLike(item.courseId!, item.courseReelId!);
+                    },
+                  ),
+                  GestureDetector(
+                    onTap: () =>
+                        _showLikeBottomSheet(item.id!, item.courseReelId!),
+                    child: Text("${item.courseReelLikeCount ?? 0}"),
+                  ),
+                  SizedBox(width: 10),
+                  IconButton(
+                    icon: Icon(Icons.comment),
+                    onPressed: _showComment,
+                  ),
+                  GestureDetector(
+                    onTap: () => _showCommentsBottomSheet(
+                        item.courseId!, item.courseReelId!),
+                    child: Row(
+                      children: [
+                        Text("${item.courseReelCommentCount ?? 0}"),
+                        SizedBox(width: 5),
+                        Text(
+                          "View Comments",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(Icons.share),
+                    onPressed: () {
+                      String postUrl;
+
+                      if (item.courseReelYoutubeLink != null &&
+                          item.courseReelYoutubeLink!.isNotEmpty) {
+                        // Share the YouTube link if available
+                        postUrl = item.courseReelYoutubeLink!;
+                      } else if (item.courseReelVideo != null &&
+                          item.courseReelVideo!.isNotEmpty) {
+                        // Share the normal video link
+                        postUrl =
+                            "${ApiConstants.publicBaseUrl}/${item.courseReelVideo}";
+                      } else {
+                        // Share the thumbnail if no video is available
+                        postUrl =
+                            "${ApiConstants.publicBaseUrl}/${item.courseThumbnail ?? ""}";
+                      }
+
+                      // Custom message with app logo, app name, and text
+                      String message = """
+📚 *${item.title}*  
+🔥 Check out this amazing course on Edxera!
+$postUrl
+📲 Download our app for more
+
+    """;
+
+                      Share.share(message);
+                    },
+                  ),
+                  if (isShowComment)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: commentController,
+                        focusNode: node,
+                        decoration: InputDecoration(
+                          hintText: 'Comment',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xFFF5F5F5),
+                          suffixIcon: isCommentLoading
+                              ? SpinKitFadingCircle(
+                                  color: Colors.blue,
+                                  size: 20.0,
+                                )
+                              : IconButton(
+                                  onPressed: () async {
+                                    _addComment(
+                                        item.courseId!, item.courseReelId!);
+                                  },
+                                  icon: Icon(Icons.send),
+                                ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ]));
   }
 
   Future<void> _toggleLike(int id, int courseReelId) async {

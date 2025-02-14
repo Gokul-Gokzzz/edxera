@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:edxera/My_cources/Models/course_data_model.dart';
 import 'package:edxera/batchs/Models/announcements_entity.dart';
@@ -395,36 +398,73 @@ class PostRepository {
     }
   }
 
-  Future<AllCourseModel?> homeDashboardTrendingDatGet({String? search}) async {
+  Future<AllCourseModel?> fetchCourses({String? search}) async {
     try {
       int userId = await PrefData.getUserId();
-
-      var response = await api.sendRequest.post(
-        // ApiConstants.latestCourses,
-        ApiConstants.get_all_courses_list,
-        data: {
-          "user_id": userId,
-          if ((search ?? "").isNotEmpty) "search": search,
-        },
-
-        //  options: Options(contentType: 'multipart/form-data'),
-      );
-      //final body = jsonDecode(response.data);
+      var response = await api.sendRequest
+          .post(ApiConstants.get_all_courses_list, // Replace with your API URL
+              data: {
+            "user_id": userId,
+            if ((search ?? "").isNotEmpty) "search": search,
+          });
 
       if (response.statusCode == 200) {
-        if (response.data['success'] == true) {
-          return AllCourseModel.fromMap(response.data);
-        } else {
-          Fluttertoast.showToast(msg: response.data['message']);
-
-          return AllCourseModel.fromJson(response.data);
-        }
+        return AllCourseModel.fromMap(response.data);
+      } else {
+        return null;
       }
-    } catch (ex) {
-      rethrow;
+    } on DioException catch (e) {
+      print('Error fetching courses: ${e.response?.data ?? e.message}');
+      return null;
     }
-    return null;
   }
+
+  // Future<AllCourseModel?> homeDashboardTrendingDatGet({String? search}) async {
+  //   try {
+  //     int userId = await PrefData.getUserId();
+
+  //     var response = await api.sendRequest.post(
+  //       ApiConstants.get_all_courses_list,
+  //       data: {
+  //         "user_id": userId,
+  //         if ((search ?? "").isNotEmpty) "search": search,
+  //       },
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       // *** KEY CHANGE: Parse the JSON string if needed ***
+  //       dynamic responseData = response.data; // Use dynamic to check type
+
+  //       if (responseData is String) {
+  //         // Check if it's a string
+  //         try {
+  //           responseData = jsonDecode(responseData); // Attempt to parse
+  //         } catch (e) {
+  //           log('Error decoding JSON string: $e');
+  //           Fluttertoast.showToast(msg: 'Error: Invalid JSON response');
+  //           return null; // Or handle the error as needed
+  //         }
+  //       }
+
+  //       if (responseData['success'] == true) {
+  //         return AllCourseModel.fromMap(responseData); // Now it should work!
+  //       } else {
+  //         Fluttertoast.showToast(
+  //             msg: responseData['message'] ??
+  //                 "An error occurred"); // Handle null message
+  //         return AllCourseModel.fromJson(
+  //             responseData); // If fromJson can handle it
+  //       }
+  //     } else {
+  //       log('API Error: Status Code ${response.statusCode}'); // Log the error
+  //       Fluttertoast.showToast(msg: 'API Error: ${response.statusCode}');
+  //     }
+  //   } catch (ex) {
+  //     log('Exception in API call: $ex'); // Log the exception
+  //     rethrow; // Re-throw the exception for higher-level handling
+  //   }
+  //   return null;
+  // }
 
   Future<FreeStudyMatrialListDataModel?> freestudyMatrialApi(
       Map<String, dynamic> data) async {

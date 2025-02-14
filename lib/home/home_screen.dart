@@ -2180,60 +2180,60 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void showMySelectedCategory() {
-    homecontroller.fetchUserCategories();
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          padding: EdgeInsets.all(16),
-          height: 350, // Increased height to accommodate button
-          child: Column(
-            children: [
-              Expanded(
-                child: GetBuilder<HomeController>(
-                  autoRemove: false,
-                  builder: (controller) {
-                    if (controller.ishUserCategories.value) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      final list = controller.userCategory.value.data ?? [];
+  // void showMySelectedCategory() {
+  //   homecontroller.fetchUserCategories();
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (context) {
+  //       return Container(
+  //         padding: EdgeInsets.all(16),
+  //         height: 350, // Increased height to accommodate button
+  //         child: Column(
+  //           children: [
+  //             Expanded(
+  //               child: GetBuilder<HomeController>(
+  //                 autoRemove: false,
+  //                 builder: (controller) {
+  //                   if (controller.ishUserCategories.value) {
+  //                     return Center(
+  //                       child: CircularProgressIndicator(),
+  //                     );
+  //                   } else {
+  //                     final list = controller.userCategory.value.data ?? [];
 
-                      return ListView.builder(
-                        itemCount: list.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          final item = list[index];
-                          return Container(
-                            padding: EdgeInsets.all(10),
-                            child: Text(item.title ?? ""),
-                          );
-                        },
-                      );
-                    }
-                  },
-                ),
-              ),
-              SizedBox(height: 10),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close the modal first
-                  Get.to(
-                      CategoryGridView()); // Navigate to category selection page
-                },
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.blue,
-                ),
-                child: Text("Add More Categories"),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  //                     return ListView.builder(
+  //                       itemCount: list.length,
+  //                       shrinkWrap: true,
+  //                       itemBuilder: (context, index) {
+  //                         final item = list[index];
+  //                         return Container(
+  //                           padding: EdgeInsets.all(10),
+  //                           child: Text(item.title ?? ""),
+  //                         );
+  //                       },
+  //                     );
+  //                   }
+  //                 },
+  //               ),
+  //             ),
+  //             SizedBox(height: 10),
+  //             TextButton(
+  //               onPressed: () {
+  //                 Navigator.pop(context); // Close the modal first
+  //                 Get.to(
+  //                     CategoryGridView()); // Navigate to category selection page
+  //               },
+  //               style: TextButton.styleFrom(
+  //                 foregroundColor: Colors.blue,
+  //               ),
+  //               child: Text("Add More Categories"),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -3105,11 +3105,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                             fontWeight: FontWeight.w700,
                                             fontFamily: 'Gilroy')),
                                     SizedBox(height: 20),
-                                    TextButton(
-                                      onPressed: () {
-                                        showMySelectedCategory();
-                                      },
-                                      child: Text("Show My Selected Category"),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "My Selected\nCategory",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            // Navigator.pop(
+                                            //     context); // Close the modal first
+                                            Get.to(
+                                                CategoryGridView()); // Navigate to category selection page
+                                          },
+                                          style: TextButton.styleFrom(
+                                            foregroundColor: Colors.blue,
+                                          ),
+                                          child: Text(
+                                              textAlign: TextAlign.center,
+                                              "Click Here\nAdd More Categories"),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -3159,7 +3178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             .studyPlanCourseNameDataModel
                                             .data !=
                                         null
-                                    ? all_course_list()
+                                    ? allCategoryList()
                                     : Container(),
                               ),
 
@@ -3672,17 +3691,15 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-          child: Text(
-            mplanguage['courses'].toString(),
-            style: TextStyle(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'Gilroy',
-            ),
-          ),
+          child: Text(mplanguage['courses'].toString(),
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Gilroy')),
         ),
         SizedBox(
-          height: 250.h, // Increased height to adjust category title
+          //color: Colors.red,
+          height: 234.h,
           width: double.infinity.w,
           child: ListView.builder(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -3690,11 +3707,13 @@ class _HomeScreenState extends State<HomeScreen> {
             primary: false,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount:
-                homecontroller.trendingCoursesDataModel.data?.length ?? 0,
+            itemCount: homecontroller.trendingCoursesDataModel.data?.length,
             itemBuilder: (BuildContext context, index) {
               var course = homecontroller.trendingCoursesDataModel.data;
 
+              // if ((course?[index].is_show ?? 1) == 0) {
+              //   return SizedBox.shrink();
+              // }
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: GestureDetector(
@@ -3706,57 +3725,73 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Category Name Above the Image
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 8.h), // Add spacing
-                          child: Text(
-                            course?[index].categoryTile?.isNotEmpty == true
-                                ? course![index].categoryTile!
-                                : 'Category',
-                            style: TextStyle(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue, // Change color to visible
-                            ),
-                          ),
-                        ),
-
-                        // Course Image
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: CachedNetworkImage(
-                            height: 177.h,
-                            width: 250.w,
-                            fit: BoxFit.fill,
-                            imageUrl:
-                                '${ApiConstants.publicBaseUrl}/${course?[index].courseThumbnail ?? ''}',
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Center(
-                              child: SizedBox(
-                                height: 30.h,
-                                width: 30.w,
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
+                        Container(
+                          height: 177.h,
+                          width: 250.w,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.fill,
+                              // height: 50.h,
+                              // width: 50.w,
+                              imageUrl:
+                                  '${ApiConstants.publicBaseUrl}/${course?[index].courseThumbnail ?? ''}',
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Center(
+                                child: Container(
+                                  height: 30.h,
+                                  width: 30.w,
+                                  child: CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => ClipRRect(
+                                borderRadius: BorderRadius.circular(10.h),
+                                child: Container(
+                                  // height: 50.h,
+                                  // width: 50.w,
+                                  color: Colors.grey.withOpacity(0.2),
                                 ),
                               ),
                             ),
-                            errorWidget: (context, url, error) => ClipRRect(
-                              borderRadius: BorderRadius.circular(10.h),
-                              child: Container(
-                                color: Colors.grey.withOpacity(0.2),
-                              ),
-                            ),
                           ),
+                          //alignment: Alignment.topLeft,
+                          // child:
+                          // Padding(
+                          //   padding: EdgeInsets.only(
+                          //       left: 10.w, right: 147.w, bottom: 142.h),
+                          //   child: Container(
+                          //     height: 20.h,
+                          //     width: 20.w,
+                          //     decoration: const BoxDecoration(
+                          //         shape: BoxShape.circle, color: Colors.white),
+                          //     child: Center(
+                          //       child: GestureDetector(
+                          //         onTap: () {
+                          //           // toggle(index);
+                          //         },
+                          //         child: trendingCource[index].buttonStatus == true
+                          //             ? Image(
+                          //                 image:
+                          //                     AssetImage("assets/saveboldblue.png"),
+                          //                 height: 10.h,
+                          //                 width: 9.w,
+                          //               )
+                          //             : Image(
+                          //                 image: AssetImage("assets/savebold.png"),
+                          //                 height: 10.h,
+                          //                 width: 9.w,
+                          //               ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ),
-
                         SizedBox(height: 8.h),
-
-                        // Course Title
                         Expanded(
                           child: Text(
                             course?[index].title ?? '',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                            maxLines: 5,
                             style: TextStyle(
                               fontFamily: 'Gilroy',
                               fontWeight: FontWeight.w700,
@@ -3765,8 +3800,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-
                         SizedBox(height: 5.h),
+                        // Text(trendingCource[index].subtitle!,
+                        //     style: TextStyle(
+                        //         fontFamily: 'Gilroy',
+                        //         fontWeight: FontWeight.w700,
+                        //         fontSize: 15.sp,
+                        //         color: const Color(0XFF000000))),
                       ],
                     ),
                   ),
@@ -3938,43 +3978,120 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget all_categories_list() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: SizedBox(
-        width: double.infinity.w,
-        child: Wrap(
-          spacing: 8.0,
-          runSpacing: 4.0,
-          children: homecontroller.categoriesData.value.data!.categories!
-              .take(5)
-              .map((category) {
-            return GestureDetector(
-              onTap: () {
-                Get.to(SubCategoriesScreen(
-                  category: category,
-                ));
-              },
-              child: Container(
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: WidgetStateColor.transparent,
-                    border: Border.all(color: Colors.black)),
+  Widget allCategoryList() {
+    // 1. Group courses by category:
+    Map<String, List<dynamic>> coursesByCategory =
+        {}; // Dynamic for course data
+
+    if (homecontroller.trendingCoursesDataModel.data != null) {
+      for (var course in homecontroller.trendingCoursesDataModel.data!) {
+        String categoryTitle = course.courseTitle ?? 'Category'; // Handle null
+        coursesByCategory.putIfAbsent(categoryTitle, () => []).add(course);
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 2. Iterate through the *categories*
+        ...coursesByCategory.entries.map((entry) {
+          String categoryTitle = entry.key;
+          List<dynamic> courses = entry.value;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Category Title
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 child: Text(
-                  category.title.toString(),
+                  categoryTitle,
                   style: TextStyle(
-                      fontFamily: 'Gilroy',
-                      color: const Color(0XFF000000),
-                      fontSize: 15.sp,
-                      overflow: TextOverflow.ellipsis,
-                      fontWeight: FontWeight.w500),
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-            );
-          }).toList(),
-        ),
-      ),
+              SizedBox(
+                height: 210.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount:
+                      courses.length, // Use the courses for this category
+                  itemBuilder: (context, index) {
+                    var course =
+                        courses[index]; // Get the course for this index
+
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(MyCources(), arguments: course.id ?? 0);
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: CachedNetworkImage(
+                                height: 135.h,
+                                width: 200.w,
+                                fit: BoxFit.fill,
+                                imageUrl:
+                                    '${ApiConstants.publicBaseUrl}/${course.courseThumbnail ?? ''}',
+                                progressIndicatorBuilder:
+                                    (context, url, downloadprogress) => Center(
+                                  child: SizedBox(
+                                    height: 30.h,
+                                    width: 30.w,
+                                    child: CircularProgressIndicator(
+                                      value: downloadprogress.progress,
+                                    ),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: Colors.grey.withOpacity(0.2),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5.h),
+                          SizedBox(
+                            width: 200.w,
+                            child: Text(
+                              course.title ?? '',
+                              maxLines: 3,
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Gilroy',
+                                color: const Color(0XFF000000),
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "Rs: ${course.price.toString() ?? ''}",
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Gilroy',
+                              color: const Color(0XFF000000),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 16.h),
+            ],
+          );
+        }).toList(), // Convert the iterable to a list
+      ],
     );
   }
 

@@ -63,7 +63,7 @@ class Datum {
   String? description;
   int? isPrivate;
   String? videoSource;
-  Video? video;
+  // Video? video;
   int? imageMediaId;
   Image? image;
   String? duration;
@@ -93,10 +93,11 @@ class Datum {
   String? status;
   DateTime? createdAt;
   DateTime? updatedAt;
-  String? categoryTile;
+  String? courseTitle;
 
   Datum({
     this.id,
+    this.courseTitle,
     this.isShow,
     this.courseThumbnail,
     this.courseReelVideo,
@@ -115,7 +116,7 @@ class Datum {
     this.description,
     this.isPrivate,
     this.videoSource,
-    this.video,
+    // this.video,
     this.imageMediaId,
     this.image,
     this.duration,
@@ -145,7 +146,6 @@ class Datum {
     this.status,
     this.createdAt,
     this.updatedAt,
-    this.categoryTile,
   });
 
   Datum copyWith({
@@ -168,7 +168,7 @@ class Datum {
     String? description,
     int? isPrivate,
     String? videoSource,
-    Video? video,
+    // Video? video,
     int? imageMediaId,
     Image? image,
     String? duration,
@@ -198,10 +198,11 @@ class Datum {
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
-    String? categoryTile,
+    String? courseTitle,
   }) =>
       Datum(
         id: id ?? this.id,
+        courseTitle: courseTitle ?? this.courseTitle,
         isShow: isShow ?? this.isShow,
         courseThumbnail: courseThumbnail ?? this.courseThumbnail,
         courseReelVideo: courseReelVideo ?? this.courseReelVideo,
@@ -220,7 +221,7 @@ class Datum {
         description: description ?? this.description,
         isPrivate: isPrivate ?? this.isPrivate,
         videoSource: videoSource ?? this.videoSource,
-        video: video ?? this.video,
+        // video: video ?? this.video,
         imageMediaId: imageMediaId ?? this.imageMediaId,
         image: image ?? this.image,
         duration: duration ?? this.duration,
@@ -250,7 +251,6 @@ class Datum {
         status: status ?? this.status,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
-        categoryTile: categoryTile ?? this.categoryTile,
       );
 
   factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
@@ -259,6 +259,7 @@ class Datum {
 
   factory Datum.fromMap(Map<String, dynamic> json) => Datum(
         id: json["id"],
+        courseTitle: json["CATEGORY_TITLE"],
         isShow: json["is_show"],
         courseThumbnail: json["course_thumbnail"],
         courseReelVideo: json["course_reel_video"],
@@ -279,7 +280,7 @@ class Datum {
         description: json["description"],
         isPrivate: json["is_private"],
         videoSource: json["video_source"],
-        video: json["video"] == null ? null : Video.fromMap(json["video"]),
+        // video: json["video"] == null ? null : Video.fromMap(json["video"]),
         imageMediaId: json["image_media_id"],
         image: json["image"] == null ? null : Image.fromMap(json["image"]),
         duration: json["duration"],
@@ -321,11 +322,11 @@ class Datum {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
-        categoryTile: json["CATEGORY_TITLE"],
       );
 
   Map<String, dynamic> toMap() => {
         "id": id,
+        "CATEGORY_TITLE": courseTitle,
         "is_show": isShow,
         "course_thumbnail": courseThumbnail,
         "course_reel_video": courseReelVideo,
@@ -346,7 +347,7 @@ class Datum {
         "description": description,
         "is_private": isPrivate,
         "video_source": videoSource,
-        "video": video?.toMap(),
+        // "video": video?.toMap(),
         "image_media_id": imageMediaId,
         "image": image?.toMap(),
         "duration": duration,
@@ -376,7 +377,6 @@ class Datum {
         "status": status,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
-        "CATEGORY_TITLE": categoryTile,
       };
 }
 
