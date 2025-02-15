@@ -223,33 +223,35 @@ class _ReelCardState extends State<ReelCard> {
         width: MediaQuery.of(context).size.width,
         child: Stack(
           children: [
-            SizedBox.expand(
-              child: isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : isError
-                      ? Center(
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
-                            progressIndicatorBuilder:
-                                (context, url, progress) => const Center(
-                                    child: CircularProgressIndicator()),
-                            fit: BoxFit.contain,
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.broken_image),
-                          ),
-                        )
-                      : _isYoutubeVideo && _youtubeController != null
-                          ? YoutubePlayer(
-                              controller: _youtubeController!,
-                              showVideoProgressIndicator: true,
-                              progressIndicatorColor: Colors.amber,
-                              aspectRatio: 9 / 16,
-                            )
-                          : _videoController != null && _isInitialized
-                              ? VideoPlayer(_videoController!)
-                              : const Center(
-                                  child: Text("No video or Youtube link")),
+            Center(
+              child: SizedBox(
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : isError
+                        ? Center(
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
+                              progressIndicatorBuilder:
+                                  (context, url, progress) => const Center(
+                                      child: CircularProgressIndicator()),
+                              fit: BoxFit.contain,
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.broken_image),
+                            ),
+                          )
+                        : _isYoutubeVideo && _youtubeController != null
+                            ? YoutubePlayer(
+                                controller: _youtubeController!,
+                                showVideoProgressIndicator: true,
+                                progressIndicatorColor: Colors.amber,
+                                aspectRatio: 16 / 9,
+                              )
+                            : _videoController != null && _isInitialized
+                                ? VideoPlayer(_videoController!)
+                                : const Center(
+                                    child: Text("No video or Youtube link")),
+              ),
             ),
 
             // User info & caption (Bottom Left)
