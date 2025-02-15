@@ -16,8 +16,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class ReelCard extends StatefulWidget {
   final int index;
   final bool isCurrent;
-  const ReelCard({Key? key, required this.index, required this.isCurrent})
-      : super(key: key);
+  const ReelCard({Key? key, required this.index, required this.isCurrent}) : super(key: key);
 
   @override
   _ReelCardState createState() => _ReelCardState();
@@ -70,9 +69,7 @@ class _ReelCardState extends State<ReelCard> {
         Duration.zero,
         () {
           setState(() {
-            isLiked = (reelController.reels[widget.index].isLiked ?? 0) == 0
-                ? false
-                : true;
+            isLiked = (reelController.reels[widget.index].isLiked ?? 0) == 0 ? false : true;
           });
         },
       );
@@ -85,11 +82,9 @@ class _ReelCardState extends State<ReelCard> {
     log((widget.index.toString()), name: "index");
     final item = reelController.reels[widget.index];
 
-    if (item.courseReelYoutubeLink != null &&
-        item.courseReelYoutubeLink!.isNotEmpty) {
+    if (item.courseReelYoutubeLink != null && item.courseReelYoutubeLink!.isNotEmpty) {
       _isYoutubeVideo = true;
-      String? videoId =
-          YoutubePlayer.convertUrlToId(item.courseReelYoutubeLink!);
+      String? videoId = YoutubePlayer.convertUrlToId(item.courseReelYoutubeLink!);
       if (videoId != null) {
         _youtubeController = YoutubePlayerController(
           initialVideoId: videoId,
@@ -107,11 +102,9 @@ class _ReelCardState extends State<ReelCard> {
           isLoading = false;
         });
       }
-    } else if (item.courseReelVideo != null &&
-        item.courseReelVideo!.isNotEmpty) {
+    } else if (item.courseReelVideo != null && item.courseReelVideo!.isNotEmpty) {
       _isYoutubeVideo = false;
-      log(("${ApiConstants.publicBaseUrl}/${(item.courseReelVideo)}"),
-          name: "initializePlayer");
+      log(("${ApiConstants.publicBaseUrl}/${(item.courseReelVideo)}"), name: "initializePlayer");
       try {
         setState(() {
           isLoading = true;
@@ -198,6 +191,8 @@ class _ReelCardState extends State<ReelCard> {
   Widget build(BuildContext context) {
     final item = reelController.reels[widget.index];
 
+    final height = MediaQuery.sizeOf(context).height;
+    final width = MediaQuery.sizeOf(context).width;
     return VisibilityDetector(
       key: ValueKey(item.courseReelId),
       onVisibilityChanged: (VisibilityInfo info) {
@@ -218,46 +213,49 @@ class _ReelCardState extends State<ReelCard> {
         }
       },
       child: Container(
-        color: Colors.white, // Set background color to transparent
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black,
+        height: height,
+        width: width,
         child: Stack(
           children: [
-            SizedBox.expand(
+            SizedBox(
               child: isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : isError
                       ? Center(
                           child: CachedNetworkImage(
-                            imageUrl:
-                                "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
-                            progressIndicatorBuilder:
-                                (context, url, progress) => const Center(
-                                    child: CircularProgressIndicator()),
+                            imageUrl: "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
+                            progressIndicatorBuilder: (context, url, progress) => const Center(child: CircularProgressIndicator()),
                             fit: BoxFit.contain,
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.broken_image),
+                            errorWidget: (context, url, error) => const Icon(Icons.broken_image),
                           ),
                         )
                       : _isYoutubeVideo && _youtubeController != null
-                          ? YoutubePlayer(
-                              controller: _youtubeController!,
-                              showVideoProgressIndicator: true,
-                              progressIndicatorColor: Colors.amber,
-                              aspectRatio: 9 / 16,
+                          ? Center(
+                              child: YoutubePlayer(
+                                controller: _youtubeController!,
+                                showVideoProgressIndicator: true,
+                                progressIndicatorColor: Colors.amber,
+                                aspectRatio: _youtubeController!.value.isFullScreen ? 9 / 16 : 16 / 9,
+                              ),
                             )
                           : _videoController != null && _isInitialized
-                              ? VideoPlayer(_videoController!)
-                              : const Center(
-                                  child: Text("No video or Youtube link")),
+                              ? Center(
+                                  child: AspectRatio(
+                                    aspectRatio: _videoController?.value.aspectRatio ?? 16 / 9,
+                                    child: VideoPlayer(
+                                      _videoController!,
+                                    ),
+                                  ),
+                                )
+                              : const Center(child: Text("No video or Youtube link")),
             ),
 
-            // User info & caption (Bottom Left)
+            /// User info & caption
             Positioned(
-              bottom: 80, // Adjust spacing from bottom
+              top: 20,
               left: 16,
               child: SafeArea(
-                // Use SafeArea to avoid overlapping system UI
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -273,8 +271,7 @@ class _ReelCardState extends State<ReelCard> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color:
-                                Colors.white, // Text color for better contrast
+                            color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
                             shadows: [
                               // Add shadows for better readability on video
                               Shadow(
@@ -291,7 +288,7 @@ class _ReelCardState extends State<ReelCard> {
                     Text(
                       item.title.toString(),
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
                         fontSize: 16, // Slightly smaller font size
                         shadows: [
                           Shadow(
@@ -307,11 +304,12 @@ class _ReelCardState extends State<ReelCard> {
               ),
             ),
 
-            // Right-side action buttons
+            /// Right-side action buttons
             Positioned(
-              bottom: 200,
+              bottom: 0,
               right: 16,
               child: Column(
+                spacing: 10,
                 children: [
                   GestureDetector(
                     onTap: () {
@@ -323,60 +321,62 @@ class _ReelCardState extends State<ReelCard> {
                       children: [
                         IconButton(
                           icon: Icon(
-                              isLiked ? Icons.favorite : Icons.favorite_border,
-                              color: isLiked ? Colors.red : Colors.black),
+                            isLiked ? Icons.favorite : Icons.favorite_border,
+                            color: isLiked
+                                ? Colors.red
+                                : Theme.of(context).brightness == Brightness.light
+                                    ? Colors.black
+                                    : Colors.white,
+                          ),
                           onPressed: () {
                             _toggleLike(item.courseId!, item.courseReelId!);
                           },
                         ),
                         GestureDetector(
-                          onTap: () => _showLikeBottomSheet(
-                              item.courseId!, item.courseReelId!),
+                          onTap: () => _showLikeBottomSheet(item.courseId!, item.courseReelId!),
                           child: Text("${item.courseReelLikeCount ?? 0}"),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
                   Column(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.comment),
+                        icon: Icon(
+                          Icons.comment,
+                          color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+                        ),
                         onPressed: () {
-                          _showCommentsBottomSheet(
-                              item.courseId!, item.courseReelId!);
+                          _showCommentsBottomSheet(item.courseId!, item.courseReelId!);
                         },
                       ),
                       GestureDetector(
                         onTap: () {
-                          _showCommentsBottomSheet(
-                              item.courseId!, item.courseReelId!);
+                          _showCommentsBottomSheet(item.courseId!, item.courseReelId!);
                         },
                         child: Text("${item.courseReelCommentCount ?? 0}"),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
                   Column(
                     children: [
                       IconButton(
-                        icon: Icon(Icons.share),
+                        icon: Icon(
+                          Icons.share,
+                          color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+                        ),
                         onPressed: () {
                           String postUrl;
 
-                          if (item.courseReelYoutubeLink != null &&
-                              item.courseReelYoutubeLink!.isNotEmpty) {
+                          if (item.courseReelYoutubeLink != null && item.courseReelYoutubeLink!.isNotEmpty) {
                             // Share the YouTube link if available
                             postUrl = item.courseReelYoutubeLink!;
-                          } else if (item.courseReelVideo != null &&
-                              item.courseReelVideo!.isNotEmpty) {
+                          } else if (item.courseReelVideo != null && item.courseReelVideo!.isNotEmpty) {
                             // Share the normal video link
-                            postUrl =
-                                "${ApiConstants.publicBaseUrl}/${item.courseReelVideo}";
+                            postUrl = "${ApiConstants.publicBaseUrl}/${item.courseReelVideo}";
                           } else {
                             // Share the thumbnail if no video is available
-                            postUrl =
-                                "${ApiConstants.publicBaseUrl}/${item.courseThumbnail ?? ""}";
+                            postUrl = "${ApiConstants.publicBaseUrl}/${item.courseThumbnail ?? ""}";
                           }
 
                           // Custom message with app logo, app name, and text
@@ -414,18 +414,13 @@ class _ReelCardState extends State<ReelCard> {
       isLiked = !isLiked;
     });
     if (isLiked) {
-      int newLike =
-          (reelController.reels[widget.index].courseReelLikeCount ?? 0) + 1;
-      reelController.reels[widget.index] =
-          reelController.reels[widget.index].copyWith(courseLikeCount: newLike);
+      int newLike = (reelController.reels[widget.index].courseReelLikeCount ?? 0) + 1;
+      reelController.reels[widget.index] = reelController.reels[widget.index].copyWith(courseLikeCount: newLike);
     } else {
-      int newLike =
-          (reelController.reels[widget.index].courseReelLikeCount ?? 0) - 1;
-      reelController.reels[widget.index] =
-          reelController.reels[widget.index].copyWith(courseLikeCount: newLike);
+      int newLike = (reelController.reels[widget.index].courseReelLikeCount ?? 0) - 1;
+      reelController.reels[widget.index] = reelController.reels[widget.index].copyWith(courseLikeCount: newLike);
     }
-    final result = await reelController.likeDislike(
-        courseId: id, courseReelId: courseReelId);
+    final result = await reelController.likeDislike(courseId: id, courseReelId: courseReelId);
     // setState(() {
     //   if (result) {
     //     isLiked = true;
@@ -446,10 +441,7 @@ class _ReelCardState extends State<ReelCard> {
     setState(() {
       isCommentLoading = true;
     });
-    final result = await reelController.addComment(
-        courseId: courseId,
-        comment: commentController.text,
-        courseReelId: courseReelId);
+    final result = await reelController.addComment(courseId: courseId, comment: commentController.text, courseReelId: courseReelId);
 
     // if (result) {
     //   int newCount = (reelController.reels[widget.index].courseCommentCount ?? 0) + 1;
@@ -475,24 +467,18 @@ class _ReelCardState extends State<ReelCard> {
           builder: (context, setState) {
             return Container(
               padding: const EdgeInsets.all(16),
-              height: MediaQuery.of(context).size.height *
-                  0.6, // Adjust height as needed
+              height: MediaQuery.of(context).size.height * 0.6, // Adjust height as needed
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Comments",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text("Comments", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   Expanded(
                     // Use Expanded to fill available space
                     child: FutureBuilder(
-                      future:
-                          reelController.getComments(courseId, courseReelId),
+                      future: reelController.getComments(courseId, courseReelId),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
                         } else if (snapshot.hasData) {
                           final comments = snapshot.data ?? [];
                           return ListView.builder(
@@ -563,8 +549,7 @@ class _ReelCardState extends State<ReelCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Likes",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text("Likes", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               FutureBuilder(
                 future: reelController.getLikes(courseId, courseReelId),
                 builder: (context, snapshot) {
