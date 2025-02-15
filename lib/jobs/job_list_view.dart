@@ -175,6 +175,19 @@ class _JobListScreenState extends State<JobListScreen> {
                           ),
                           _buildDetailRow('WhatsApp',
                               job.contactWhatsappNumber ?? "No Number"),
+                          if (job.deletionAllowedStatus == 0)
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                  onPressed: () {
+                                    _showDeleteConfirmation(
+                                        context, job.id ?? 1, index);
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  )),
+                            ),
                           // _buildDetailRow(
                           //     'Email', job.contactEmail ?? "No Email"),
                           // if (job.contactLink != null &&

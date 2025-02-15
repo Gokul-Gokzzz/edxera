@@ -10,6 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ReelCard extends StatefulWidget {
@@ -28,9 +29,11 @@ class _ReelCardState extends State<ReelCard> {
   VideoPlayerController? _videoController;
   YoutubePlayerController? _youtubeController;
   bool isLoading = true;
+  bool _isVideoPlaying = false;
   bool isError = false;
   bool isImage = false;
-  ChewieController? _chewieController;
+
+  // ChewieController? _chewieController;
   bool isLiked = false;
   bool isShowComment = false;
   bool isCommentLoading = false;
@@ -44,15 +47,19 @@ class _ReelCardState extends State<ReelCard> {
   void didUpdateWidget(covariant ReelCard oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isCurrent) {
-      if (!_isInitialized && !isLoading && !_isYoutubeVideo) {
-        _videoController?.play();
-      } else if (_isYoutubeVideo && _youtubeController != null) {
-        _youtubeController!.play();
-      }
-    } else {
       _videoController?.pause();
       _youtubeController?.pause();
+      _isVideoPlaying = false;
+      // if (!_isInitialized && !isLoading && !_isYoutubeVideo) {
+      //   _videoController?.play();
+      // } else if (_isYoutubeVideo && _youtubeController != null) {
+      //   _youtubeController!.play();
+      // }
     }
+    // else {
+    //   _videoController?.pause();
+    //   _youtubeController?.pause();
+    // }
   }
 
   @override
@@ -119,7 +126,7 @@ class _ReelCardState extends State<ReelCard> {
           _videoController!.setLooping(true);
         }
 
-        _createChewieController();
+        // _createChewieController();
       } on PlatformException catch (err) {
         setState(() {
           isError = true;
@@ -142,43 +149,43 @@ class _ReelCardState extends State<ReelCard> {
     }
   }
 
-  void _createChewieController() {
-    try {
-      if (!mounted || _chewieController != null) return;
-      final item = reelController.reels[widget.index];
+  // void _createChewieController() {
+  //   try {
+  //     // if (!mounted || _chewieController != null) return;
+  //     // final item = reelController.reels[widget.index];
 
-      /// Dispose previous controller if exists
-      _chewieController?.dispose();
+  //     // /// Dispose previous controller if exists
+  //     // _chewieController?.dispose();
 
-      _chewieController = ChewieController(
-        videoPlayerController: _videoController!,
-        aspectRatio: _videoController!.value.aspectRatio,
-        hideControlsTimer: const Duration(seconds: 1),
-        showControls: true,
-        allowMuting: true,
-      );
+  //     // _chewieController = ChewieController(
+  //     //   videoPlayerController: _videoController!,
+  //     //   aspectRatio: _videoController!.value.aspectRatio,
+  //     //   hideControlsTimer: const Duration(seconds: 1),
+  //     //   showControls: true,
+  //     //   allowMuting: true,
+  //     // );
 
-      setState(() {
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   } catch (e) {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   } finally {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
 
   @override
   void dispose() {
     super.dispose();
 
-    if (_chewieController != null) {
-      _chewieController!.dispose();
-    }
+    // if (_chewieController != null) {
+    //   _chewieController!.dispose();
+    // }
     if (_videoController != null) {
       _videoController!.dispose();
     }
@@ -191,201 +198,213 @@ class _ReelCardState extends State<ReelCard> {
   Widget build(BuildContext context) {
     final item = reelController.reels[widget.index];
 
-    return SizedBox(
-      height: MediaQuery.of(context).size.height, // Full screen height
-      width: MediaQuery.of(context).size.width,
-      child: Stack(
-        children: [
-          SizedBox.expand(
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : isError
-                    ? Center(
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
-                          progressIndicatorBuilder: (context, url, progress) =>
-                              SizedBox(
-                            height: 300,
-                            child: const Center(
-                              child: SpinKitFadingCircle(
-                                color: Colors.blue,
-                                size: 50.0,
-                              ),
-                            ),
+    return VisibilityDetector(
+      key: ValueKey(item.courseReelId),
+      onVisibilityChanged: (VisibilityInfo info) {
+        if (widget.isCurrent && info.visibleFraction > 0.8) {
+          if (!_isVideoPlaying && _videoController != null && _isInitialized) {
+            // _chewieController!.play();
+            _videoController!.play();
+            _isVideoPlaying = true;
+          }
+        } else {
+          if (_isVideoPlaying && _youtubeController != null) {
+            _youtubeController!.pause();
+            _isVideoPlaying = false;
+          } else if (_isVideoPlaying && _youtubeController != null) {
+            _youtubeController!.pause();
+            _isVideoPlaying = false;
+          }
+        }
+      },
+      child: Container(
+        color: Colors.white, // Set background color to transparent
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(
+          children: [
+            SizedBox.expand(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : isError
+                      ? Center(
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
+                            progressIndicatorBuilder:
+                                (context, url, progress) => const Center(
+                                    child: CircularProgressIndicator()),
+                            fit: BoxFit.contain,
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.broken_image),
                           ),
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.broken_image),
-                        ),
-                      )
-                    : _isYoutubeVideo && _youtubeController != null
-                        ? YoutubePlayer(
-                            controller: _youtubeController!,
-                            showVideoProgressIndicator: true,
-                            progressIndicatorColor: Colors.amber,
-                            aspectRatio: 9 / 16,
-                          )
-                        : _chewieController != null
-                            ? Chewie(
-                                controller: _chewieController!,
-                              )
-                            // AspectRatio(
-                            //     aspectRatio: 16 / 9,
-                            // child: Chewie(
-                            //   controller: _chewieController!,
-                            // ),
-                            // )
-                            : const Center(
-                                child: Text("No video or Youtube link")),
-          ),
+                        )
+                      : _isYoutubeVideo && _youtubeController != null
+                          ? YoutubePlayer(
+                              controller: _youtubeController!,
+                              showVideoProgressIndicator: true,
+                              progressIndicatorColor: Colors.amber,
+                              aspectRatio: 9 / 16,
+                            )
+                          : _videoController != null && _isInitialized
+                              ? VideoPlayer(_videoController!)
+                              : const Center(
+                                  child: Text("No video or Youtube link")),
+            ),
 
-          // User info & caption (Bottom Left)
-          Positioned(
-            bottom: 60,
-            left: 16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+            // User info & caption (Bottom Left)
+            Positioned(
+              bottom: 80, // Adjust spacing from bottom
+              left: 16,
+              child: SafeArea(
+                // Use SafeArea to avoid overlapping system UI
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CircleAvatar(
-                      backgroundImage: AssetImage('assets/app_logo.jpeg'),
+                    Row(
+                      children: [
+                        const CircleAvatar(
+                          backgroundImage: AssetImage('assets/app_logo.jpeg'),
+                          radius: 20, // Adjust avatar size
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          "Edxera", // Replace with actual username
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Colors.white, // Text color for better contrast
+                            shadows: [
+                              // Add shadows for better readability on video
+                              Shadow(
+                                blurRadius: 3.0,
+                                color: Colors.black,
+                                offset: Offset(1.0, 1.0),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(height: 8),
                     Text(
-                      "Edxera",
+                      item.title.toString(),
                       style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.purple.shade900),
+                        color: Colors.white,
+                        fontSize: 16, // Slightly smaller font size
+                        shadows: [
+                          Shadow(
+                            blurRadius: 3.0,
+                            color: Colors.black,
+                            offset: Offset(1.0, 1.0),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(width: 10),
-                    // ElevatedButton(
-                    //   onPressed: () {},
-                    //   style: ElevatedButton.styleFrom(
-                    //     backgroundColor: Colors.white,
-                    //     foregroundColor: Colors.black,
-                    //     padding: const EdgeInsets.symmetric(
-                    //         horizontal: 16, vertical: 4),
-                    //   ),
-                    //   child: const Text('Follow'),
-                    // ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                Text(item.title.toString(),
-                    style: TextStyle(color: Colors.black)),
-                const SizedBox(height: 10),
-                // Row(
-                //   children: [
-                //     const Icon(Icons.music_note, color: Colors.white, size: 16),
-                //     const SizedBox(width: 5),
-                //     const Text("Original Audio 🎵",
-                //         style: TextStyle(color: Colors.white)),
-                //   ],
-                // ),
-              ],
+              ),
             ),
-          ),
 
-          // Right-side action buttons
-          Positioned(
-            bottom: 200,
-            right: 16,
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isLiked = !isLiked;
-                    });
-                  },
-                  child: Column(
+            // Right-side action buttons
+            Positioned(
+              bottom: 200,
+              right: 16,
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isLiked = !isLiked;
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                              isLiked ? Icons.favorite : Icons.favorite_border,
+                              color: isLiked ? Colors.red : Colors.black),
+                          onPressed: () {
+                            _toggleLike(item.courseId!, item.courseReelId!);
+                          },
+                        ),
+                        GestureDetector(
+                          onTap: () => _showLikeBottomSheet(
+                              item.courseId!, item.courseReelId!),
+                          child: Text("${item.courseReelLikeCount ?? 0}"),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Column(
                     children: [
                       IconButton(
-                        icon: Icon(
-                            isLiked ? Icons.favorite : Icons.favorite_border,
-                            color: isLiked ? Colors.red : Colors.black),
+                        icon: const Icon(Icons.comment),
                         onPressed: () {
-                          _toggleLike(item.courseId!, item.courseReelId!);
+                          _showCommentsBottomSheet(
+                              item.courseId!, item.courseReelId!);
                         },
                       ),
                       GestureDetector(
-                        onTap: () => _showLikeBottomSheet(
-                            item.courseId!, item.courseReelId!),
-                        child: Text("${item.courseReelLikeCount ?? 0}"),
+                        onTap: () {
+                          _showCommentsBottomSheet(
+                              item.courseId!, item.courseReelId!);
+                        },
+                        child: Text("${item.courseReelCommentCount ?? 0}"),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 16),
-                Column(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.comment),
-                      onPressed: () {
-                        _showCommentsBottomSheet(
-                            item.courseId!, item.courseReelId!);
-                      },
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _showCommentsBottomSheet(
-                            item.courseId!, item.courseReelId!);
-                      },
-                      child: Text("${item.courseReelCommentCount ?? 0}"),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Column(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.share),
-                      onPressed: () {
-                        String postUrl;
+                  const SizedBox(height: 16),
+                  Column(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.share),
+                        onPressed: () {
+                          String postUrl;
 
-                        if (item.courseReelYoutubeLink != null &&
-                            item.courseReelYoutubeLink!.isNotEmpty) {
-                          // Share the YouTube link if available
-                          postUrl = item.courseReelYoutubeLink!;
-                        } else if (item.courseReelVideo != null &&
-                            item.courseReelVideo!.isNotEmpty) {
-                          // Share the normal video link
-                          postUrl =
-                              "${ApiConstants.publicBaseUrl}/${item.courseReelVideo}";
-                        } else {
-                          // Share the thumbnail if no video is available
-                          postUrl =
-                              "${ApiConstants.publicBaseUrl}/${item.courseThumbnail ?? ""}";
-                        }
+                          if (item.courseReelYoutubeLink != null &&
+                              item.courseReelYoutubeLink!.isNotEmpty) {
+                            // Share the YouTube link if available
+                            postUrl = item.courseReelYoutubeLink!;
+                          } else if (item.courseReelVideo != null &&
+                              item.courseReelVideo!.isNotEmpty) {
+                            // Share the normal video link
+                            postUrl =
+                                "${ApiConstants.publicBaseUrl}/${item.courseReelVideo}";
+                          } else {
+                            // Share the thumbnail if no video is available
+                            postUrl =
+                                "${ApiConstants.publicBaseUrl}/${item.courseThumbnail ?? ""}";
+                          }
 
-                        // Custom message with app logo, app name, and text
-                        String message = """
-      📚 *${item.title}*  
-      🔥 Check out this amazing course on Edxera!
-      $postUrl
-      📲 Download our app for more
-      
-      """;
+                          // Custom message with app logo, app name, and text
+                          String message = """
+        📚 *${item.title}*  
+        🔥 Check out this amazing course on Edxera!
+        $postUrl
+        📲 Download our app for more
+        
+        """;
 
-                        Share.share(message);
-                      },
-                    ),
-                  ],
-                ),
+                          Share.share(message);
+                        },
+                      ),
+                    ],
+                  ),
 
-                const SizedBox(height: 16),
-                //   Column(
-                //     children: [
-                //       const Icon(Icons.more_vert, color: Colors.white, size: 30),
-                //     ],
-                //   ),
-              ],
+                  const SizedBox(height: 16),
+                  //   Column(
+                  //     children: [
+                  //       const Icon(Icons.more_vert, color: Colors.white, size: 30),
+                  //     ],
+                  //   ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

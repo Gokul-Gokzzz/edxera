@@ -24,6 +24,7 @@ class ReelsHome extends StatefulWidget {
 
 class _ReelsHomeState extends State<ReelsHome> {
   bool isSearching = false;
+  final PageController _pagesController = PageController(viewportFraction: 1);
   TextEditingController searchController = TextEditingController();
   ReelController reelController = Get.find();
   final ScrollController _scrollController = ScrollController();
@@ -41,12 +42,13 @@ class _ReelsHomeState extends State<ReelsHome> {
     // Future.delayed(Duration(seconds: 2), _autoSlideAds);
 
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        _loadReels();
-        _scrollController.addListener(_handleScroll);
-      },
-    );
+    reelController.getReels();
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //   (_) {
+    //     _loadReels();
+    //     _scrollController.addListener(_handleScroll);
+    //   },
+    // );
   }
 
   Future<void> _loadReels() async {
@@ -174,119 +176,141 @@ class _ReelsHomeState extends State<ReelsHome> {
       ),
       body: Obx(
         () {
-          return SafeArea(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                await _loadReels();
-                //  reelController.getReels();
+          if (reelController.isLoading.value) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (reelController.reels.isEmpty) {
+            return const Center(child: Text("No reels available."));
+          } else {
+            return PageView.builder(
+              controller: _pagesController,
+              scrollDirection: Axis.vertical,
+              itemCount: reelController.reels.length,
+              itemBuilder: (context, index) {
+                return ReelCard(
+                    index: index, isCurrent: index == _currentIndex);
               },
-              child: Container(
-                color: Colors.white,
-                child: reelController.isLoading.value
-                    ? Center(child: CircularProgressIndicator())
-                    : reelController.reels.isEmpty
-                        ? Center(child: Text("There is No Reels"))
-                        // Column(
-                        // children: [
-                        // Advertisement Slider
-                        // Padding(
-                        //   padding: const EdgeInsets.all(10),
-                        //   child: Container(
-                        //     decoration: BoxDecoration(
-                        //       color: Colors.white,
-                        //       borderRadius: BorderRadius.circular(10),
-                        //     ),
-                        //     child: Card(
-                        //       color: Colors.white,
-                        //       margin: EdgeInsets.all(10),
-                        //       elevation: 3,
-                        //       child: Padding(
-                        //         padding: const EdgeInsets.all(10.0),
-                        //         child: Column(
-                        //           children: [
-                        //             Container(
-                        //               height:
-                        //                   150, // Fixed height for the advertisement
-                        //               child: PageView.builder(
-                        //                 controller: _pageController,
-                        //                 itemCount:
-                        //                     3, // Number of advertisements
-                        //                 onPageChanged: (index) {
-                        //                   setState(() {
-                        //                     _currentPage = index;
-                        //                   });
-                        //                 },
-                        //                 itemBuilder: (context, index) {
-                        //                   return Image.asset(
-                        //                     'assets/adv1.jpg', // Replace with your advertisement images
-                        //                     fit: BoxFit.cover,
-                        //                   );
-                        //                 },
-                        //               ),
-                        //             ),
-                        //             SizedBox(height: 10),
-                        //             SmoothPageIndicator(
-                        //               controller: _pageController,
-                        //               count:
-                        //                   3, // Number of advertisements
-                        //               effect:
-                        //                   SwapEffect(), // Indicator effect (can be changed)
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        : ListView.builder(
-                            controller: _scrollController,
-                            // shrinkWrap: true,
-                            physics: AlwaysScrollableScrollPhysics(),
-                            itemCount: reelController.reels.length,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                  onTap: () {
-                                    // print("${ApiConstants.publicBaseUrl}/${reelController.reels[index].courseReelVideo}");
-                                    // Get.to(
-                                    //   () => ReelPlayer(
-                                    //     index: index,
-                                    //   ),
-                                    // );
-                                  },
-                                  child:
-                                      // (reelController.reels[index].courseThumbnail ?? "").isEmpty
-                                      //     // ? ThumbnailPlayer(reelController.reels[index])
-                                      //     ?
-                                      ReelCard(
-                                    index: index,
-                                    isCurrent: index == _currentIndex,
-                                  )
+              onPageChanged: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+            );
+          }
+          // return SafeArea(
+          //   child: RefreshIndicator(
+          //     onRefresh: () async {
+          //       await _loadReels();
+          //       //  reelController.getReels();
+          //     },
+          //     child: Container(
+          //       color: Colors.white,
+          //       child: reelController.isLoading.value
+          //           ? Center(child: CircularProgressIndicator())
+          //           : reelController.reels.isEmpty
+          //               ? Center(child: Text("There is No Reels"))
+          //               // Column(
+          //               // children: [
+          //               // Advertisement Slider
+          //               // Padding(
+          //               //   padding: const EdgeInsets.all(10),
+          //               //   child: Container(
+          //               //     decoration: BoxDecoration(
+          //               //       color: Colors.white,
+          //               //       borderRadius: BorderRadius.circular(10),
+          //               //     ),
+          //               //     child: Card(
+          //               //       color: Colors.white,
+          //               //       margin: EdgeInsets.all(10),
+          //               //       elevation: 3,
+          //               //       child: Padding(
+          //               //         padding: const EdgeInsets.all(10.0),
+          //               //         child: Column(
+          //               //           children: [
+          //               //             Container(
+          //               //               height:
+          //               //                   150, // Fixed height for the advertisement
+          //               //               child: PageView.builder(
+          //               //                 controller: _pageController,
+          //               //                 itemCount:
+          //               //                     3, // Number of advertisements
+          //               //                 onPageChanged: (index) {
+          //               //                   setState(() {
+          //               //                     _currentPage = index;
+          //               //                   });
+          //               //                 },
+          //               //                 itemBuilder: (context, index) {
+          //               //                   return Image.asset(
+          //               //                     'assets/adv1.jpg', // Replace with your advertisement images
+          //               //                     fit: BoxFit.cover,
+          //               //                   );
+          //               //                 },
+          //               //               ),
+          //               //             ),
+          //               //             SizedBox(height: 10),
+          //               //             SmoothPageIndicator(
+          //               //               controller: _pageController,
+          //               //               count:
+          //               //                   3, // Number of advertisements
+          //               //               effect:
+          //               //                   SwapEffect(), // Indicator effect (can be changed)
+          //               //             ),
+          //               //           ],
+          //               //         ),
+          //               //       ),
+          //               //     ),
+          //               //   ),
+          //               // ),
+          //               : ListView.builder(
+          //                   controller: _scrollController,
+          //                   // shrinkWrap: true,
+          //                   physics: AlwaysScrollableScrollPhysics(),
+          //                   itemCount: reelController.reels.length,
+          //                   itemBuilder: (context, index) {
+          //                     return InkWell(
+          //                         onTap: () {
+          //                           // print("${ApiConstants.publicBaseUrl}/${reelController.reels[index].courseReelVideo}");
+          //                           // Get.to(
+          //                           //   () => ReelPlayer(
+          //                           //     index: index,
+          //                           //   ),
+          //                           // );
+          //                         },
+          //                         child:
+          //                             // (reelController.reels[index].courseThumbnail ?? "").isEmpty
+          //                             //     // ? ThumbnailPlayer(reelController.reels[index])
+          //                             //     ?
+          //                             ReelCard(
+          //                           index: index,
+          //                           isCurrent: index == _currentIndex,
+          //                         )
 
-                                  // : CachedNetworkImage(
-                                  //     imageUrl: "${ApiConstants.publicBaseUrl}/${reelController.reels[index].courseThumbnail}",
-                                  //     progressIndicatorBuilder: (context, url, progress) => SizedBox(
-                                  //       height: 300,
-                                  //       child: Center(
-                                  //         child: CircularProgressIndicator(
-                                  //           value: progress.progress,
-                                  //         ),
-                                  //       ),
-                                  //     ),
-                                  //     fit: BoxFit.cover,
-                                  //     errorWidget: (context, url, error) => Icon(Icons.broken_image),
-                                  //   ),
-                                  );
-                            },
-                          ),
-                // ],
-                // ),
+          //                         // : CachedNetworkImage(
+          //                         //     imageUrl: "${ApiConstants.publicBaseUrl}/${reelController.reels[index].courseThumbnail}",
+          //                         //     progressIndicatorBuilder: (context, url, progress) => SizedBox(
+          //                         //       height: 300,
+          //                         //       child: Center(
+          //                         //         child: CircularProgressIndicator(
+          //                         //           value: progress.progress,
+          //                         //         ),
+          //                         //       ),
+          //                         //     ),
+          //                         //     fit: BoxFit.cover,
+          //                         //     errorWidget: (context, url, error) => Icon(Icons.broken_image),
+          //                         //   ),
+          //                         );
+          //                   },
+          //                 ),
+          //       // ],
+          //       // ),
 
-                // : Center(
-                //     child: Text("There is No Reels"),
-                //   ),
-              ),
-            ),
-          );
+          //       // : Center(
+          //       //     child: Text("There is No Reels"),
+          //       //   ),
+          //     ),
+          //   ),
+          // );
         },
       ),
     );

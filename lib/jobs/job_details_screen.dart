@@ -103,7 +103,7 @@ class JobDetailScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: job.applyAalowedStatus == 1
+      bottomNavigationBar: job.applyAalowedStatus == 0
           ? Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
@@ -229,10 +229,11 @@ class JobDetailScreen extends StatelessWidget {
                     color: Colors.blueGrey[800]),
               ),
               SizedBox(height: 16),
-              _optionTile(
-                  context, Icons.chat, "WhatsApp", Colors.green, _openWhatsApp),
-              _optionTile(
-                  context, Icons.email, "Email", Colors.red, _sendEmail),
+              _optionTile(context, Icons.chat, "WhatsApp", Colors.green, () {
+                _showWhatsAppNumber(context);
+              }),
+              _optionTile(context, Icons.email, "Email", Colors.red,
+                  () => _sendEmail(context)),
             ],
           ),
         );
@@ -247,30 +248,80 @@ class JobDetailScreen extends StatelessWidget {
       title: Text(text, style: TextStyle(fontSize: 16)),
       onTap: () {
         onTap();
-        Navigator.pop(context);
+        // Navigator.pop(context);
       },
     );
   }
 
   /// **Open WhatsApp**
-  void _openWhatsApp() async {
+  void _showWhatsAppNumber(BuildContext context) {
     final phone = job.contactWhatsappNumber;
     if (phone != null && phone.isNotEmpty) {
-      final url = "https://wa.me/$phone";
-      if (await canLaunch(url)) {
-        await launch(url);
-      }
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("WhatsApp Contact"),
+            content: Text("📱 8129935578"),
+            // Text("📱 $phone"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Close"),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
   /// **Send Email**
-  void _sendEmail() async {
+  void _sendEmail(BuildContext context) {
     final email = job.contactEmail;
     if (email != null && email.isNotEmpty) {
-      final url = "mailto:$email";
-      if (await canLaunch(url)) {
-        await launch(url);
-      }
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Send Email"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Send your job application using the following format:"),
+                SizedBox(height: 8),
+                Text("📌 Subject: Job Application for ${job.title}"),
+                Text(
+                    "📌 Body:\n- Name: \n- Contact: \n- Experience: \n- Cover Letter:"),
+                SizedBox(height: 10),
+                // Text("📧 Send to: $email"),
+                Text("📧 Send to: info@edxera.com"),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  final subject =
+                      Uri.encodeComponent("Job Application for ${job.title}");
+                  final body = Uri.encodeComponent(
+                      "Dear Hiring Manager,\n\nI am interested in the ${job.title} position. Here are my details:\n\n- Name:\n- Contact:\n- Experience:\n- Cover Letter:\n\nBest regards,");
+                  final url = "mailto:$email?subject=$subject&body=$body";
+                  if (await canLaunch(url)) {
+                    await launch(url);
+                  }
+                },
+                child: Text("Send Email"),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
