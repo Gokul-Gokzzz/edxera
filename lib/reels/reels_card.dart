@@ -198,6 +198,8 @@ class _ReelCardState extends State<ReelCard> {
   Widget build(BuildContext context) {
     final item = reelController.reels[widget.index];
 
+    final height = MediaQuery.sizeOf(context).height;
+    final width = MediaQuery.sizeOf(context).width;
     return VisibilityDetector(
       key: ValueKey(item.courseReelId),
       onVisibilityChanged: (VisibilityInfo info) {
@@ -218,48 +220,61 @@ class _ReelCardState extends State<ReelCard> {
         }
       },
       child: Container(
-        color: Colors.white, // Set background color to transparent
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        color: Theme.of(context).brightness == Brightness.light
+            ? Colors.white
+            : Colors.black,
+        height: height,
+        width: width,
         child: Stack(
           children: [
-            Center(
-              child: SizedBox(
-                child: isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : isError
-                        ? Center(
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
-                              progressIndicatorBuilder:
-                                  (context, url, progress) => const Center(
-                                      child: CircularProgressIndicator()),
-                              fit: BoxFit.contain,
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.broken_image),
-                            ),
-                          )
-                        : _isYoutubeVideo && _youtubeController != null
-                            ? YoutubePlayer(
+            SizedBox(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : isError
+                      ? Center(
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                "${ApiConstants.publicBaseUrl}/${item.courseThumbnail}",
+                            progressIndicatorBuilder:
+                                (context, url, progress) => const Center(
+                                    child: CircularProgressIndicator()),
+                            fit: BoxFit.contain,
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.broken_image),
+                          ),
+                        )
+                      : _isYoutubeVideo && _youtubeController != null
+                          ? Center(
+                              child: YoutubePlayer(
                                 controller: _youtubeController!,
                                 showVideoProgressIndicator: true,
                                 progressIndicatorColor: Colors.amber,
-                                aspectRatio: 16 / 9,
-                              )
-                            : _videoController != null && _isInitialized
-                                ? VideoPlayer(_videoController!)
-                                : const Center(
-                                    child: Text("No video or Youtube link")),
-              ),
+                                aspectRatio:
+                                    _youtubeController!.value.isFullScreen
+                                        ? 9 / 16
+                                        : 16 / 9,
+                              ),
+                            )
+                          : _videoController != null && _isInitialized
+                              ? Center(
+                                  child: AspectRatio(
+                                    aspectRatio:
+                                        _videoController?.value.aspectRatio ??
+                                            16 / 9,
+                                    child: VideoPlayer(
+                                      _videoController!,
+                                    ),
+                                  ),
+                                )
+                              : const Center(
+                                  child: Text("No video or Youtube link")),
             ),
 
-            // User info & caption (Bottom Left)
+            /// User info & caption
             Positioned(
-              bottom: 80, // Adjust spacing from bottom
+              top: 20,
               left: 16,
               child: SafeArea(
-                // Use SafeArea to avoid overlapping system UI
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -276,7 +291,9 @@ class _ReelCardState extends State<ReelCard> {
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color:
-                                Colors.white, // Text color for better contrast
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.black
+                                    : Colors.white,
                             shadows: [
                               // Add shadows for better readability on video
                               Shadow(
@@ -293,7 +310,9 @@ class _ReelCardState extends State<ReelCard> {
                     Text(
                       item.title.toString(),
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? Colors.black
+                            : Colors.white,
                         fontSize: 16, // Slightly smaller font size
                         shadows: [
                           Shadow(
@@ -309,11 +328,12 @@ class _ReelCardState extends State<ReelCard> {
               ),
             ),
 
-            // Right-side action buttons
+            /// Right-side action buttons
             Positioned(
-              bottom: 200,
+              bottom: 0,
               right: 16,
               child: Column(
+                // spacing: 10,
                 children: [
                   GestureDetector(
                     onTap: () {
@@ -325,8 +345,14 @@ class _ReelCardState extends State<ReelCard> {
                       children: [
                         IconButton(
                           icon: Icon(
-                              isLiked ? Icons.favorite : Icons.favorite_border,
-                              color: isLiked ? Colors.red : Colors.black),
+                            isLiked ? Icons.favorite : Icons.favorite_border,
+                            color: isLiked
+                                ? Colors.red
+                                : Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.black
+                                    : Colors.white,
+                          ),
                           onPressed: () {
                             _toggleLike(item.courseId!, item.courseReelId!);
                           },
@@ -339,11 +365,16 @@ class _ReelCardState extends State<ReelCard> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
                   Column(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.comment),
+                        icon: Icon(
+                          Icons.comment,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Colors.black
+                                  : Colors.white,
+                        ),
                         onPressed: () {
                           _showCommentsBottomSheet(
                               item.courseId!, item.courseReelId!);
@@ -358,11 +389,16 @@ class _ReelCardState extends State<ReelCard> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
                   Column(
                     children: [
                       IconButton(
-                        icon: Icon(Icons.share),
+                        icon: Icon(
+                          Icons.share,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Colors.black
+                                  : Colors.white,
+                        ),
                         onPressed: () {
                           String postUrl;
 

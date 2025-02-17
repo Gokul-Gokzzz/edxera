@@ -103,7 +103,7 @@ class JobDetailScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: job.applyAalowedStatus == 0
+      bottomNavigationBar: job.applyAalowedStatus == 1
           ? Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(

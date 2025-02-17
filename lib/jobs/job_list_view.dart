@@ -175,13 +175,13 @@ class _JobListScreenState extends State<JobListScreen> {
                           ),
                           _buildDetailRow('WhatsApp',
                               job.contactWhatsappNumber ?? "No Number"),
-                          if (job.deletionAllowedStatus == 0)
+                          if (job.deletionAllowedStatus == 1)
                             Align(
                               alignment: Alignment.centerRight,
                               child: IconButton(
                                   onPressed: () {
                                     _showDeleteConfirmation(
-                                        context, job.id ?? 1, index);
+                                        context, job.id!, index);
                                   },
                                   icon: Icon(
                                     Icons.delete,

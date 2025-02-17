@@ -53,12 +53,12 @@ class JobService {
     }
   }
 
-  Future<bool> deleteJob(int jobId) async {
+  Future<bool> deleteJobRequest(int jobId) async {
     try {
-      Response response =
-          await _dio.sendRequest.post(ApiConstants.delete_job, data: {
-        "job_id": jobId,
-      });
+      Response response = await _dio.sendRequest.post(
+        ApiConstants.delete_job,
+        data: {"job_id": jobId},
+      );
 
       return response.statusCode == 200;
     } catch (e) {

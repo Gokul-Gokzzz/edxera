@@ -85,18 +85,25 @@ class JobController extends GetxController {
   }
 
   void deleteJob(int jobId, int index) async {
-    bool success = await _jobService.deleteJob(jobId);
+    bool success = await _jobService.deleteJobRequest(jobId);
     if (success) {
       jobList.removeAt(index);
-      Get.snackbar("Success", "Job deleted successfully",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white);
+      update(); // If using GetX, trigger UI update
+      Get.snackbar(
+        "Success",
+        "Job deleted successfully",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
     } else {
-      Get.snackbar("Error", "Failed to delete job",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        "Failed to delete job",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 
