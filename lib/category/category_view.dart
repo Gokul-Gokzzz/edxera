@@ -42,9 +42,9 @@ class _CategoryGridViewState extends State<CategoryGridView> {
                       _searchDebouncer.call(
                         () {
                           if (value.isEmpty) {
-                            // categoryController.loadCategory();
+                            categoryController.fetchCategories();
                           } else {
-                            // categoryController.loadCategory(search: value);
+                            categoryController.searchCategories(value);
                           }
                         },
                       );
