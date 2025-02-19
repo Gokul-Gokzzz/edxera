@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 class UserProfileController extends GetxController {
   final UserProfileService _service = UserProfileService();
   var userProfile = Rxn<UserProfile>();
+  var profile = Rxn<UserData>();
   var isLoading = false.obs;
 
   // TextEditingControllers for each field

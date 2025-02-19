@@ -51,7 +51,7 @@ class _MyProfileState extends State<MyProfile> {
     CertificatePayment(),
     ChangePasswordScreen(),
     HelpCenter(),
-    PrivacyPolicy(),
+    PrivacyPolicyScreen(),
 
     FeedBack(),
     LanguageSelection(),

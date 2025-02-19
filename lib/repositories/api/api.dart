@@ -38,19 +38,23 @@ class CustomInterceptor extends Interceptor {
     } else {
       myErrorMsg = await MyDioException.myDioError(err, cancelToken);
     }
-    DioException myErr = err.copyWith(message: myErrorMsg, response: err.response);
+    DioException myErr =
+        err.copyWith(message: myErrorMsg, response: err.response);
 
     logger.e(myErr);
 
     if (myErr.response != null) {
-      logger.e("API_Error => ${myErr.response?.statusCode}  ${myErr.requestOptions.uri.toString()}", error: myErr);
+      logger.e(
+          "API_Error => ${myErr.response?.statusCode}  ${myErr.requestOptions.uri.toString()}",
+          error: myErr);
     }
     // throw myErrorMsg;
     return super.onError(myErr, handler);
   }
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     final requestPath = options.baseUrl;
     final path = options.path;
     // Automatically assign cancelToken to each request
@@ -81,7 +85,8 @@ class CustomInterceptor extends Interceptor {
 class MyDioException implements Exception {
   static late String errorMessage;
 
-  static Future<String> myDioError(DioException dioError, CancelToken cancelToken) async {
+  static Future<String> myDioError(
+      DioException dioError, CancelToken cancelToken) async {
     switch (dioError.type) {
       case DioExceptionType.cancel:
         PrefData.setLogin(false);
@@ -110,9 +115,11 @@ class MyDioException implements Exception {
     }
   }
 
-  static Future<String> _handleStatusCode(DioException dioError, CancelToken cancelToken) async {
+  static Future<String> _handleStatusCode(
+      DioException dioError, CancelToken cancelToken) async {
     ///Check if not login then logout....
-    if (!dioError.requestOptions.uri.path.contains(ApiConstants.login) || dioError.requestOptions.uri.path.contains(ApiConstants.register)) {
+    if (!dioError.requestOptions.uri.path.contains(ApiConstants.login) ||
+        dioError.requestOptions.uri.path.contains(ApiConstants.register)) {
       if (dioError.response != null && dioError.response!.statusCode == 401) {
         cancelToken.cancel(["Unauthenticated user"]);
 

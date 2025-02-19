@@ -269,7 +269,7 @@ class _JobListScreenState extends State<JobListScreen> {
         onPressed: () {
           Get.to(() => AddJobScreen());
         },
-        backgroundColor: Colors.blueGrey[900],
+        backgroundColor: Colors.transparent,
         child: Icon(Icons.add, color: Colors.white),
       ),
     );
