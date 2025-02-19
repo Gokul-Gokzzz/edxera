@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:edxera/controller/controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,11 +23,13 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _selectedImage;
   File? _selectedResume;
   final ImagePicker _picker = ImagePicker();
+  MyProfileController myProfileController = Get.put(MyProfileController());
 
   @override
   void initState() {
     super.initState();
-    profileController.loadUserProfile("498"); // Replace with actual user ID
+    profileController.loadUserProfile(myProfileController.userDataModel.data!.id
+        .toString()); // Replace with actual user ID
   }
 
   Future<void> _updateProfileImage() async {
