@@ -32,7 +32,8 @@ class ChoosePlane extends StatefulWidget {
 }
 
 class _ChoosePlaneState extends State<ChoosePlane> {
-  ProfilePageController profilePageController = Get.put(ProfilePageController());
+  ProfilePageController profilePageController =
+      Get.put(ProfilePageController());
 
   //Create an instance of ScreenshotController
   ScreenshotController screenshotController = ScreenshotController();
@@ -52,7 +53,8 @@ class _ChoosePlaneState extends State<ChoosePlane> {
   void _launchWhatsApp(String phoneNumber) async {
     try {
       const message = 'Hello, I need some information about the course.';
-      final url = 'https://wa.me/+91$phoneNumber?text=${Uri.encodeFull(message)}';
+      final url =
+          'https://wa.me/+91$phoneNumber?text=${Uri.encodeFull(message)}';
       if (await canLaunchUrl(Uri.parse(url))) {
         await launchUrl(Uri.parse(url));
       } else {
@@ -100,7 +102,8 @@ class _ChoosePlaneState extends State<ChoosePlane> {
     }
   }
 
-  Future<dynamic> ShowCapturedWidget(BuildContext context, Uint8List capturedImage) {
+  Future<dynamic> ShowCapturedWidget(
+      BuildContext context, Uint8List capturedImage) {
     return showDialog(
       useSafeArea: false,
       context: context,
@@ -135,25 +138,36 @@ class _ChoosePlaneState extends State<ChoosePlane> {
                                       Get.back();
                                     },
                                     child: Image(
-                                      image: AssetImage("assets/back_arrow.png"),
+                                      image:
+                                          AssetImage("assets/back_arrow.png"),
                                       height: 24.h,
                                       width: 24.w,
                                     )),
                                 SizedBox(width: 16.w),
                                 Text(
                                   "Course Price",
-                                  style: TextStyle(fontWeight: FontWeight.w700, fontFamily: 'Gilroy', fontSize: 24.sp),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: 'Gilroy',
+                                      fontSize: 24.sp),
                                 ),
                                 Spacer(),
                                 InkWell(
                                   onTap: () {
-                                    screenshotController.capture(delay: Duration(milliseconds: 10)).then((capturedImage) async {
-                                      final directory = await getApplicationDocumentsDirectory();
-                                      final imagePath =
-                                          await File('${directory.path}/screenshot${DateTime.now().millisecondsSinceEpoch}.png').create();
-                                      await imagePath.writeAsBytes(capturedImage!);
+                                    screenshotController
+                                        .capture(
+                                            delay: Duration(milliseconds: 10))
+                                        .then((capturedImage) async {
+                                      final directory =
+                                          await getApplicationDocumentsDirectory();
+                                      final imagePath = await File(
+                                              '${directory.path}/screenshot${DateTime.now().millisecondsSinceEpoch}.png')
+                                          .create();
+                                      await imagePath
+                                          .writeAsBytes(capturedImage!);
 
-                                      Share.shareXFiles([XFile(imagePath.path)]);
+                                      Share.shareXFiles(
+                                          [XFile(imagePath.path)]);
                                     }).catchError((onError) {
                                       print(onError);
                                     });
@@ -169,13 +183,21 @@ class _ChoosePlaneState extends State<ChoosePlane> {
                             Padding(
                               padding: EdgeInsets.all(8.0.h),
                               child: Padding(
-                                padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 10.h, bottom: 15.h),
+                                padding: EdgeInsets.only(
+                                    left: 15.w,
+                                    right: 15.w,
+                                    top: 10.h,
+                                    bottom: 15.h),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
                                       'Helpline phone numbers',
-                                      style: TextStyle(fontSize: 16.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.w700),
+                                      style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontFamily: 'Gilroy',
+                                          fontWeight: FontWeight.w700),
                                     ),
                                     SizedBox(
                                       height: 5.h,
@@ -184,21 +206,33 @@ class _ChoosePlaneState extends State<ChoosePlane> {
                                       children: [
                                         Text(
                                           '8129935578',
-                                          style: TextStyle(fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.w700, color: Colors.blue),
+                                          style: TextStyle(
+                                              fontSize: 14.sp,
+                                              fontFamily: 'Gilroy',
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.blue),
                                         ),
                                         Spacer(),
                                         InkWell(
                                           onTap: () {
                                             _launchWhatsApp('8129935578');
                                           },
-                                          child: SizedBox(height: 25, width: 25, child: Image.asset(Assets.assetsWhatsapp)),
+                                          child: SizedBox(
+                                              height: 25,
+                                              width: 25,
+                                              child: Image.asset(
+                                                  Assets.assetsWhatsapp)),
                                         ),
                                         SizedBox(width: 5.h),
                                         InkWell(
                                           onTap: () {
                                             _makePhoneCall('8129935578');
                                           },
-                                          child: SizedBox(height: 25, width: 25, child: Image.asset(Assets.assetsCallicon)),
+                                          child: SizedBox(
+                                              height: 25,
+                                              width: 25,
+                                              child: Image.asset(
+                                                  Assets.assetsCallicon)),
                                         ),
                                       ],
                                     ),
@@ -209,21 +243,33 @@ class _ChoosePlaneState extends State<ChoosePlane> {
                                       children: [
                                         Text(
                                           '8075707353',
-                                          style: TextStyle(fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.w700, color: Colors.blue),
+                                          style: TextStyle(
+                                              fontSize: 14.sp,
+                                              fontFamily: 'Gilroy',
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.blue),
                                         ),
                                         Spacer(),
                                         InkWell(
                                           onTap: () {
                                             _launchWhatsApp('8075707353');
                                           },
-                                          child: SizedBox(height: 25, width: 25, child: Image.asset(Assets.assetsWhatsapp)),
+                                          child: SizedBox(
+                                              height: 25,
+                                              width: 25,
+                                              child: Image.asset(
+                                                  Assets.assetsWhatsapp)),
                                         ),
                                         SizedBox(width: 5.h),
                                         InkWell(
                                           onTap: () {
                                             _makePhoneCall('8075707353');
                                           },
-                                          child: SizedBox(height: 25, width: 25, child: Image.asset(Assets.assetsCallicon)),
+                                          child: SizedBox(
+                                              height: 25,
+                                              width: 25,
+                                              child: Image.asset(
+                                                  Assets.assetsCallicon)),
                                         ),
                                       ],
                                     ),
@@ -240,24 +286,39 @@ class _ChoosePlaneState extends State<ChoosePlane> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12.h),
                                     boxShadow: [
-                                      BoxShadow(color: const Color(0XFF503494).withOpacity(0.14), offset: const Offset(-4, 5), blurRadius: 16.h),
+                                      BoxShadow(
+                                          color: const Color(0XFF503494)
+                                              .withOpacity(0.14),
+                                          offset: const Offset(-4, 5),
+                                          blurRadius: 16.h),
                                     ],
                                     color: Colors.white),
                                 child: Padding(
-                                  padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 10.h, bottom: 15.h),
+                                  padding: EdgeInsets.only(
+                                      left: 15.w,
+                                      right: 15.w,
+                                      top: 10.h,
+                                      bottom: 15.h),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         widget.data.data?.course?.title ?? '',
-                                        style: TextStyle(fontSize: 20.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.w700),
+                                        style: TextStyle(
+                                            fontSize: 20.sp,
+                                            fontFamily: 'Gilroy',
+                                            fontWeight: FontWeight.w700),
                                       ),
                                       SizedBox(
                                         height: 20.h,
                                       ),
                                       Text(
                                         'Price ₹ ${widget.data.data?.course?.price ?? ''}',
-                                        style: TextStyle(fontSize: 20.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.w700),
+                                        style: TextStyle(
+                                            fontSize: 20.sp,
+                                            fontFamily: 'Gilroy',
+                                            fontWeight: FontWeight.w700),
                                       ),
                                     ],
                                   ),

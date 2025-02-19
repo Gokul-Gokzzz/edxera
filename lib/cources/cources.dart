@@ -71,7 +71,11 @@ class _MyCourcesState extends State<MyCources> {
         title: Text(
           mplanguage['courses'].toString(),
           maxLines: 2,
-          style: TextStyle(fontFamily: 'Gilroy', fontWeight: FontWeight.w700, fontSize: 24.sp, overflow: TextOverflow.ellipsis),
+          style: TextStyle(
+              fontFamily: 'Gilroy',
+              fontWeight: FontWeight.w700,
+              fontSize: 24.sp,
+              overflow: TextOverflow.ellipsis),
         ),
       ),
       body: Obx(
@@ -94,26 +98,34 @@ class _MyCourcesState extends State<MyCources> {
                                 if (CourceController.isVideoLoaded.value) {
                                   return (CourceController.flickManager != null)
                                       ? Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 15.w),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 15.w),
                                           child: Container(
                                             padding: EdgeInsets.all(12.h),
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Color(0XFF503494).withOpacity(0.1),
+                                                  color: Color(0XFF503494)
+                                                      .withOpacity(0.1),
                                                   blurRadius: 16,
                                                 ),
                                               ],
-                                              borderRadius: BorderRadius.circular(22.h),
+                                              borderRadius:
+                                                  BorderRadius.circular(22.h),
                                             ),
                                             child: Container(
                                               height: 195.h,
-                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(22.h)),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          22.h)),
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(22),
+                                                borderRadius:
+                                                    BorderRadius.circular(22),
                                                 child: FlickVideoPlayer(
-                                                  flickManager: courceController.flickManager!,
+                                                  flickManager: courceController
+                                                      .flickManager!,
                                                 ),
                                               ),
                                             ),
@@ -124,33 +136,46 @@ class _MyCourcesState extends State<MyCources> {
                                   return CourceController.isloader.value
                                       ? Container()
                                       : Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 15.w),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 15.w),
                                           child: Container(
                                             padding: EdgeInsets.all(12.h),
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Color(0XFF503494).withOpacity(0.1),
+                                                  color: Color(0XFF503494)
+                                                      .withOpacity(0.1),
                                                   blurRadius: 16,
                                                 ),
                                               ],
-                                              borderRadius: BorderRadius.circular(22.h),
+                                              borderRadius:
+                                                  BorderRadius.circular(22.h),
                                             ),
                                             child: Container(
                                               height: 195.h,
                                               width: double.infinity,
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(22.h),
+                                                borderRadius:
+                                                    BorderRadius.circular(22.h),
                                               ),
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(22),
-                                                child: CourceController.imageGroup == null
-                                                    ? Center(child: Text("Video is temporarily unavailable"))
+                                                borderRadius:
+                                                    BorderRadius.circular(22),
+                                                child: CourceController
+                                                            .imageGroup ==
+                                                        null
+                                                    ? Center(
+                                                        child: Text(
+                                                            "Video is temporarily unavailable"))
                                                     : Image.network(
                                                         "${ApiConstants.publicBaseUrl}/${CourceController.courseDetailsDataModel.data?.course?.image?.originalImage}",
-                                                        errorBuilder: (context, error, stackTrace) =>
-                                                            Center(child: Text("Video is temporarily unavailable")),
+                                                        errorBuilder: (context,
+                                                                error,
+                                                                stackTrace) =>
+                                                            Center(
+                                                                child: Text(
+                                                                    "Video is temporarily unavailable")),
                                                       ),
                                               ),
                                             ),
@@ -166,22 +191,36 @@ class _MyCourcesState extends State<MyCources> {
                             child: Container(
                               height: 54.h,
                               width: double.infinity,
-                              decoration: BoxDecoration(boxShadow: [
-                                BoxShadow(
-                                  color: const Color(0XFF503494).withOpacity(0.20),
-                                  blurRadius: 16,
-                                ),
-                              ], color: const Color(0XFFFFFFFF), borderRadius: BorderRadius.circular(22)),
+                              decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(0XFF503494)
+                                          .withOpacity(0.20),
+                                      blurRadius: 16,
+                                    ),
+                                  ],
+                                  color: const Color(0XFFFFFFFF),
+                                  borderRadius: BorderRadius.circular(22)),
                               child: TabBar(
                                 unselectedLabelColor: Color(0XFF6E758A),
-                                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
-                                labelStyle:
-                                    TextStyle(color: const Color(0XFF503494), fontWeight: FontWeight.bold, fontSize: 12.sp, fontFamily: 'Gilroy'),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5.w, vertical: 5.h),
+                                labelStyle: TextStyle(
+                                    color: const Color(0XFF503494),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12.sp,
+                                    fontFamily: 'Gilroy'),
                                 labelColor: const Color(0XFF503494),
-                                unselectedLabelStyle:
-                                    TextStyle(color: const Color(0XFF503494), fontWeight: FontWeight.w700, fontSize: 12.sp, fontFamily: 'Gilroy'),
+                                unselectedLabelStyle: TextStyle(
+                                    color: const Color(0XFF503494),
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12.sp,
+                                    fontFamily: 'Gilroy'),
                                 indicator: ShapeDecoration(
-                                    color: const Color(0XFFE5ECFF), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22.h))),
+                                    color: const Color(0XFFE5ECFF),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(22.h))),
                                 controller: courceController.tabController,
                                 tabs: [
                                   Tab(
@@ -195,7 +234,11 @@ class _MyCourcesState extends State<MyCources> {
                                   ),
                                 ],
                                 onTap: (value) {
-                                  courceController.pController.animateToPage(value, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+                                  courceController.pController.animateToPage(
+                                      value,
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.ease);
                                 },
                               ),
                             ),
@@ -206,14 +249,18 @@ class _MyCourcesState extends State<MyCources> {
                                   child: PageView.builder(
                                     controller: courceController.pController,
                                     onPageChanged: (value) {
-                                      courceController.tabController
-                                          .animateTo(value, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+                                      courceController.tabController.animateTo(
+                                          value,
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          curve: Curves.ease);
                                     },
                                     itemCount: 3,
                                     itemBuilder: (context, index) {
                                       return index == 0
                                           ? Overview(
-                                              courseDetails: courceController.courseDetailsDataModel,
+                                              courseDetails: courceController
+                                                  .courseDetailsDataModel,
                                             )
                                           : index == 1
                                               ? Lesson()
@@ -235,39 +282,77 @@ class _MyCourcesState extends State<MyCources> {
                               padding: EdgeInsets.only(bottom: 30.h),
                               child: CustomButton(
                                 onTap: () async {
-                                  bool isBypassTrue = await courceController.checkByPassApi();
+                                  bool isBypassTrue =
+                                      await courceController.checkByPassApi();
                                   if (isBypassTrue) {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => BatchesShowByCourseScreen(
-                                            id: courceController.courseDetailsDataModel.data?.course?.id ?? 0,
-                                            count: courceController.batchmodel.data!.batches!.length ?? 0),
+                                        builder: (context) =>
+                                            BatchesShowByCourseScreen(
+                                                id: courceController
+                                                        .courseDetailsDataModel
+                                                        .data
+                                                        ?.course
+                                                        ?.id ??
+                                                    0,
+                                                count: courceController
+                                                        .batchmodel
+                                                        .data!
+                                                        .batches!
+                                                        .length ??
+                                                    0),
                                       ),
                                     );
                                   } else {
-                                    if ((courceController.courseDetailsDataModel.data?.coursePurchasedStatus ?? 0) == 1) {
+                                    if ((courceController.courseDetailsDataModel
+                                                .data?.coursePurchasedStatus ??
+                                            0) ==
+                                        1) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => BatchesShowByCourseScreen(
-                                              id: courceController.courseDetailsDataModel.data?.course?.id ?? 0,
-                                              count: courceController.batchmodel.data?.batches?.length ?? 0),
+                                          builder: (context) =>
+                                              BatchesShowByCourseScreen(
+                                                  id: courceController
+                                                          .courseDetailsDataModel
+                                                          .data
+                                                          ?.course
+                                                          ?.id ??
+                                                      0,
+                                                  count: courceController
+                                                          .batchmodel
+                                                          .data
+                                                          ?.batches
+                                                          ?.length ??
+                                                      0),
                                         ),
                                       );
                                     } else {
                                       courceController.couserPurchaseRequest();
                                       Get.to(
-                                        ChoosePlane(data: courceController.courseDetailsDataModel),
+                                        ChoosePlane(
+                                            data: courceController
+                                                .courseDetailsDataModel),
                                       );
                                     }
                                   }
                                 },
-                                buttonText: ((courceController.courseDetailsDataModel.data?.coursePurchasedStatus ?? 0) == 1)
-                                    ? ((courceController.batchmodel.data != null)
-                                        ? ((courceController.batchmodel.data!.batches!.length > 1)
-                                            ? mplanguage['viewbatches'].toString()
-                                            : mplanguage['viewbatche'].toString())
+                                buttonText: ((courceController
+                                                .courseDetailsDataModel
+                                                .data
+                                                ?.coursePurchasedStatus ??
+                                            0) ==
+                                        1)
+                                    ? ((courceController.batchmodel.data !=
+                                            null)
+                                        ? ((courceController.batchmodel.data!
+                                                    .batches!.length >
+                                                1)
+                                            ? mplanguage['viewbatches']
+                                                .toString()
+                                            : mplanguage['viewbatche']
+                                                .toString())
                                         : mplanguage['viewbatches'].toString())
                                     : mplanguage['enrollnow'].toString(),
                               ),

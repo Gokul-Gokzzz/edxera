@@ -1,241 +1,194 @@
-import 'dart:collection';
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:edxera/profile/service/edit_service.dart';
+import 'package:edxera/profile/Controllers/profile_controller/profile_conreoller.dart';
+import 'package:edxera/repositories/api/api_constants.dart';
 
-import '../controller/controller.dart';
-import '../languagecontrols/LanguageCheck.dart';
-import '../utils/screen_size.dart';
-import '../utils/shared_pref.dart';
-
-class EditScreen extends StatefulWidget {
-  const EditScreen({
-    Key? key,
-  }) : super(key: key);
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
 
   @override
-  State<EditScreen> createState() => _EditScreenState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _EditScreenState extends State<EditScreen> {
-  EditScreenController editScreenController = Get.put(EditScreenController());
+class _ProfilePageState extends State<ProfilePage> {
+  final UserProfileService service = UserProfileService();
+  final UserProfileController profileController =
+      Get.put(UserProfileController());
+  File? _selectedImage;
+  File? _selectedResume;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
-    editScreenController.userDataApi();
     super.initState();
-    checkLanguage();
+    profileController.loadUserProfile("498"); // Replace with actual user ID
   }
 
-  Map<String, dynamic> mplanguage = new HashMap();
+  Future<void> _updateProfileImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
 
-  checkLanguage() async {
-    String lcode = await PrefData.getLanguage();
-
-    var b = await LanguageCheck.checkLanguage(lcode);
-    setState(() {
-      mplanguage = b;
-    });
+  Future<void> _pickResume() async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    if (result != null) {
+      setState(() {
+        _selectedResume = File(result.files.single.path!);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    initializeScreenSize(context);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Obx(
-        () => Stack(
-          children: [
-            GetBuilder(
-              init: EditScreenController(),
-              builder: (editScreenController) => SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20.w, right: 20.w),
-                  child: editScreenController.userDataModel.data != null
-                      ? Column(
-                          children: [
-                            SizedBox(height: 20.h),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      Get.back();
-                                    },
-                                    child: const Icon(Icons.arrow_back_ios)),
-                                SizedBox(width: 16.w),
-                                Text(
-                                  mplanguage['edit_profile'].toString(),
-                                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16.sp, fontFamily: 'Gilroy'),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 20.h),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(100.h / 2),
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                height: 100.h,
-                                width: 100.w,
-                                imageUrl: editScreenController.userDataModel.data?.image ?? '',
-                                progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-                                  child: Container(
-                                    height: 30.h,
-                                    width: 30.w,
-                                    child: CircularProgressIndicator(value: downloadProgress.progress),
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) => ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.h),
-                                  child: Container(
-                                    height: 100.h,
-                                    width: 100.w,
-                                    color: Colors.grey.withOpacity(0.2),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: ListView(
-                                children: [
-                                  SizedBox(height: 30.h),
-                                  name_email_phone(
-                                    editScreenController.nameController,
-                                    "assets/profileicon1st.png",
-                                    mplanguage['entername'].toString(),
-                                  ),
-                                  SizedBox(height: 20.h),
-                                  name_email_phone(
-                                    editScreenController.emailController,
-                                    "assets/profileicon2nd.png",
-                                    mplanguage['enteremailid'].toString(),
-                                  ),
-                                  SizedBox(height: 20.h),
-                                  name_email_phone(
-                                    editScreenController.passwordController,
-                                    "assets/profileicon3rd.png",
-                                    mplanguage['enterph'].toString(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 40.h),
-                              child: save_button(),
-                            )
-                          ],
-                        )
-                      : Container(),
-                ),
-              ),
-            ),
-            if (editScreenController.isloader.value)
-              SafeArea(
-                top: false,
-                bottom: false,
-                child: ColoredBox(
-                  color: Colors.white.withOpacity(0.5),
-                  child: Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(.1),
-                            spreadRadius: 0.1,
-                            offset: const Offset(0.0, 0.0),
-                            blurRadius: 5.0,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text("Edit Profile"),
+        centerTitle: true,
+      ),
+      body: Obx(() {
+        if (profileController.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        } else if (profileController.userProfile.value == null) {
+          return Center(child: Text("Failed to load profile"));
+        } else {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.grey[300],
+                        backgroundImage: _selectedImage != null
+                            ? FileImage(_selectedImage!)
+                            : CachedNetworkImageProvider(
+                                "${ApiConstants.publicBaseUrl}/${profileController.userProfile.value!.data!.profileImage}",
+                              ) as ImageProvider,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: CircleAvatar(
+                          radius: 18,
+                          backgroundColor: Colors.blue,
+                          child: IconButton(
+                            icon: Icon(Icons.camera_alt, color: Colors.white),
+                            onPressed: _updateProfileImage,
                           ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+
+                  TextFormField(
+                    controller: profileController.firstNameController,
+                    decoration: InputDecoration(labelText: "First Name"),
+                  ),
+                  SizedBox(height: 10),
+
+                  TextFormField(
+                    controller: profileController.lastNameController,
+                    decoration: InputDecoration(labelText: "Last Name"),
+                  ),
+                  SizedBox(height: 10),
+
+                  TextFormField(
+                    controller: profileController.emailController,
+                    decoration: InputDecoration(labelText: "Email"),
+                  ),
+                  SizedBox(height: 10),
+
+                  TextFormField(
+                    controller: profileController.addressController,
+                    decoration: InputDecoration(labelText: "Address"),
+                  ),
+                  SizedBox(height: 10),
+
+                  TextFormField(
+                    controller: profileController.dobNameController,
+                    decoration: InputDecoration(labelText: "Date of Birth"),
+                  ),
+                  SizedBox(height: 10),
+
+                  TextFormField(
+                    controller: profileController.qualificationController,
+                    decoration: InputDecoration(labelText: "Qualification"),
+                  ),
+                  SizedBox(height: 20),
+
+                  // Resume Upload Box
+                  GestureDetector(
+                    onTap: _pickResume,
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _selectedResume != null
+                                ? "${_selectedResume!.path.split('/').last}"
+                                : "Upload Resume (PDF)",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Icon(Icons.upload_file, color: Colors.blue),
                         ],
                       ),
-                      height: 80,
-                      width: 80,
-                      child: Platform.isIOS
-                          ? const CupertinoActivityIndicator(
-                              animating: true,
-                              color: Color(0XFF503494),
-                            )
-                          : const Padding(
-                              padding: EdgeInsets.all(25),
-                              child: CircularProgressIndicator(
-                                strokeWidth: 3.0,
-                                color: Color(0XFF503494),
-                              ),
-                            ),
                     ),
                   ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
+                  SizedBox(height: 20),
 
-  name_email_phone(
-    TextEditingController controller,
-    String i,
-    h,
-  ) {
-    return Container(
-      height: 60.h,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22.h),
-          boxShadow: [
-            BoxShadow(color: const Color(0XFF503494).withOpacity(0.14), offset: const Offset(-4, 5), blurRadius: 16),
-          ],
-          color: Colors.white),
-      child: Padding(
-        padding: EdgeInsets.all(8.0.h),
-        child: TextFormField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: h,
-            contentPadding: EdgeInsets.only(left: 18.w, top: 18.h, bottom: 18.h),
-            prefixIcon: Padding(
-              padding: EdgeInsets.all(7.0.h),
-              child: Container(
-                //color: Colors.red,
-                height: 24.h,
-                width: 24.h,
-                child: Image(
-                  image: AssetImage(i),
-                ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      bool isUpdated = await service.updateUserProfile(
+                        userId: "498",
+                        firstName: profileController.firstNameController.text,
+                        lastName: profileController.lastNameController.text,
+                        email: profileController.emailController.text,
+                        address: profileController.addressController.text,
+                        qualification:
+                            profileController.qualificationController.text,
+                        dateOfBirth: profileController.dobNameController.text,
+                        gender: "Male",
+                      );
+
+                      if (isUpdated) {
+                        Get.snackbar("Success", "Profile updated successfully",
+                            snackPosition: SnackPosition.BOTTOM);
+                        Future.delayed(Duration(seconds: 1), () {
+                          Get.back(); // Pop back to the previous screen
+                        });
+                      } else {
+                        Get.snackbar("Error", "Failed to update profile",
+                            snackPosition: SnackPosition.BOTTOM);
+                      }
+                    },
+                    child: Text("Save Changes"),
+                  ),
+                ],
               ),
             ),
-            border: InputBorder.none,
-          ),
-          style: TextStyle(fontSize: 15.sp, color: Color(0XFF6E758A), fontFamily: 'Gilroy', fontWeight: FontWeight.w700),
-        ),
-      ),
-    );
-  }
-
-  save_button() {
-    return GestureDetector(
-      onTap: () {
-        Get.back();
-      },
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 40.h, top: 15.h),
-        child: Container(
-          height: 56.h,
-          width: 374.w,
-          //color: Color(0XFF503494),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.h),
-            color: const Color(0XFF503494),
-          ),
-          child: Center(
-            child: Text(mplanguage['save'].toString(),
-                style: TextStyle(color: Color(0XFFFFFFFF), fontSize: 18.sp, fontWeight: FontWeight.w700, fontFamily: 'Gilroy')),
-          ),
-        ),
-      ),
+          );
+        }
+      }),
     );
   }
 }

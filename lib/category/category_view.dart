@@ -3,6 +3,7 @@ import 'package:edxera/category/category_controller.dart';
 import 'package:edxera/repositories/api/api_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
 class CategoryGridView extends StatefulWidget {
   const CategoryGridView({Key? key}) : super(key: key);
@@ -13,6 +14,8 @@ class CategoryGridView extends StatefulWidget {
 
 class _CategoryGridViewState extends State<CategoryGridView> {
   final CategoryController categoryController = Get.put(CategoryController());
+  bool isSearching = false;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -21,14 +24,80 @@ class _CategoryGridViewState extends State<CategoryGridView> {
     categoryController.fetchCategories();
   }
 
+  Debouncer _searchDebouncer = Debouncer(delay: Duration(milliseconds: 500));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: const Text('Categories'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56), // Set a fixed height for the AppBar
+        child: AppBar(
+          backgroundColor: Colors.white,
+          title: isSearching
+              ? Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: TextField(
+                    onChanged: (value) {
+                      _searchDebouncer.call(
+                        () {
+                          if (value.isEmpty) {
+                            // categoryController.loadCategory();
+                          } else {
+                            // categoryController.loadCategory(search: value);
+                          }
+                        },
+                      );
+                    },
+                    controller: searchController,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: "Search...",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                      isDense: true,
+                    ),
+                    style: TextStyle(
+                        color: Colors.black), // Set text color to black
+                  ),
+                )
+              : Row(
+                  children: [
+                    Image.asset(
+                      'assets/app_logo.jpeg', // Your logo image
+                      height: 30,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      "Edxera",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purple.shade900),
+                    ),
+                  ],
+                ),
+          actions: [
+            isSearching
+                ? IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        isSearching = false;
+                        searchController.clear();
+                      });
+                    },
+                  )
+                : IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      setState(() {
+                        isSearching = true;
+                      });
+                    },
+                  ),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

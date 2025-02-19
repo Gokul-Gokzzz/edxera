@@ -50,16 +50,7 @@ class _ReelCardState extends State<ReelCard> {
       _videoController?.pause();
       _youtubeController?.pause();
       _isVideoPlaying = false;
-      // if (!_isInitialized && !isLoading && !_isYoutubeVideo) {
-      //   _videoController?.play();
-      // } else if (_isYoutubeVideo && _youtubeController != null) {
-      //   _youtubeController!.play();
-      // }
     }
-    // else {
-    //   _videoController?.pause();
-    //   _youtubeController?.pause();
-    // }
   }
 
   @override
@@ -149,43 +140,10 @@ class _ReelCardState extends State<ReelCard> {
     }
   }
 
-  // void _createChewieController() {
-  //   try {
-  //     // if (!mounted || _chewieController != null) return;
-  //     // final item = reelController.reels[widget.index];
-
-  //     // /// Dispose previous controller if exists
-  //     // _chewieController?.dispose();
-
-  //     // _chewieController = ChewieController(
-  //     //   videoPlayerController: _videoController!,
-  //     //   aspectRatio: _videoController!.value.aspectRatio,
-  //     //   hideControlsTimer: const Duration(seconds: 1),
-  //     //   showControls: true,
-  //     //   allowMuting: true,
-  //     // );
-
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   } catch (e) {
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   } finally {
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   }
-  // }
-
   @override
   void dispose() {
     super.dispose();
 
-    // if (_chewieController != null) {
-    //   _chewieController!.dispose();
-    // }
     if (_videoController != null) {
       _videoController!.dispose();
     }
@@ -431,13 +389,7 @@ class _ReelCardState extends State<ReelCard> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 16),
-                  //   Column(
-                  //     children: [
-                  //       const Icon(Icons.more_vert, color: Colors.white, size: 30),
-                  //     ],
-                  //   ),
                 ],
               ),
             ),
@@ -464,13 +416,6 @@ class _ReelCardState extends State<ReelCard> {
     }
     final result = await reelController.likeDislike(
         courseId: id, courseReelId: courseReelId);
-    // setState(() {
-    //   if (result) {
-    //     isLiked = true;
-    //   } else {
-    //     isLiked = false;
-    //   }
-    // });
   }
 
   Future<void> _showComment() async {
@@ -489,13 +434,6 @@ class _ReelCardState extends State<ReelCard> {
         comment: commentController.text,
         courseReelId: courseReelId);
 
-    // if (result) {
-    //   int newCount = (reelController.reels[widget.index].courseCommentCount ?? 0) + 1;
-    //   reelController.reels[widget.index] = reelController.reels[widget.index].copyWith(courseCommentCount: newCount);
-    // } else {
-    //   int newCount = (reelController.reels[widget.index].courseCommentCount ?? 0) - 1;
-    //   reelController.reels[widget.index] = reelController.reels[widget.index].copyWith(courseCommentCount: newCount);
-    // }
     commentController.clear();
     setState(() {
       isShowComment = false;

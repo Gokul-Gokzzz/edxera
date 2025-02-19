@@ -8,7 +8,7 @@ class ApiConstants {
   static String homeScreen = 'home-screen';
   static String categoriesApi = 'categories';
   static String bypassApi = 'bypass_api';
-  static String latestCourses = 'latest-courses';
+  // static String latestCourses = 'latest-courses';
   static String free_study_materials = 'free_study_materials';
   static String study_plan_chapter_inner = 'study_plan_chapter_inner';
   static String get_user_notifications = 'get_user_notifications';

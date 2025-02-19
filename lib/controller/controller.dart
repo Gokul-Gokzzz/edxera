@@ -1975,6 +1975,7 @@ class EditScreenController extends GetxController {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   final Rx<UserDataModel> _userDataModel = UserDataModel().obs;
 
   void userDataApi() async {
