@@ -9,12 +9,21 @@ import '../utils/shared_pref.dart';
 
 class CategoryService {
   final api = API();
-  // Fetch categories for a given userId
-  Future<CategoryModel?> fetchCategories() async {
+  Future<CategoryModel?> fetchCategories({String search = ""}) async {
     int userId = await PrefData.getUserId();
 
     try {
-      final Response response = await api.sendRequest.post(ApiConstants.get_all_categories, data: {"user_id": userId});
+      final Map<String, dynamic> requestData = {"user_id": userId};
+
+      if (search.isNotEmpty) {
+        requestData["search"] = search;
+      }
+
+      final Response response = await api.sendRequest.post(
+        ApiConstants.get_all_categories,
+        data: requestData, // Pass dynamic data
+      );
+
       if (response.statusCode == 200) {
         log('API response: ${response.data}');
         return CategoryModel.fromJson(response.data);
@@ -32,7 +41,8 @@ class CategoryService {
     int userId = await PrefData.getUserId();
 
     try {
-      final Response response = await api.sendRequest.post(ApiConstants.get_user_categories, data: {"user_id": userId});
+      final Response response = await api.sendRequest
+          .post(ApiConstants.get_user_categories, data: {"user_id": userId});
       if (response.statusCode == 200) {
         log('API response: ${response.data}');
         return UserCategory.fromJson(response.data);
@@ -51,7 +61,8 @@ class CategoryService {
     int userId = await PrefData.getUserId();
 
     try {
-      final Response response = await api.sendRequest.post(ApiConstants.add_categories_for_user, data: {
+      final Response response = await api.sendRequest
+          .post(ApiConstants.add_categories_for_user, data: {
         "user_id": userId,
         "category_ids": categoryIds,
       });

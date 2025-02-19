@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:edxera/category/categor_model.dart';
 import 'package:edxera/category/category_service.dart';
 import 'package:edxera/home/home_main.dart';
@@ -12,7 +14,7 @@ class CategoryController extends GetxController {
   final CategoryService _categoryService = CategoryService();
 
   // Fetch categories for a given userId
-  Future<void> fetchCategories( ) async {
+  Future<void> fetchCategories() async {
     isLoading.value = true;
     errorMessage.value = '';
 
@@ -25,6 +27,48 @@ class CategoryController extends GetxController {
       }
     } catch (e) {
       errorMessage.value = "Error occurred: $e";
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> searchCategories(String query) async {
+    if (query.isEmpty) {
+      await fetchCategories();
+      return;
+    }
+
+    try {
+      isLoading.value = true;
+      var response = await _categoryService.fetchCategories(search: query);
+
+      if (response != null && response.success == true) {
+        var searchedCategories = response.data ?? [];
+
+        // Preserve selected categories across searches
+        for (var category in searchedCategories) {
+          var existingCategory =
+              categories.firstWhereOrNull((c) => c.id == category.id);
+          if (existingCategory != null) {
+            category.isCategorySelected = existingCategory.isCategorySelected;
+          }
+        }
+
+        // Merge the searched categories with previously selected ones
+        var selectedCategories =
+            categories.where((c) => c.isCategorySelected == 1).toList();
+        for (var selected in selectedCategories) {
+          if (!searchedCategories.any((c) => c.id == selected.id)) {
+            searchedCategories.add(selected);
+          }
+        }
+
+        categories.assignAll(searchedCategories);
+      } else {
+        categories.clear();
+      }
+    } catch (e) {
+      log("Error in search categories $e");
     } finally {
       isLoading.value = false;
     }
@@ -56,19 +100,16 @@ class CategoryController extends GetxController {
     isSubmitting.value = true;
     errorMessage.value = '';
     try {
-      final categoryIds = getSelectedCategoryIds();//1,1,1,
+      final categoryIds = getSelectedCategoryIds(); //1,1,1,
       if (categoryIds.isEmpty) {
         Get.snackbar('Error', 'No categories selected!');
         return;
       }
 
-      final response =
-          await _categoryService.submitCategories( categoryIds);
+      final response = await _categoryService.submitCategories(categoryIds);
       if (response != null && response.statusCode == 200) {
         Get.snackbar('Success', 'Categories added successfully!');
-        Get.offAll(()=>const HomeMainScreen());
-
-
+        Get.offAll(() => const HomeMainScreen());
       } else {
         Get.snackbar('Error', 'Failed to add categories.');
       }
