@@ -19,6 +19,8 @@ class UserProfileController extends GetxController {
   TextEditingController addressController = TextEditingController();
   TextEditingController dobNameController = TextEditingController();
   TextEditingController qualificationController = TextEditingController();
+  Rx<String> gender = "male".obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -37,12 +39,12 @@ class UserProfileController extends GetxController {
         if (profile != null && profile.data != null) {
           userProfile.value = profile;
 
-          firstNameController.text =
-              profile.data?.firstName ?? ""; // Set text here
+          firstNameController.text = profile.data?.firstName ?? ""; // Set text here
           lastNameController.text = profile.data?.lastName ?? "";
           emailController.text = profile.data?.email ?? "";
           addressController.text = profile.data?.address ?? "";
           qualificationController.text = profile.data?.qualification ?? "";
+          gender.value = profile.data?.gender ?? "male";
           if (profile.data?.dateOfBirth != null) {
             dobNameController.text =
                 "${profile.data!.dateOfBirth!.year}-${profile.data!.dateOfBirth!.month.toString().padLeft(2, '0')}-${profile.data!.dateOfBirth!.day.toString().padLeft(2, '0')}";

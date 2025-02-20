@@ -105,6 +105,7 @@ class JobController extends GetxController {
         colorText: Colors.white,
       );
     }
+    loadJobs();
   }
 
   void setCompanyLogo(File image) {

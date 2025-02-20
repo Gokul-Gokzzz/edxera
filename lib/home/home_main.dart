@@ -1,16 +1,20 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edxera/batchs/batches_main_screen.dart';
 import 'package:edxera/homes/homes.dart';
 import 'package:edxera/jobs/job_list_view.dart';
+import 'package:edxera/profile/Controllers/profile_controller/profile_conreoller.dart';
 import 'package:edxera/reels/controller/reel_controller.dart';
 import 'package:edxera/reels/reels_home.dart';
 import 'package:edxera/store/webview_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:edxera/controller/controller.dart';
 import 'package:edxera/home/home_screen.dart';
 import '../My_cources/ongoing_completed_main_screen.dart';
 import '../chate/chate_screen.dart';
 import '../profile/my_profile.dart';
+import '../repositories/api/api_constants.dart';
 import '../utils/slider_page_data_model.dart';
 
 class HomeMainScreen extends StatefulWidget {
@@ -26,6 +30,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
 
   HomeMainController controller = Get.put(HomeMainController());
   ReelController reelController = Get.put(ReelController());
+  final UserProfileController userProfileController = Get.put(UserProfileController());
 
   @override
   void initState() {
@@ -42,13 +47,9 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
         body: _body(),
         bottomNavigationBar: Container(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(22), topLeft: Radius.circular(22)),
+              borderRadius: const BorderRadius.only(topRight: Radius.circular(22), topLeft: Radius.circular(22)),
               boxShadow: [
-                BoxShadow(
-                    color: const Color(0XFF503494).withOpacity(0.12),
-                    spreadRadius: 0,
-                    blurRadius: 12),
+                BoxShadow(color: const Color(0XFF503494).withOpacity(0.12), spreadRadius: 0, blurRadius: 12),
               ],
             ),
             child: ClipRRect(
@@ -79,10 +80,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
                               color: Color(0XFF503494),
                             ),
                             SizedBox(height: 8.79),
-                            Image(
-                                image: AssetImage("assets/line.png"),
-                                height: 1.75,
-                                width: 24),
+                            Image(image: AssetImage("assets/line.png"), height: 1.75, width: 24),
                           ],
                         ),
                         icon: const Image(
@@ -101,10 +99,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
                               color: Color(0XFF503494),
                             ),
                             SizedBox(height: 8.79),
-                            Image(
-                                image: AssetImage("assets/line.png"),
-                                height: 1.75,
-                                width: 24),
+                            Image(image: AssetImage("assets/line.png"), height: 1.75, width: 24),
                           ],
                         ),
                         icon: const Image(
@@ -116,16 +111,9 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
                     BottomNavigationBarItem(
                         activeIcon: Column(
                           children: const [
-                            Image(
-                                image: AssetImage("assets/bottomhomeblue.png"),
-                                height: 24,
-                                width: 24,
-                                color: Color(0XFF503494)),
+                            Image(image: AssetImage("assets/bottomhomeblue.png"), height: 24, width: 24, color: Color(0XFF503494)),
                             SizedBox(height: 8.79),
-                            Image(
-                                image: AssetImage("assets/line.png"),
-                                height: 1.75,
-                                width: 24),
+                            Image(image: AssetImage("assets/line.png"), height: 1.75, width: 24),
                           ],
                         ),
                         icon: const Image(
@@ -137,64 +125,78 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
                     BottomNavigationBarItem(
                         activeIcon: Column(
                           children: const [
-                            Image(
-                                image: AssetImage("assets/bottombookblue.png"),
-                                height: 24,
-                                width: 24,
-                                color: Color(0XFF503494)),
+                            Image(image: AssetImage("assets/bottombookblue.png"), height: 24, width: 24, color: Color(0XFF503494)),
                             SizedBox(height: 8.79),
-                            Image(
-                                image: AssetImage("assets/line.png"),
-                                height: 1.75,
-                                width: 24),
+                            Image(image: AssetImage("assets/line.png"), height: 1.75, width: 24),
                           ],
                         ),
-                        icon: const Image(
-                            image: AssetImage("assets/bottombookblack.png"),
-                            height: 24,
-                            width: 24),
+                        icon: const Image(image: AssetImage("assets/bottombookblack.png"), height: 24, width: 24),
                         label: 'Jobs'),
                     BottomNavigationBarItem(
                         activeIcon: Column(
                           children: const [
-                            Image(
-                                image:
-                                    AssetImage("assets/bottommessegeblue.png"),
-                                height: 24,
-                                width: 24,
-                                color: Color(0XFF503494)),
+                            Image(image: AssetImage("assets/bottommessegeblue.png"), height: 24, width: 24, color: Color(0XFF503494)),
                             SizedBox(height: 8.79),
-                            Image(
-                                image: AssetImage("assets/line.png"),
-                                height: 1.75,
-                                width: 24),
+                            Image(image: AssetImage("assets/line.png"), height: 1.75, width: 24),
                           ],
                         ),
-                        icon: const Image(
-                            image: AssetImage("assets/store.png"),
-                            height: 24,
-                            width: 24),
+                        icon: const Image(image: AssetImage("assets/store.png"), height: 24, width: 24),
                         label: 'Store'),
                     BottomNavigationBarItem(
                         activeIcon: Column(
-                          children: const [
-                            Image(
-                                image:
-                                    AssetImage("assets/bottomprofileblue.png"),
-                                height: 24,
-                                width: 24,
-                                color: Color(0XFF503494)),
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                height: 24.h,
+                                width: 24.h,
+                                imageUrl: "${ApiConstants.publicBaseUrl}/${userProfileController.userProfile.value?.data?.profileImage ?? ''}",
+                                progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                                  child: Container(
+                                    height: 24.h,
+                                    width: 24.h,
+                                    child: CircularProgressIndicator(value: downloadProgress.progress),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.h),
+                                  child: Container(
+                                    height: 24.h,
+                                    width: 24.h,
+                                    color: Colors.grey.withOpacity(0.2),
+                                  ),
+                                ),
+                              ),
+                            ),
                             SizedBox(height: 8.79),
-                            Image(
-                                image: AssetImage("assets/line.png"),
-                                height: 1.75,
-                                width: 24),
+                            Image(image: AssetImage("assets/line.png"), height: 1.75, width: 24),
                           ],
                         ),
-                        icon: const Image(
-                            image: AssetImage("assets/bottomprofileblack.png"),
-                            height: 24,
-                            width: 24),
+                        icon: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            height: 24.h,
+                            width: 24.h,
+                            imageUrl: "${ApiConstants.publicBaseUrl}/${userProfileController.userProfile.value?.data?.profileImage ?? ''}",
+                            progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                              child: Container(
+                                height: 24.h,
+                                width: 24.h,
+                                child: CircularProgressIndicator(value: downloadProgress.progress),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => ClipRRect(
+                              borderRadius: BorderRadius.circular(10.h),
+                              child: Container(
+                                height: 24.h,
+                                width: 24.h,
+                                color: Colors.grey.withOpacity(0.2),
+                              ),
+                            ),
+                          ),
+                        ),
                         label: 'Account'),
                   ]),
             )),

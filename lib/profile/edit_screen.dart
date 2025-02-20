@@ -32,8 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _pickResume() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
     if (result != null && result.files.single.path != null) {
       setState(() {
         _selectedResume = File(result.files.single.path!);
@@ -49,8 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
       lastDate: DateTime.now(),
     );
     if (picked != null) {
-      controller.dobNameController.text =
-          DateFormat('yyyy-MM-dd').format(picked);
+      controller.dobNameController.text = DateFormat('yyyy-MM-dd').format(picked);
     }
   }
 
@@ -82,9 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         backgroundImage: _selectedImage != null
                             ? FileImage(_selectedImage!)
                             : userData.profileImage != null
-                                ? CachedNetworkImageProvider(
-                                        "${ApiConstants.publicBaseUrl}/${userData.profileImage}")
-                                    as ImageProvider
+                                ? CachedNetworkImageProvider("${ApiConstants.publicBaseUrl}/${userData.profileImage}") as ImageProvider
                                 : const AssetImage('assets/placeholder.png'),
                       ),
                       Positioned(
@@ -94,8 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           radius: size.width * 0.05,
                           backgroundColor: Colors.blue,
                           child: IconButton(
-                            icon: const Icon(Icons.camera_alt,
-                                color: Colors.white),
+                            icon: const Icon(Icons.camera_alt, color: Colors.white),
                             onPressed: _updateProfileImage,
                           ),
                         ),
@@ -104,21 +99,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 SizedBox(height: padding),
-                _buildEditableDataItem("First Name", userData.firstName,
-                    controller.firstNameController, radius),
-                _buildEditableDataItem("Last Name", userData.lastName,
-                    controller.lastNameController, radius),
-                _buildEditableDataItem("Email", userData.email,
-                    controller.emailController, radius),
-                _buildEditableDataItem("Address", userData.address,
-                    controller.addressController, radius),
-                _buildEditableDataItem("Qualification", userData.qualification,
-                    controller.qualificationController, radius),
+                _buildEditableDataItem("First Name", userData.firstName, controller.firstNameController, radius),
+                _buildEditableDataItem("Last Name", userData.lastName, controller.lastNameController, radius),
+                _buildEditableDataItem("Email", userData.email, controller.emailController, radius),
+                _buildGenderDropdownDataItem(radius),
+                _buildEditableDataItem("Address", userData.address, controller.addressController, radius),
+                _buildEditableDataItem("Qualification", userData.qualification, controller.qualificationController, radius),
                 _buildDateEditableDataItem(
                   "Date of Birth",
-                  userData.dateOfBirth != null
-                      ? DateFormat('yyyy-MM-dd').format(userData.dateOfBirth!)
-                      : null,
+                  userData.dateOfBirth != null ? DateFormat('yyyy-MM-dd').format(userData.dateOfBirth!) : null,
                   controller.dobNameController,
                   context,
                 ),
@@ -128,9 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: EdgeInsets.all(padding * 0.6),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(radius),
-                          bottomRight: Radius.circular(radius)),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(radius), bottomRight: Radius.circular(radius)),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -138,11 +125,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(
                           width: size.width * 0.5,
                           child: Text(
-                            _selectedResume != null
-                                ? _selectedResume!.path.split('/').last
-                                : userData.resume ?? "Upload Resume (PDF)",
-                            style: const TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.bold),
+                            _selectedResume != null ? _selectedResume!.path.split('/').last : userData.resume ?? "Upload Resume (PDF)",
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                         ),
                         const Icon(Icons.upload_file, color: Colors.blue),
@@ -162,6 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       dateOfBirth: controller.dobNameController.text,
                       profileImageFile: _selectedImage,
                       resumeFile: _selectedResume,
+                      gender: controller.gender.value,
                     );
                   },
                   child: const Text("Save Changes"),
@@ -176,8 +161,38 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildEditableDataItem(String label, String? value,
-      TextEditingController? controller, double radius) {
+  Widget _buildGenderDropdownDataItem(double radius) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Gender", style: const TextStyle(fontWeight: FontWeight.bold)),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(radius), bottomRight: Radius.circular(radius)),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: DropdownButtonFormField<String>(
+              items: ["male", "female"]
+                  .map(
+                    (e) => DropdownMenuItem(child: Text(e), value: e),
+                  )
+                  .toList(),
+              value: controller.gender.value,
+              onChanged: (value) {
+                controller.gender.value = value ?? "other";
+              },
+              decoration: InputDecoration(border: InputBorder.none),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEditableDataItem(String label, String? value, TextEditingController? controller, double radius) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -187,9 +202,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(radius),
-                  bottomRight: Radius.circular(radius)),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(radius), bottomRight: Radius.circular(radius)),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: TextFormField(
@@ -202,8 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildDateEditableDataItem(String label, String? value,
-      TextEditingController? controller, BuildContext context) {
+  Widget _buildDateEditableDataItem(String label, String? value, TextEditingController? controller, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -213,9 +225,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20))),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: TextFormField(
               controller: controller,

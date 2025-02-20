@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edxera/languagecontrols/LanguageCheck.dart';
 import 'package:edxera/profile/Controllers/change_password_controller.dart';
+import 'package:edxera/profile/Controllers/profile_controller/profile_conreoller.dart';
 import 'package:edxera/profile/change_password_screen.dart';
 import 'package:edxera/profile/language_selection.dart';
 import 'package:edxera/profile/my_payment_details.dart';
@@ -26,6 +27,7 @@ import 'package:edxera/utils/slider_page_data_model.dart';
 import '../controller/controller.dart';
 import '../login/login_empty_state.dart';
 import '../models/profile_option.dart';
+import '../repositories/api/api_constants.dart';
 import '../utils/screen_size.dart';
 import '../utils/shared_pref.dart';
 import 'certi_payment.dart';
@@ -57,8 +59,7 @@ class _MyProfileState extends State<MyProfile> {
     LanguageSelection(),
     RateUs(),
   ];
-  ChangePasswordController _changePasswordController =
-      Get.put(ChangePasswordController());
+  ChangePasswordController _changePasswordController = Get.put(ChangePasswordController());
 
   // Future<bool> rateUsDialog() async {
   //   return await Get.defaultDialog(
@@ -74,6 +75,8 @@ class _MyProfileState extends State<MyProfile> {
     checkLanguage();
   }
 
+  final UserProfileController userProfileController = Get.put(UserProfileController());
+
   @override
   Widget build(BuildContext context) {
     initializeScreenSize(context);
@@ -84,9 +87,7 @@ class _MyProfileState extends State<MyProfile> {
             GetBuilder(
               id: 'UserData',
               init: MyProfileController(),
-              builder: (MyProfileController) => myProfileController
-                          .userDataModel.data !=
-                      null
+              builder: (MyProfileController) => myProfileController.userDataModel.data != null
                   ? SafeArea(
                       child: Column(
                         children: [
@@ -108,10 +109,7 @@ class _MyProfileState extends State<MyProfile> {
                                 // SizedBox(width: 15.w),
                                 Text(
                                   mplanguage['myprofile'].toString(),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 24.sp,
-                                      fontFamily: 'Gilroy'),
+                                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24.sp, fontFamily: 'Gilroy'),
                                 ),
                               ],
                             ),
@@ -123,16 +121,12 @@ class _MyProfileState extends State<MyProfile> {
                               fit: BoxFit.cover,
                               height: 100.h,
                               width: 100.w,
-                              imageUrl: myProfileController
-                                      .userDataModel.data?.image ??
-                                  '',
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Center(
+                              imageUrl: "${ApiConstants.publicBaseUrl}/${userProfileController.userProfile.value?.data?.profileImage ?? ''}",
+                              progressIndicatorBuilder: (context, url, downloadProgress) => Center(
                                 child: Container(
                                   height: 30.h,
                                   width: 30.w,
-                                  child: CircularProgressIndicator(
-                                      value: downloadProgress.progress),
+                                  child: CircularProgressIndicator(value: downloadProgress.progress),
                                 ),
                               ),
                               errorWidget: (context, url, error) => ClipRRect(
@@ -148,29 +142,18 @@ class _MyProfileState extends State<MyProfile> {
                           SizedBox(height: 12.h),
                           Text(
                             myProfileController.userDataModel.data?.name ?? '',
-                            style: TextStyle(
-                                fontSize: 18.sp,
-                                fontFamily: 'Gilroy',
-                                fontWeight: FontWeight.w700,
-                                color: const Color(0XFF000000)),
+                            style: TextStyle(fontSize: 18.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.w700, color: const Color(0XFF000000)),
                           ),
                           SizedBox(height: 2.h),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ProfilePage()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(mplanguage['edit_profile'].toString(),
-                                    style: TextStyle(
-                                        fontSize: 15.sp,
-                                        fontFamily: 'Gilroy',
-                                        fontWeight: FontWeight.w400,
-                                        color: Color(0XFF000000))),
+                                    style: TextStyle(fontSize: 15.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.w400, color: Color(0XFF000000))),
                                 Image(
                                   image: AssetImage("assets/editsymbol.png"),
                                   height: 16.h,
@@ -193,33 +176,21 @@ class _MyProfileState extends State<MyProfile> {
                                   itemCount: profileoption.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: 10.h,
-                                          top: index == 0 ? 0.h : 10.h,
-                                          left: 20.w,
-                                          right: 20.w),
+                                      padding: EdgeInsets.only(bottom: 10.h, top: index == 0 ? 0.h : 10.h, left: 20.w, right: 20.w),
                                       child: GestureDetector(
                                         onTap: () {
-                                          if ((index ==
-                                              profileOptionClass.length)) {
+                                          if ((index == profileOptionClass.length)) {
                                             //
                                             showDialog(
                                               context: context,
                                               builder: (context) {
                                                 return AlertDialog(
-                                                  title: Text(mplanguage[
-                                                          'deleteaccount']
-                                                      .toString()),
-                                                  content:
-                                                      SingleChildScrollView(
+                                                  title: Text(mplanguage['deleteaccount'].toString()),
+                                                  content: SingleChildScrollView(
                                                     child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Text(mplanguage[
-                                                                'deleteinfo']
-                                                            .toString()),
+                                                        Text(mplanguage['deleteinfo'].toString()),
                                                         // TextField(
                                                         //   controller: _textFieldController,
                                                         //   decoration: InputDecoration(
@@ -231,24 +202,20 @@ class _MyProfileState extends State<MyProfile> {
                                                   ),
                                                   actions: <Widget>[
                                                     TextButton(
-                                                      child: Text(
-                                                          mplanguage['cancel']
-                                                              .toString()),
+                                                      child: Text(mplanguage['cancel'].toString()),
                                                       onPressed: () {
                                                         Navigator.pop(context);
                                                       },
                                                     ),
                                                     TextButton(
                                                         child: Text(
-                                                          mplanguage['delete']
-                                                              .toString(),
+                                                          mplanguage['delete'].toString(),
                                                           style: TextStyle(
                                                             color: Colors.red,
                                                           ),
                                                         ),
                                                         onPressed: () async {
-                                                          _changePasswordController
-                                                              .delteAccountApi();
+                                                          _changePasswordController.delteAccountApi();
                                                         }
                                                         // print(_textFieldController.text);
                                                         // Navigator.pop(context);
@@ -258,12 +225,10 @@ class _MyProfileState extends State<MyProfile> {
                                                 );
                                               },
                                             );
-                                          } else if ((index ==
-                                              profileOptionClass.length - 1)) {
+                                          } else if ((index == profileOptionClass.length - 1)) {
                                             rateUs_dialogue();
                                           } else {
-                                            Get.to(profileOptionClass[index])
-                                                ?.then((value) {
+                                            Get.to(profileOptionClass[index])?.then((value) {
                                               if (value != null) {
                                                 Map m = value as Map;
                                                 if (m.containsKey("changed")) {
@@ -288,67 +253,46 @@ class _MyProfileState extends State<MyProfile> {
                                           height: 60.h,
                                           width: double.infinity.w,
                                           decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(22.h),
+                                              borderRadius: BorderRadius.circular(22.h),
                                               boxShadow: [
                                                 BoxShadow(
-                                                    color:
-                                                        const Color(0XFF503494)
-                                                            .withOpacity(0.14),
-                                                    offset: const Offset(-4, 5),
-                                                    blurRadius: 16.h),
+                                                    color: const Color(0XFF503494).withOpacity(0.14), offset: const Offset(-4, 5), blurRadius: 16.h),
                                               ],
                                               color: Colors.white),
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   Row(
                                                     children: [
                                                       SizedBox(width: 15.w),
                                                       Image(
-                                                        image: AssetImage(
-                                                            profileoption[index]
-                                                                .icon!),
-                                                        color: const Color(
-                                                            0XFF503494),
+                                                        image: AssetImage(profileoption[index].icon!),
+                                                        color: const Color(0XFF503494),
                                                         height: 24.h,
                                                         width: 24.w,
                                                       ),
                                                       SizedBox(width: 15.w),
                                                       Text(
-                                                        profileoption[index]
-                                                            .title!,
-                                                        style: TextStyle(
-                                                            fontSize: 15.sp,
-                                                            fontFamily:
-                                                                'Gilroy',
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                        profileoption[index].title!,
+                                                        style: TextStyle(fontSize: 15.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
                                                       ),
                                                     ],
                                                   )
                                                 ],
                                               ),
                                               Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 15.w),
+                                                    padding: EdgeInsets.only(right: 15.w),
                                                     child: Row(
                                                       children: [
                                                         Image(
-                                                          image: const AssetImage(
-                                                              "assets/right_arrow.png"),
+                                                          image: const AssetImage("assets/right_arrow.png"),
                                                           height: 24.h,
                                                           width: 24.w,
                                                         )
@@ -366,8 +310,7 @@ class _MyProfileState extends State<MyProfile> {
                                 ),
                                 SizedBox(height: 30.h),
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                      bottom: 40.h, left: 20.h, right: 20.h),
+                                  padding: EdgeInsets.only(bottom: 40.h, left: 20.h, right: 20.h),
                                   child: GestureDetector(
                                     onTap: () {
                                       log_out_dialogue();
@@ -383,17 +326,12 @@ class _MyProfileState extends State<MyProfile> {
                                           style: BorderStyle.solid,
                                           width: 1.0.w,
                                         ),
-                                        borderRadius:
-                                            BorderRadius.circular(20.h),
+                                        borderRadius: BorderRadius.circular(20.h),
                                       ),
                                       child: Center(
-                                        child: Text(
-                                            mplanguage['logout'].toString(),
+                                        child: Text(mplanguage['logout'].toString(),
                                             style: TextStyle(
-                                                color: const Color(0XFF503494),
-                                                fontSize: 18.sp,
-                                                fontWeight: FontWeight.w700,
-                                                fontFamily: 'Gilroy')),
+                                                color: const Color(0XFF503494), fontSize: 18.sp, fontWeight: FontWeight.w700, fontFamily: 'Gilroy')),
                                       ),
                                     ),
                                   ),
@@ -480,11 +418,7 @@ class _MyProfileState extends State<MyProfile> {
               child: Text(
                 mplanguage['giveyourop'].toString(),
                 style: TextStyle(
-                    fontSize: 18.sp,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0XFF000000)),
+                    fontSize: 18.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Color(0XFF000000)),
               ),
             ),
             SizedBox(height: 15.h),
@@ -492,11 +426,7 @@ class _MyProfileState extends State<MyProfile> {
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Text(mplanguage['makebetter'].toString(),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 14.sp,
-                      fontFamily: 'Gilroy',
-                      fontWeight: FontWeight.w500,
-                      color: Color(0XFF000000))),
+                  style: TextStyle(fontSize: 14.sp, fontFamily: 'Gilroy', fontWeight: FontWeight.w500, color: Color(0XFF000000))),
             ),
             SizedBox(height: 15.h),
             RatingBar(
@@ -600,10 +530,7 @@ class _MyProfileState extends State<MyProfile> {
             children: [
               Text(
                 mplanguage['logoutalert'].toString(),
-                style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Gilroy'),
+                style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold, fontFamily: 'Gilroy'),
                 textAlign: TextAlign.center,
               ),
               Padding(

@@ -34,15 +34,12 @@ class JobService {
     try {
       int userId = await PrefData.getUserId();
 
-      Response response =
-          await _dio.sendRequest.post(ApiConstants.get_job_categories, data: {
+      Response response = await _dio.sendRequest.post(ApiConstants.get_job_categories, data: {
         "user_id": userId,
       });
 
       if (response.statusCode == 200) {
-        final list = (response.data['data'] as Iterable)
-            .map((e) => JobCategory.fromMap(e))
-            .toList();
+        final list = (response.data['data'] as Iterable).map((e) => JobCategory.fromMap(e)).toList();
         return list;
       } else {
         return [];
@@ -55,9 +52,13 @@ class JobService {
 
   Future<bool> deleteJobRequest(int jobId) async {
     try {
+      int userId = await PrefData.getUserId();
       Response response = await _dio.sendRequest.post(
         ApiConstants.delete_job,
-        data: {"job_id": jobId},
+        data: {
+          "job_id": jobId,
+          "user_id": userId,
+        },
       );
 
       return response.statusCode == 200;
@@ -69,8 +70,7 @@ class JobService {
 
   Future<Map<String, dynamic>> addJob(FormData jobData) async {
     try {
-      final response =
-          await _dio.sendRequest.post(ApiConstants.add_job, data: jobData);
+      final response = await _dio.sendRequest.post(ApiConstants.add_job, data: jobData);
       return response.data;
     } catch (e) {
       return {"status": false, "message": "Error: ${e.toString()}"};
