@@ -67,15 +67,9 @@ class UserData {
         "email": email,
         "address": address,
         "qualification": qualification,
-        "date_of_birth": dateOfBirth,
+        "date_of_birth": dateOfBirth?.toIso8601String(),
         "gender": gender,
         "profile_image": profileImage,
         "resume": resume,
       };
 }
-
-// Functions to parse JSON data
-UserProfile userProfileFromJson(String str) =>
-    UserProfile.fromJson(json.decode(str));
-
-String userProfileToJson(UserProfile data) => json.encode(data.toJson());

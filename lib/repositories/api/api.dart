@@ -15,7 +15,7 @@ class API {
   CancelToken cancelToken = CancelToken();
 
   API() {
-    _dio.options.baseUrl = "https://xianinfotech.in/edxera/api/";
+    _dio.options.baseUrl = "https://www.edxera.com/api/";
     _dio.interceptors.add(CustomInterceptor(cancelToken: cancelToken));
   }
 

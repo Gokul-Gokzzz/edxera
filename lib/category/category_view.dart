@@ -174,10 +174,16 @@ class _CategoryGridViewState extends State<CategoryGridView> {
                               const SizedBox(height: 8),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  category.title ?? "No Title",
-                                  style: const TextStyle(color: Colors.black),
-                                  textAlign: TextAlign.center,
+                                child: Column(
+                                  children: [
+                                    // Text(category.id.toString()),
+                                    Text(
+                                      category.title ?? "No Title",
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

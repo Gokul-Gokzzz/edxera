@@ -1,7 +1,7 @@
 class ApiConstants {
   static String login = 'login';
   static String user_exists = 'user/user_exists';
-  static String publicBaseUrl = 'https://xianinfotech.in/edxera/public';
+  static String publicBaseUrl = 'https://www.edxera.com/public';
   static String register = 'register_ac';
   static String get_verification_otp = 'get-verification-otp';
   static String reset_password = 'reset-password';
