@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:edxera/category/category_view.dart';
 import 'package:edxera/firebase_options.dart';
 import 'package:edxera/jobs/job_list_view.dart';
 import 'package:edxera/notification/my_notification.dart';
+import 'package:edxera/home/trending/trending_reel_card.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_windowmanager_plus/flutter_windowmanager_plus.dart';
 
 import 'package:get/get.dart';
 import 'package:edxera/splash/splash_screen.dart';
@@ -12,7 +16,8 @@ import 'package:edxera/splash/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
     await MyNotification().initNotification();
   } catch (e) {}
 
@@ -28,12 +33,14 @@ void main() async {
   //   };
 
   runApp(const MyApp());
-  // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-  //   if (Platform.isAndroid) {
-  //     await FlutterWindowManagerPlus.addFlags(
-  //         FlutterWindowManagerPlus.FLAG_SECURE);
-  //   }
-  // });
+  // WidgetsBinding.instance.addPostFrameCallback(
+  //   (timeStamp) async {
+  //     if (Platform.isAndroid) {
+  //       await FlutterWindowManagerPlus.addFlags(
+  //           FlutterWindowManagerPlus.FLAG_SECURE);
+  //     }
+  //   },
+  // );
 //  }, catchUnhandledExceptions);
 }
 
