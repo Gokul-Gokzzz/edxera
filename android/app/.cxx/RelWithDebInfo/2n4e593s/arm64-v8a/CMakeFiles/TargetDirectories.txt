@@ -1,2 +1,0 @@
-C:/Users/More/Downloads/edxera/android/app/.cxx/RelWithDebInfo/2n4e593s/arm64-v8a/CMakeFiles/edit_cache.dir
-C:/Users/More/Downloads/edxera/android/app/.cxx/RelWithDebInfo/2n4e593s/arm64-v8a/CMakeFiles/rebuild_cache.dir
