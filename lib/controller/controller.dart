@@ -25,6 +25,7 @@ import 'package:edxera/course_list/course_list_model.dart';
 import 'package:edxera/home/Models/all_course_model.dart';
 import 'package:edxera/home/Models/categories_detail_model.dart';
 import 'package:edxera/home/Models/category_wise_product_list_data_model.dart';
+import 'package:edxera/home/Models/category_wise_reels_model.dart';
 import 'package:edxera/home/Models/chapter_inner_data_model.dart';
 import 'package:edxera/home/Models/free_study_matrial_data_model.dart';
 import 'package:edxera/home/Models/home_categories_model.dart';
@@ -72,6 +73,7 @@ class HomeController extends GetxController {
   RxString dropdownvalue = ''.obs;
   PostRepository postRepository = PostRepository();
   Rx<CategoriesModel> categoriesData = CategoriesModel().obs;
+  Rx<CategoryWiseReelsModel> categoryWiseReelData = CategoryWiseReelsModel().obs;
   Rx<CategoriesDetailModel> categoriesDetailsData = CategoriesDetailModel().obs;
 
   final Rx<HomeDashboardDataModel> _homeDashboardDataModel =
@@ -214,6 +216,29 @@ class HomeController extends GetxController {
       final resp = await postRepository.homeCategoriesGet();
       if (resp != null) {
         categoriesData.value = CategoriesModel.fromMap(resp.data);
+      }
+    } on DioException catch (ex) {
+      Get.showSnackbar(
+        GetSnackBar(
+          backgroundColor: Colors.red,
+          message: ex.message,
+          duration: const Duration(seconds: 1),
+        ),
+      );
+      isloader(false);
+      if (ex.type == DioExceptionType.unknown) {}
+    } finally {
+      isloader(false);
+    }
+  }
+
+  Future<void> getReelCategoryWise() async {
+    isloader(true);
+
+    try {
+      final resp = await postRepository.getReelCategoryWise();
+      if (resp != null) {
+        categoryWiseReelData.value = CategoryWiseReelsModel.fromMap(resp.data);
       }
     } on DioException catch (ex) {
       Get.showSnackbar(

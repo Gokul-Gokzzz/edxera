@@ -7,6 +7,7 @@ class ApiConstants {
   static String reset_password = 'reset-password';
   static String homeScreen = 'home-screen';
   static String categoriesApi = 'categories';
+  static String getCourseReels = 'get_course_reels';
   static String bypassApi = 'bypass_api';
   // static String latestCourses = 'latest-courses';
   static String free_study_materials = 'free_study_materials';
@@ -76,7 +77,7 @@ class ApiConstants {
   static String get_job_categories = '/get_job_categories';
   static String delete_job = 'delete_job';
   static String add_job = '/add_job';
-  static String get_reels = '/get_reels';
+  static String get_reels = 'get_reels';
   static String get_reels_details = '/get_reels_details';
   static String like_or_unlike_reels = '/like_or_unlike_reels';
   static String comment_reels = '/comment_reels';

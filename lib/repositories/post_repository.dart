@@ -347,6 +347,30 @@ class PostRepository {
       rethrow;
     }
   }
+  Future getReelCategoryWise() async {
+    try {
+      int userId = await PrefData.getUserId();
+
+      final response = await api.sendRequest.post(
+        ApiConstants.getCourseReels,
+        data: {
+          "user_id" : userId,
+        }
+      );
+
+      if (response.statusCode == 200) {
+        final message = response.data;
+        print(" Reels Response ::$message");
+        return response;
+      } else {
+        Fluttertoast.showToast(msg: response.data['message']);
+
+        return null;
+      }
+    } catch (ex) {
+      rethrow;
+    }
+  }
 
   Future categoriesDetailGet({required String id}) async {
     try {

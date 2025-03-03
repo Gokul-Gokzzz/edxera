@@ -594,7 +594,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
   _body() {
     switch (controller.position.value) {
       case 0:
-        return TrendingHomeScreen();
+        return TrendingScreen();
       case 1:
         return HomeScreen();
       case 2:

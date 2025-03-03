@@ -62,7 +62,7 @@ class ReelController extends GetxController {
     try {
       bool res = await ReelService()
           .likeDislike(courseId: courseId, courseReelId: courseReelId);
-      await getReelById(courseId, courseReelId);
+      // await getReelById(courseId, courseReelId);
       return res;
     } catch (ex) {
       return false;
@@ -76,7 +76,7 @@ class ReelController extends GetxController {
     try {
       bool res = await ReelService().addComment(
           courseId: courseId, comment: comment, courseReelId: courseReelId);
-      await getReelById(courseId, courseReelId);
+      // await getReelById(courseId, courseReelId);
       return res;
     } catch (ex) {
       return false;
