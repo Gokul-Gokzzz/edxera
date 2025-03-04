@@ -416,6 +416,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edxera/batchs/batches_main_screen.dart';
+import 'package:edxera/home/trending.dart';
 import 'package:edxera/home/trending/trending_home_reel.dart';
 import 'package:edxera/homes/homes.dart';
 import 'package:edxera/jobs/job_list_view.dart';
