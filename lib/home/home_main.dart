@@ -447,8 +447,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
 
   HomeMainController controller = Get.put(HomeMainController());
   ReelController reelController = Get.put(ReelController());
-  final UserProfileController userProfileController =
-      Get.put(UserProfileController());
+  final UserProfileController userProfileController = Get.put(UserProfileController());
 
   @override
   void initState() {
@@ -468,10 +467,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
             activeIconTheme: IconThemeData(color: Colors.purple),
             backgroundColor: Colors.white,
             titleStyle: TextStyle(color: Colors.black45, fontSize: 12),
-            activeTitleStyle: TextStyle(
-                color: Colors.purple,
-                fontSize: 12,
-                fontWeight: FontWeight.bold),
+            activeTitleStyle: TextStyle(color: Colors.purple, fontSize: 12, fontWeight: FontWeight.bold),
             actionButtonDetails: SCActionButtonDetails(
                 color: Colors.redAccent,
                 icon: Icon(
@@ -483,17 +479,17 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
             items: [
               SCBottomBarItem(
                 icon: Icons.home,
-                // title: "",
+                title: "Home",
                 onPressed: () => controller.onChange(0),
               ),
               SCBottomBarItem(
-                icon: Icons.book,
-                // title: "",
+                icon: Icons.video_collection_outlined,
+                title: "Updates",
                 onPressed: () => controller.onChange(1),
               ),
               SCBottomBarItem(
                 icon: Icons.batch_prediction,
-                // title: "",
+                title: "Batch",
                 onPressed: () => controller.onChange(2),
               ),
               // SCBottomBarItem(
@@ -503,17 +499,17 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
               // ),
               SCBottomBarItem(
                 icon: Icons.work,
-                // title: "",
+                title: "Job",
                 onPressed: () => controller.onChange(4),
               ),
               SCBottomBarItem(
                 icon: Icons.store,
-                // title: "",
+                title: "Store",
                 onPressed: () => controller.onChange(5),
               ),
               SCBottomBarItem(
                 icon: Icons.person,
-                // title: "",
+                title: "Account",
                 onPressed: () => controller.onChange(6),
               ),
             ],
@@ -546,8 +542,7 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Image(
-          image: AssetImage(
-              controller.position.value == index ? activeIcon : icon),
+          image: AssetImage(controller.position.value == index ? activeIcon : icon),
           height: 24.h,
           width: 24.h,
           color: controller.position.value == index ? Colors.black : null,
@@ -566,15 +561,12 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
             fit: BoxFit.cover,
             height: 24.h,
             width: 24.h,
-            imageUrl:
-                "${ApiConstants.publicBaseUrl}/${userProfileController.userProfile.value?.data?.profileImage ?? ''}",
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                Center(
+            imageUrl: "${ApiConstants.publicBaseUrl}/${userProfileController.userProfile.value?.data?.profileImage ?? ''}",
+            progressIndicatorBuilder: (context, url, downloadProgress) => Center(
               child: Container(
                 height: 24.h,
                 width: 24.h,
-                child:
-                    CircularProgressIndicator(value: downloadProgress.progress),
+                child: CircularProgressIndicator(value: downloadProgress.progress),
               ),
             ),
             errorWidget: (context, url, error) => ClipRRect(
@@ -594,9 +586,9 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
   _body() {
     switch (controller.position.value) {
       case 0:
-        return TrendingScreen();
-      case 1:
         return HomeScreen();
+      case 1:
+        return TrendingScreen();
       case 2:
         return BatchesScreen();
       case 3:
