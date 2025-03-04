@@ -56,73 +56,93 @@ class _TrendingScreenState extends State<TrendingScreen> {
         onRefresh: () async {
           await homecontroller.getReelCategoryWise();
         },
-        child: Obx(() {
-          return ListView.builder(
-            shrinkWrap: true,
-            padding: EdgeInsets.all(10),
-            physics: AlwaysScrollableScrollPhysics(),
-            itemCount: homecontroller.categoryWiseReelData.value.data?.length ?? 0,
-            itemBuilder: (context, index) {
-              final item = homecontroller.categoryWiseReelData.value.data?[index];
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ListTile(
-                    dense: true,
-                    visualDensity: VisualDensity.compact,
-                    minVerticalPadding: 0,
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      '#${item?.courseTitle ?? "Unknown"}',
-                      maxLines: 2,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Obx(() {
+            return ListView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: AlwaysScrollableScrollPhysics(),
+              itemCount: homecontroller.categoryWiseReelData.value.data?.length ?? 0,
+              itemBuilder: (context, index) {
+                final item = homecontroller.categoryWiseReelData.value.data?[index];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListTile(
+                      dense: true,
+                      visualDensity: VisualDensity.compact,
+                      minVerticalPadding: 0,
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        '${item?.courseTitle ?? "Unknown"}',
+                        maxLines: 2,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    height: 250,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: (item?.reelsList ?? []).length,
-                      padding: EdgeInsets.zero,
-                      itemBuilder: (context, i) {
-                        final reelItem = (item?.reelsList ?? [])[i];
-                        return InkWell(
-                          onTap: () {
-                            Get.to(
-                              () => TrendingReelCard(
-                                item: reelItem,
-                                reelIndex: i,
-                                courseIndex: index,
-                              ),
-                            );
-                          },
-                          child: Container(
-                            width: 150,
-                            height: 200,
-                            margin: EdgeInsets.only(right: 10),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: CachedNetworkImage(
-                                imageUrl: (reelItem.courseReelThumbnail ?? "").isEmpty
-                                    ? ""
-                                    : "${ApiConstants.publicBaseUrl}/${reelItem.courseReelThumbnail}",
-                                errorWidget: (context, url, error) => Icon(
-                                  Icons.image_not_supported,
+                    SizedBox(height: 10),
+                    SizedBox(
+                      height: 220,
+                      width: MediaQuery.sizeOf(context).width,
+                      child: Center(
+                        child: CachedNetworkImage(
+                          imageUrl: (item?.courseThumbnail ?? "").isEmpty ? "" : "${ApiConstants.publicBaseUrl}/${item?.courseThumbnail ?? ""}",
+                          height: 200,
+                          width: MediaQuery.sizeOf(context).width,
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) => Icon(
+                            Icons.image_not_supported,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: (item?.reelsList ?? []).length,
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, i) {
+                          final reelItem = (item?.reelsList ?? [])[i];
+                          return InkWell(
+                            onTap: () {
+                              Get.to(
+                                () => TrendingReelCard(
+                                  item: reelItem,
+                                  reelIndex: i,
+                                  courseIndex: index,
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: 150,
+                              height: 200,
+                              margin: EdgeInsets.only(right: 10),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: CachedNetworkImage(
+                                  imageUrl: (reelItem.courseReelThumbnail ?? "").isEmpty
+                                      ? ""
+                                      : "${ApiConstants.publicBaseUrl}/${reelItem.courseReelThumbnail}",
+                                  fit: BoxFit.contain,
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.image_not_supported,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                ],
-              );
-            },
-          );
-        }),
+                    SizedBox(height: 20),
+                  ],
+                );
+              },
+            );
+          }),
+        ),
       ),
     );
   }

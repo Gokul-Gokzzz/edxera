@@ -42,16 +42,19 @@ class CategoryWiseReelsModel {
 class ReelsModel {
   int? courseId;
   String? courseTitle;
+  String? courseThumbnail;
   List<ReelsList>? reelsList;
 
   ReelsModel({
     this.courseId,
+    this.courseThumbnail,
     this.courseTitle,
     this.reelsList,
   });
 
   ReelsModel copyWith({
     int? courseId,
+    String? courseThumbnail,
     String? courseTitle,
     List<ReelsList>? reelsList,
   }) =>
@@ -67,6 +70,7 @@ class ReelsModel {
 
   factory ReelsModel.fromMap(Map<String, dynamic> json) => ReelsModel(
     courseId: json["course_id"],
+    courseThumbnail: json["course_thumbnail"],
     courseTitle: json["course_title"],
     reelsList: json["reels_list"] == null ? [] : List<ReelsList>.from(json["reels_list"]!.map((x) => ReelsList.fromMap(x))),
   );
@@ -74,6 +78,7 @@ class ReelsModel {
   Map<String, dynamic> toMap() => {
     "course_id": courseId,
     "course_title": courseTitle,
+    "course_thumbnail": courseThumbnail,
     "reels_list": reelsList == null ? [] : List<dynamic>.from(reelsList!.map((x) => x.toMap())),
   };
 }
